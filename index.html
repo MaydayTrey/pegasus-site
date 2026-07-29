@@ -7,7 +7,6 @@
     <!--PRIMARY SEO-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business. " />
-    <meta name="keywords" content="Deprecated" />
     <meta name="author" content="Pegasus Labs" />
     <meta name="theme-color" content="#PUT THE PRIMARY HEX COLOR" />
     <meta name="geo.region" content="US" />
@@ -65,10 +64,9 @@
      Navigation Layout[]
      Information on Hero []
      Logo/Design[] -->
-
+    <a href="#main" class="skip-link">Skip to main content</a>
     <header>
       <nav>
-        <a href="#main" class="skip-link">Skip to main content</a>
         <a href="/" id="logo"><!--Put the logo here --></a>
         <a href="#about-us">About Us</a>
         <a href="#services">Services</a>
@@ -78,52 +76,79 @@
     </header>
 
     <main id="main">
-      <section id="hero" aria-labelledby="hero-description"></section>>
-        <h1>We help your business reach new heights.</h1>
+      <section id="hero" aria-labelledby="hero-heading"></section>
+        <h1 id="hero-heading">We help your business reach new heights.</h1>
         <p id="hero-description">
           A team of experienced website developers, dedicated to elevating your
           user's experience and getting your sales to soar.
         </p>
       </section>
 
-      <section id="about-us" aria-labelledby="about-us-desc">
+      <section id="about-us" aria-labelledby="about-us-heading">
         <!--Second Segment; WHITE/Transitioned from clouds; About Us section, what we do, area/location, ensuring proper security standards,
             team of experienced developers -->
-            <h2>
+            <h2 id="about-us-heading">
                 About Us
             </h2>
             <p id="about-us-desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </section>
 
-      <section id="services">
+      <section id="services" aria-labelledby="serices-heading">
+        <h2 id="serices-heading">Services Provided</h2>
         <!--Third Segment: Services, the tiers/different grades; have asymmetric layout bottom to top resembiling stairs; where bottom left is Beginner, middle is Growth, and top right is Advanced.
             When you click one from the left you see a transition background fade in and text appear which describes what is offered and pricing.
         In the center bottom in a sunlight-esq CTA will be Book an Assessment. If they do click Book an Assessment It should then take them to contact, where the tier they selected is chosen in a dropdown.
     On click the sunlight should radiate out from the CTA; before transitioning into a Contact Form. 
  -->
-        <article id="starter-tier" aria-labelledby="starter-tier-desc">
-            <p id="starter-tier-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <article aria-labelledby="starter-heading">
+            <h3 id="starter-heading">Starter</h3>
+            <p class="price">$895</p>
+            <ul>
+                <li>One page, mobile responsive</li>
+                <li>Contact form</li>
+                <li>Basic SEO</li>
+            </ul>
         </article>
 
-        <article id="growth-tier" aria-labelledby="growth-tier-desc">
-            <p id="growth-tier-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <article aria-labelledby="growth-heading">
+            <h3 id="growth-heading">Growth</h3>
+            <p class="price">$2,195</p>
+            <ul>
+                <li>One page, mobile responsive</li>
+                <li>Contact form</li>
+                <li>Basic SEO</li>
+                <li>Other stuff</li>
+                <li>Other Stuff</li>
+            </ul>
         </article>
 
-        <article id="advanced-tier" aria-labelledby="advanced-tier-desc">
-            <p id="advanced-tier-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <article aria-labelledby="advanced-heading">
+            <h3 id="advanced-heading">Starter</h3>
+            <p class="price">Request Quote</p>
+            <ul>
+                <li>One page, mobile responsive</li>
+                <li>Contact form</li>
+                <li>Basic SEO</li>
+                <li>Lots of stuff 1</li>
+                <li>Lots of stuff 2</li>
+                <li>Lots of stuff 3</li>
+                <li>Lots of stuff 4</li>
+                <li>Lots of stuff 5</li>
+            </ul>
         </article>
 
       </section>
 
-      <section id="tier-comparison">
+      <section id="tier-comparison" aria-labelledby="tier-comparison-heading">
+        <h2 id="tier-comparison-heading">Tier Comparison</h2>
         <!--
         Blue sky band:
         This is the comparison segment, compare all the different tiers, what is included. Headers/Rows essentially. -->
         <!--How to represent this in semantic HTML, it has rows and headers, so as a table?-->
       </section>
 
-      <section id="examples" aria-labelledby="examples-desc">
-        <h2>
+      <section id="examples" aria-labelledby="examples-heading">
+        <h2 id="examples-heading">
             Examples of Our Work.
         </h2>
         <p id="examples-desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -131,22 +156,24 @@
         White band
          Examples of work; the photo of the hero, and maybe some pages. This should be empty right now; the friend websites I build will go here, and testimonials to the right corresponding to the website-->
         <picture>
-            <source srcset="PRIMARY.webp" type="image/webp" alt="PHOTO DESC" aria-describedby="website1-desc">
-            <source srcset="BACKUP.jpg" type="image/jpeg" alt="PHOTO DESC" aria-describedby="website1-desc">
-            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website1-desc" onerror="this.onerror=null; this.src='FINALFALLBACK.png';">
+            <source srcset="PRIMARY.webp" type="image/webp">
+            <source srcset="BACKUP.jpg" type="image/jpeg">
+            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website1-desc">
         </picture>
         <p id="website1-desc">PHOTO DESC FOR WEBSITE 1</p>
 
         <picture>
-            <source srcset="PRIMARY.webp" type="image/webp" alt="PHOTO DESC" aria-describedby="website2-desc">
-            <source srcset="BACKUP.jpg" type="image/jpeg" alt="PHOTO DESC" aria-describedby="website2-desc">
-            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website2-desc" onerror="this.onerror=null; this.src='FINALFALLBACK.png';">
+            <source srcset="PRIMARY.webp" type="image/webp">
+            <source srcset="BACKUP.jpg" type="image/jpeg">
+            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website2-desc">
         </picture>
         <p id="website2-desc">PHOTO DESC FOR WEBSITE 2</p>
 
       </section>
 
-      <section id="roadmap">
+      <section id="roadmap" aria-labelledby="roadmap-heading">
+        <h2 id="roadmap-heading">Roadmap, the process to creating your dream website.</h2>
+        <p id="roadmap-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <!--
         Blue Sky band
 
@@ -171,15 +198,24 @@
          Email us at: <a href="mailto:info@getpegauslabs.com">info@getpegasuslabs.com</a><br>
          Or, give us a call at: <a href="tel:+15133994566">+1 (513) 399-4566</a><br>
         Our Social Media:<br>
-        <div class="social-buttons">
-            <a href="https://facebook.com" class="facebook-icon">FACEBOOK ICON</a>
-            <a href="https://twitter.com" class="twitter-icon">X ICON</a>
-            <a href="https://instagram.com" class="twitter-icon">INSTAGRAM ICON</a>
-        </div>
         Example Company<br>
         123 Main Street, Suite 500<br>
         Springfield, USA
         </address>
+        <div class="social-buttons" aria-labelledby="social-media-header">
+            <h3 id="social-media-header">Social Media</h3>
+            <ul>
+            <li>
+                <a href="https://facebook.com" class="facebook-icon">FACEBOOK ICON</a>
+            </li>
+            <li>
+                <a href="https://twitter.com" class="twitter-icon">X ICON</a>
+            </li>
+            <li>
+            <a href="https://instagram.com" class="twitter-icon">INSTAGRAM ICON</a>
+            </li>
+            </ul>
+        </div>
       <p>&copy; 2026 Pegasus Labs</p>
     </footer>
   </body>
