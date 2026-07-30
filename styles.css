@@ -1,0 +1,181 @@
+/* Variables/Fonts */
+:root {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Arimo", system-ui, sans-serif;
+  --primary-color: #149dff;
+  --text-color: white;
+  --padding-size: 1rem;
+  --space-xs: 0.25rem; /* 4px  */
+  --space-sm: 0.5rem; /* 8px  */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 2rem; /* 32px */
+  --space-xl: 4rem; /* 64px */
+  --gradient: linear-gradient(
+    180deg,
+    #e5f4ff 0%,
+    #c2e6ff 1%,
+    #aadcff 2%,
+    #95d3ff 3%,
+    #91cffc 5%,
+    #82c7f9 8%,
+    #a3d7fc 12.5%,
+    #8fd0ff 25%,
+    #52b7ff 37.5%,
+    #149dff 50%,
+    #52b7ff 62.5%,
+    #8fd0ff 85%
+  );
+}
+
+/* ==== Modern CSS Reset ==== */
+
+/* 1. Use a more intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Improve text rendering */
+html {
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+  text-size-adjust: 100%;
+}
+
+/* 4. Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  font-family: system-ui, sans-serif;
+  background-image: var(--gradient);
+  color: #000;
+}
+
+/* 5. Remove list styles on ul, ol elements with a list role */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* 6. Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* 7. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* 8. Remove animations/transitions for people who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+section {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.skyband {
+  border: 2px solid white;
+}
+
+/* ================= */
+/* SECTIONS DESIGNED */
+/* ================= */
+
+/* HEADER */
+header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--padding-size) var(--space-lg);
+}
+
+/* HERO */
+
+#hero {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  height: 100dvh;
+}
+
+#hero h1 {
+  font-family: var(--font-body);
+  font-size: 25px;
+  grid-row: 2;
+  grid-column: 1 / 3;
+  color: black;
+}
+
+#hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: whitesmoke;
+  border: 2px solid red;
+  grid-column: 1 / 10; /* starts col 2, spans to 8 — offset from left */
+  grid-row: 7;
+  font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem);
+  line-height: 1.2;
+}
+#hero p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: whitesmoke;
+  border: 2px solid green;
+  grid-column: 3 / 11; /* shifted right, overlaps h1's columns visually */
+  grid-row: 8;
+  font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+  line-height: 1.2;
+  font-style: italic;
+}
+
+.bold {
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* ABOUT US */
+#about-us-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* SERVICES PROVIDED */
+
+/* TIER COMPARISON */
+
+/* EXAMPLES OF OUR WORK */
+
+/* ROADMAP */
+
+/* CONTACT US */
+
+/* FOOTER */

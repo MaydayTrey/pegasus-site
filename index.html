@@ -1,12 +1,18 @@
 <!doctype html>
 <html lang="en">
+  <!--DESIGN NOTE:
+    Background transitions from sky - lighter up top to darker on bottom, then clouds.
+    The hero is immersive design, logo -->
   <head>
     <!--META SECTION-->
     <title>Pegasus Labs</title>
     <meta charset="UTF-8" />
     <!--PRIMARY SEO-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business. " />
+    <meta
+      name="description"
+      content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business. "
+    />
     <meta name="author" content="Pegasus Labs" />
     <meta name="theme-color" content="#PUT THE PRIMARY HEX COLOR" />
     <meta name="geo.region" content="US" />
@@ -16,7 +22,10 @@
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <!--OPEN GRAPH (SEO)-->
     <meta property="og:title" content="Pegasus Labs - Web Development" />
-    <meta property="og:description" content="Pegasus Labs assists you in creating an online presence, establishing your website or renovating your current, making secure, and mobile responsive website designs." />
+    <meta
+      property="og:description"
+      content="Pegasus Labs assists you in creating an online presence, establishing your website or renovating your current, making secure, and mobile responsive website designs."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://getpegasuslabs.com" />
     <!--TODO: Make Image which will show on OG link-->
@@ -33,14 +42,14 @@
         "telephone": "+1-513-399-4566",
         "email": "hello@getpegasuslabs.com",
         "areaServed": [
-            { "@type": "City", "name": "Cincinnati" },
-            { "@type": "City", "name": "Dayton" }
+          { "@type": "City", "name": "Cincinnati" },
+          { "@type": "City", "name": "Dayton" }
         ],
         "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Franklin",
-            "addressRegion": "OH",
-            "addressCountry": "US"
+          "@type": "PostalAddress",
+          "addressLocality": "Franklin",
+          "addressRegion": "OH",
+          "addressCountry": "US"
         }
       }
     </script>
@@ -52,22 +61,23 @@
     <script src="script.js" defer></script>
 
     <!--EXTERNAL RESOURCES-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+
     <!--TODO: APIs, Netlify Form.-->
     <!--GOOGLE FONTS-->
     <!--TODO: Get our google fonts-->
   </head>
 
   <body>
-    <!-- TODO:
-     Create Hero:
-     Background Design[]
-     Navigation Layout[]
-     Information on Hero []
-     Logo/Design[] -->
     <a href="#main" class="skip-link">Skip to main content</a>
     <header>
+        <a href="/" id="nav-logo">Pegasus Labs</a>
       <nav>
-        <a href="/" id="logo"><!--Put the logo here --></a>
         <a href="#about-us">About Us</a>
         <a href="#services">Services</a>
         <a href="#examples">Examples of Our Work</a>
@@ -76,8 +86,16 @@
     </header>
 
     <main id="main">
-      <section id="hero" aria-labelledby="hero-heading"></section>
-        <h1 id="hero-heading">We help your business reach new heights.</h1>
+      <!-- TODO:
+     Create Hero:
+     Background Design[]
+     Navigation Layout[]
+     Information on Hero []
+     Logo/Design[] -->
+      <section id="hero" aria-labelledby="hero-heading" class="skyband">
+        <h1 id="hero-heading">
+          We help your business reach <span class="bold">new heights</span>.
+        </h2>
         <p id="hero-description">
           A team of experienced website developers, dedicated to elevating your
           user's experience and getting your sales to soar.
@@ -87,56 +105,200 @@
       <section id="about-us" aria-labelledby="about-us-heading">
         <!--Second Segment; WHITE/Transitioned from clouds; About Us section, what we do, area/location, ensuring proper security standards,
             team of experienced developers -->
-            <h2 id="about-us-heading">
-                About Us
-            </h2>
-            <p id="about-us-desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2 id="about-us-heading">About Us</h2>
+        <p id="about-us-desc">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <ul id="about-us-cards">
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-seo">
+                <h3>Search Engine Optimization</h3>
+                <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-seo">
+                <p>Benefit-focused description...</p>
+                </div>
+            </li>
+
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-cta">
+                <h3>Driving Sales — CTAs</h3>
+                <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-cta">
+                <p>...</p>
+                </div>
+            </li>
+
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-analytics">
+                <h3>Measurable Performance — Analytics</h3>
+                <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-analytics">
+                <p>...</p>
+                </div>
+            </li>
+
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-security">
+                <h3>Peace of Mind — Security</h3>
+                <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-security">
+                <p>...</p>
+                </div>
+            </li>
+
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-ux">
+                <h3>User Experience</h3>
+                    <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-ux">
+                <p>...</p>
+                </div>
+            </li>
+
+            <li>
+                <button class="about-card" aria-expanded="false" aria-controls="detail-a11y">
+                <h3>Open to All — Accessibility</h3>
+                    <ul>
+                    <li>
+                        BULLETIN 1
+                    </li>
+                    <li>
+                        BULLETIN 2
+                    </li>
+                    <li>
+                        BULLETIN 3
+                    </li>
+                    <li>
+                        BULLETIN 4
+                    </li>
+                </ul>
+                </button>
+                <div class="card-detail" id="detail-a11y">
+                <p>...</p>
+                </div>
+            </li>
+        </ul>       
       </section>
 
-      <section id="services" aria-labelledby="serices-heading">
-        <h2 id="serices-heading">Services Provided</h2>
+      <section id="services" aria-labelledby="services-heading">
+        <h2 id="services-heading">Services Provided</h2>
         <!--Third Segment: Services, the tiers/different grades; have asymmetric layout bottom to top resembiling stairs; where bottom left is Beginner, middle is Growth, and top right is Advanced.
             When you click one from the left you see a transition background fade in and text appear which describes what is offered and pricing.
         In the center bottom in a sunlight-esq CTA will be Book an Assessment. If they do click Book an Assessment It should then take them to contact, where the tier they selected is chosen in a dropdown.
     On click the sunlight should radiate out from the CTA; before transitioning into a Contact Form. 
  -->
-        <article aria-labelledby="starter-heading">
-            <h3 id="starter-heading">Starter</h3>
-            <p class="price">$895</p>
-            <ul>
-                <li>One page, mobile responsive</li>
-                <li>Contact form</li>
-                <li>Basic SEO</li>
-            </ul>
+        <article aria-labelledby="starter-heading" class="skyband">
+          <h3 id="starter-heading">Starter</h3>
+          <p class="price">$895</p>
+          <ul>
+            <li>One page, mobile responsive</li>
+            <li>Contact form</li>
+            <li>Basic SEO</li>
+          </ul>
         </article>
 
         <article aria-labelledby="growth-heading">
-            <h3 id="growth-heading">Growth</h3>
-            <p class="price">$2,195</p>
-            <ul>
-                <li>One page, mobile responsive</li>
-                <li>Contact form</li>
-                <li>Basic SEO</li>
-                <li>Other stuff</li>
-                <li>Other Stuff</li>
-            </ul>
+          <h3 id="growth-heading">Growth</h3>
+          <p class="price">$2,195</p>
+          <ul>
+            <li>One page, mobile responsive</li>
+            <li>Contact form</li>
+            <li>Basic SEO</li>
+            <li>Other stuff</li>
+            <li>Other Stuff</li>
+          </ul>
         </article>
 
         <article aria-labelledby="advanced-heading">
-            <h3 id="advanced-heading">Starter</h3>
-            <p class="price">Request Quote</p>
-            <ul>
-                <li>One page, mobile responsive</li>
-                <li>Contact form</li>
-                <li>Basic SEO</li>
-                <li>Lots of stuff 1</li>
-                <li>Lots of stuff 2</li>
-                <li>Lots of stuff 3</li>
-                <li>Lots of stuff 4</li>
-                <li>Lots of stuff 5</li>
-            </ul>
+          <h3 id="advanced-heading">Advanced</h3>
+          <p class="price">Request Quote</p>
+          <ul>
+            <li>One page, mobile responsive</li>
+            <li>Contact form</li>
+            <li>Basic SEO</li>
+            <li>Lots of stuff 1</li>
+            <li>Lots of stuff 2</li>
+            <li>Lots of stuff 3</li>
+            <li>Lots of stuff 4</li>
+            <li>Lots of stuff 5</li>
+          </ul>
         </article>
-
       </section>
 
       <section id="tier-comparison" aria-labelledby="tier-comparison-heading">
@@ -147,33 +309,56 @@
         <!--How to represent this in semantic HTML, it has rows and headers, so as a table?-->
       </section>
 
-      <section id="examples" aria-labelledby="examples-heading">
-        <h2 id="examples-heading">
-            Examples of Our Work.
-        </h2>
-        <p id="examples-desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <section id="examples" aria-labelledby="examples-heading" class="skyband">
+        <h2 id="examples-heading">Examples of Our Work.</h2>
+        <p id="examples-desc">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
         <!--
         White band
          Examples of work; the photo of the hero, and maybe some pages. This should be empty right now; the friend websites I build will go here, and testimonials to the right corresponding to the website-->
         <picture>
-            <source srcset="PRIMARY.webp" type="image/webp">
-            <source srcset="BACKUP.jpg" type="image/jpeg">
-            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website1-desc">
+          <source srcset="PRIMARY.webp" type="image/webp" />
+          <source srcset="BACKUP.jpg" type="image/jpeg" />
+          <img
+            src="3rd FALLBACK"
+            alt="PHTO DESC"
+            aria-describedby="website1-desc"
+          />
         </picture>
         <p id="website1-desc">PHOTO DESC FOR WEBSITE 1</p>
 
         <picture>
-            <source srcset="PRIMARY.webp" type="image/webp">
-            <source srcset="BACKUP.jpg" type="image/jpeg">
-            <img src="3rd FALLBACK" alt="PHTO DESC" aria-describedby="website2-desc">
+          <source srcset="PRIMARY.webp" type="image/webp" />
+          <source srcset="BACKUP.jpg" type="image/jpeg" />
+          <img
+            src="3rd FALLBACK"
+            alt="PHTO DESC"
+            aria-describedby="website2-desc"
+          />
         </picture>
         <p id="website2-desc">PHOTO DESC FOR WEBSITE 2</p>
-
       </section>
 
       <section id="roadmap" aria-labelledby="roadmap-heading">
-        <h2 id="roadmap-heading">Roadmap, the process to creating your dream website.</h2>
-        <p id="roadmap-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2 id="roadmap-heading">
+          Roadmap, the process to creating your dream website.
+        </h2>
+        <p id="roadmap-desc">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
         <!--
         Blue Sky band
 
@@ -183,10 +368,28 @@
 
         Roadmap, give an outline of the process, as they scroll down the roadmap interactively outlines the steps.
         -->
-        <!--How on earth do I represent this in semantic HTML? It's interactive images, which respond to your scrolling. -->
+        <ol>
+          <li>
+            <h3>Discovery</h3>
+            <p>We learn your business...</p>
+          </li>
+          <li>
+            <h3>Design</h3>
+            <p>You approve a mockup...</p>
+          </li>
+          <li>
+            <h3>Build</h3>
+            <p>...</p>
+          </li>
+          <li>
+            <h3>Launch</h3>
+            <p>...</p>
+          </li>
+        </ol>
       </section>
 
-      <section id="contact-us">
+      <section id="contact-us" aria-labelledby="contact-header">
+        <h2 id="contact-header">Contact Us</h2>
         <!-- Contact Us; FreeForm, or Netlify since I will use it for deployment anyways possibly.
          A contact form, where they specify the tier of their interest, their name, email, phone number, and optional additional information-->
       </section>
@@ -194,28 +397,33 @@
 
     <footer id="footer">
       <!--Email, contact number, region served, copyright, social media links -->
-        <address>
-         Email us at: <a href="mailto:info@getpegauslabs.com">info@getpegasuslabs.com</a><br>
-         Or, give us a call at: <a href="tel:+15133994566">+1 (513) 399-4566</a><br>
-        Our Social Media:<br>
-        Example Company<br>
-        123 Main Street, Suite 500<br>
-        Springfield, USA
-        </address>
-        <div class="social-buttons" aria-labelledby="social-media-header">
-            <h3 id="social-media-header">Social Media</h3>
-            <ul>
-            <li>
-                <a href="https://facebook.com" class="facebook-icon">FACEBOOK ICON</a>
-            </li>
-            <li>
-                <a href="https://twitter.com" class="twitter-icon">X ICON</a>
-            </li>
-            <li>
-            <a href="https://instagram.com" class="twitter-icon">INSTAGRAM ICON</a>
-            </li>
-            </ul>
-        </div>
+      <address>
+        Email us at:
+        <a href="mailto:info@getpegauslabs.com">info@getpegasuslabs.com</a
+        ><br />
+        Or, give us a call at: <a href="tel:+15133994566">+1 (513) 399-4566</a
+        ><br />
+      </address>
+      <div class="social-buttons" aria-labelledby="social-media-header">
+        <h3 id="social-media-header">Social Media</h3>
+        <h4>Get in touch:</h4>
+        <br />
+        <ul>
+          <li>
+            <a href="https://facebook.com" class="facebook-icon"
+              >FACEBOOK ICON</a
+            >
+          </li>
+          <li>
+            <a href="https://twitter.com" class="twitter-icon">X ICON</a>
+          </li>
+          <li>
+            <a href="https://instagram.com" class="instagram-icon"
+              >INSTAGRAM ICON</a
+            >
+          </li>
+        </ul>
+      </div>
       <p>&copy; 2026 Pegasus Labs</p>
     </footer>
   </body>
