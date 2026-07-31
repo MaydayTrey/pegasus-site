@@ -656,36 +656,113 @@
       </section>
 
       <section id="contact-us" aria-labelledby="contact-header">
-        <h2 id="contact-header">Contact Us</h2>
-        <!-- TODO: Netlify form — name, email, phone, tier dropdown, message -->
+        <h2 id="contact-header">Hey. Looking to get started?</h2>
+        <p>
+          We look forward to helping your business grow. Every inquiry is
+          handled personally, and we aim to respond within one business day.
+        </p>
+
+        <form
+          id="contact-form"
+          name="contact"
+          method="POST"
+          data-netlify="true"
+        >
+          <div class="field" id="name-field">
+            <label for="name" hidden>Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              autocomplete="name"
+              placeholder="Name"
+            />
+          </div>
+
+          <div class="field" id="email-field">
+            <label for="email" hidden>Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="Email"
+            />
+          </div>
+
+          <div class="field" id="phone-field">
+            <label for="phone" hidden>Phone (optional)</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              autocomplete="tel"
+              placeholder="Phone (Optional)"
+            />
+          </div>
+
+          <div class="field" id="tier-field">
+            <label for="tier" hidden>Which tier interests you?</label>
+            <select id="tier" name="tier">
+              <option value="" disabled selected hidden>
+                Which Tier interests you?
+              </option>
+              <option value="">Not sure yet</option>
+              <option value="starter">Starter</option>
+              <option value="growth">Growth</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div class="field" id="info-field">
+            <label for="message" hidden>Tell us about your project</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              placeholder="Tell us about the project: Scope, Timeline, Budget, etc."
+              maxlength="500"
+            ></textarea>
+          </div>
+
+          <button type="submit">Send Inquiry</button>
+        </form>
       </section>
     </main>
 
     <footer id="footer">
-      <address>
-        Email us at:
-        <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a
-        ><br />
-        Or, give us a call at:
-        <a href="tel:+15133994566">+1 (513) 399-4566</a><br />
-      </address>
-      <div class="social-buttons" aria-labelledby="social-media-header">
-        <h3 id="social-media-header">Social Media</h3>
-        <ul>
-          <li>
-            <a href="https://facebook.com" class="facebook-icon"
-              >FACEBOOK ICON</a
-            >
-          </li>
-          <li><a href="https://twitter.com" class="twitter-icon">X ICON</a></li>
-          <li>
-            <a href="https://instagram.com" class="instagram-icon"
-              >INSTAGRAM ICON</a
-            >
-          </li>
-        </ul>
-      </div>
-      <p>&copy; 2026 Pegasus Labs</p>
-    </footer>
+    <div id="footer-left">
+        <!--DESIGNS GO HERE-->
+        <img src="/images/pegasus-placeholder.png">
+    </div>
+    <div id="footer-right">
+        <address>
+            Email us at:
+            <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a
+            ><br />
+            Or, give us a call at:
+            <a href="tel:+15133994566">+1 (513) 399-4566</a><br />
+        </address>
+        <div class="social-buttons" aria-labelledby="social-media-header">
+            <h3 id="social-media-header">Social Media</h3>
+            <ul>
+            <li>
+                <a href="https://facebook.com" class="facebook-icon"
+                >FACEBOOK ICON</a
+                >
+            </li>
+            <li><a href="https://twitter.com" class="twitter-icon">X ICON</a></li>
+            <li>
+                <a href="https://instagram.com" class="instagram-icon"
+                >INSTAGRAM ICON</a
+                >
+            </li>
+            </ul>
+        </div>
+        <p>&copy; 2026 Pegasus Labs</p>
+        </footer>
+    </div>
   </body>
 </html>

@@ -438,5 +438,181 @@ header {
 /* ROADMAP */
 
 /* CONTACT US */
+/* CONTACT US */
 
+#contact-us {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(10, 1 fr);
+}
+
+#contact-us h2 {
+  grid-row: 1;
+  grid-column: 2 / 4;
+  font-size: clamp(2rem, 3.5vw + 1rem, 3.5rem);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+#contact-us p {
+  grid-row: 2;
+  grid-column: 2 / 5;
+  font-size: clamp(0.8rem, 1.4vw + 1rem, 1.4rem);
+}
+
+#contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  grid-column: 2 / 4;
+  grid-row: 3 / 10;
+}
+
+.field {
+  position: relative; /* anchors the ::after underline */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+  width: clamp(250px, 30vw, 400px);
+}
+
+/* the actual controls — scoped to the form */
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid #ccc;
+  font: inherit;
+  background: white;
+  height: 70px;
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.8);
+}
+
+/* focus state — outline removed, replaced with visible styling */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px 5px rgba(20, 157, 255, 0.2);
+}
+
+/* sweeping underline on focus */
+.field::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0.3%;
+  width: 99%;
+  height: 2px;
+  background: black;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.field:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* custom dropdown arrow */
+.field select {
+  appearance: none;
+  background-image: url("images/dropdown-menu-svgrepo-com.svg");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  background-size: 40px;
+  padding-right: var(--space-xl);
+  cursor: pointer;
+}
+
+.field textarea {
+  resize: vertical;
+  height: 200px;
+}
+
+/* submit button */
+#contact-form button[type="submit"] {
+  position: relative;
+  z-index: 0; /* stacking context so ::before sits above bg, below text */
+  overflow: hidden; /* clip gradient to rounded corners */
+  background-color: #1f1e1d;
+  appearance: none;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  color: #f2f2f2;
+  transition: box-shadow 0.3s ease;
+  margin-bottom: var(--space-md);
+}
+
+#contact-form button[type="submit"]::before {
+  content: ""; /* empty — just the gradient layer, text stays on the button */
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(
+    hsl(42, 100%, 87%),
+    hsl(42, 100%, 50%),
+    hsl(42, 84%, 49%)
+  );
+  opacity: 0;
+  transition: opacity 0.7s ease-in;
+  z-index: -1; /* behind text, above button bg due to button's z-index:0 */
+}
+
+#contact-form button[type="submit"]:hover::before {
+  opacity: 1;
+}
+
+#contact-form button[type="submit"]:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
 /* FOOTER */
+#footer {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-content: space-evenly; /* logo left, info right */
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 100vh; /* "full viewport cool design" — or 100vh */
+  border: 2px solid white;
+}
+
+#footer-left {
+  display: flex;
+  flex-direction: column;
+  border: solid 2px white;
+  grid-row: 1/3;
+  grid-column: 1 / 5;
+  height: 100%;
+  width: 100%;
+  box-shadow: 0 0 5px 0 black;
+  justify-content: center;
+  align-items: center;
+}
+
+#footer-right {
+  display: flex;
+  flex-direction: column;
+  border: solid 2px black;
+  grid-row: 1 / 3;
+  grid-column: 5 / 11;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+/* mobile: stack the two columns */
+@media (max-width: 700px) {
+  #footer {
+    flex-direction: column;
+    text-align: center;
+  }
+}
