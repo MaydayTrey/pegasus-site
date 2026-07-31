@@ -14,7 +14,7 @@
       content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business. "
     />
     <meta name="author" content="Pegasus Labs" />
-    <meta name="theme-color" content="#PUT THE PRIMARY HEX COLOR" />
+    <meta name="theme-color" content="#149dff" />
     <meta name="geo.region" content="US" />
     <!--CANONICAL URL (SEO)-->
     <link rel="canonical" href="https://getpegasuslabs.com" />
@@ -67,16 +67,12 @@
       href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
       rel="stylesheet"
     />
-
-    <!--TODO: APIs, Netlify Form.-->
-    <!--GOOGLE FONTS-->
-    <!--TODO: Get our google fonts-->
   </head>
 
   <body>
     <a href="#main" class="skip-link">Skip to main content</a>
     <header>
-        <a href="/" id="nav-logo">Pegasus Labs</a>
+      <a href="/" id="nav-logo">Pegasus Labs</a>
       <nav>
         <a href="#about-us">About Us</a>
         <a href="#services">Services</a>
@@ -86,16 +82,10 @@
     </header>
 
     <main id="main">
-      <!-- TODO:
-     Create Hero:
-     Background Design[]
-     Navigation Layout[]
-     Information on Hero []
-     Logo/Design[] -->
       <section id="hero" aria-labelledby="hero-heading" class="skyband">
         <h1 id="hero-heading">
           We help your business reach <span class="bold">new heights</span>.
-        </h2>
+        </h1>
         <p id="hero-description">
           A team of experienced website developers, dedicated to elevating your
           user's experience and getting your sales to soar.
@@ -103,167 +93,136 @@
       </section>
 
       <section id="about-us" aria-labelledby="about-us-heading">
-        <!--Second Segment; WHITE/Transitioned from clouds; About Us section, what we do, area/location, ensuring proper security standards,
-            team of experienced developers -->
         <h2 id="about-us-heading">About Us</h2>
         <p id="about-us-desc">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
         <ul id="about-us-cards">
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-seo">
-                <h3>Search Engine Optimization</h3>
-                <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-seo">
-                <p>Benefit-focused description...</p>
-                </div>
-            </li>
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-seo"
+            >
+              <h3>Search Engine Optimization</h3>
+            </button>
+            <div class="card-detail" id="detail-seo" hidden>
+              <p>
+                Being found is the whole game. We structure every page with
+                clean title and meta description tags, semantic headings, LD
+                Schema, and Open Graph data so search engines, and social
+                previews, read your site correctly. Then we submit sitemaps and
+                track rankings, so you climb results pages instead of waiting to
+                be discovered.
+              </p>
+            </div>
+          </li>
 
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-cta">
-                <h3>Driving Sales — CTAs</h3>
-                <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-cta">
-                <p>...</p>
-                </div>
-            </li>
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-cta"
+            >
+              <h3>Driving Sales — CTAs</h3>
+            </button>
+            <div class="card-detail" id="detail-cta" hidden>
+              <p>
+                A website earns its keep by generating business. Every page gets
+                a clear call to action: book a quote, call now, get directions,
+                placed where attention naturally lands. Small businesses without
+                one quietly lose leads to competitors who are simply easier to
+                contact.
+              </p>
+            </div>
+          </li>
 
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-analytics">
-                <h3>Measurable Performance — Analytics</h3>
-                <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-analytics">
-                <p>...</p>
-                </div>
-            </li>
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-analytics"
+            >
+              <h3>Measurable Performance — Analytics</h3>
+            </button>
+            <div class="card-detail" id="detail-analytics" hidden>
+              <p>
+                You'll never wonder whether it's working. We wire in analytics
+                that track traffic, search impressions, click-through rate, and
+                on-page interactions, then report it in plain language: where
+                visitors come from, what they click, and where they drop off, so
+                every future change is backed by data, not guesswork.
+              </p>
+            </div>
+          </li>
 
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-security">
-                <h3>Peace of Mind — Security</h3>
-                <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-security">
-                <p>...</p>
-                </div>
-            </li>
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-security"
+            >
+              <h3>Peace of Mind — Security</h3>
+            </button>
+            <div class="card-detail" id="detail-security" hidden>
+              <p>
+                Your customers' information stays theirs. We ship a Content
+                Security Policy, HSTS, and Subresource Integrity, and sanitize
+                every input rendered to the page. Together these shut down
+                cross-site scripting, the most common way attackers hijack forms
+                and skim customer data off an otherwise ordinary site.
+              </p>
+            </div>
+          </li>
 
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-ux">
-                <h3>User Experience</h3>
-                    <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-ux">
-                <p>...</p>
-                </div>
-            </li>
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-ux"
+            >
+              <h3>User Experience</h3>
+            </button>
+            <div class="card-detail" id="detail-ux" hidden>
+              <p>
+                Visitors decide in seconds. We design with intent: a distinct
+                visual identity, deliberate typography and spacing, and fast,
+                obvious navigation at every screen size. The goal isn't
+                decoration, it's a site that feels effortless to use and
+                memorable enough to bring people back.
+              </p>
+            </div>
+          </li>
 
-            <li>
-                <button class="about-card" aria-expanded="false" aria-controls="detail-a11y">
-                <h3>Open to All — Accessibility</h3>
-                    <ul>
-                    <li>
-                        BULLETIN 1
-                    </li>
-                    <li>
-                        BULLETIN 2
-                    </li>
-                    <li>
-                        BULLETIN 3
-                    </li>
-                    <li>
-                        BULLETIN 4
-                    </li>
-                </ul>
-                </button>
-                <div class="card-detail" id="detail-a11y">
-                <p>...</p>
-                </div>
-            </li>
-        </ul>       
+          <li>
+            <button
+              class="about-card"
+              aria-expanded="false"
+              aria-controls="detail-a11y"
+            >
+              <h3>Open to All — Accessibility</h3>
+            </button>
+            <div class="card-detail" id="detail-a11y" hidden>
+              <p>
+                Everyone should be able to use your site. We follow WCAG and
+                ARIA practice, proper landmarks, keyboard navigation, readable
+                contrast, descriptive alt text, so customers using screen
+                readers or assistive tech are included rather than shut out. It
+                widens your reach and reduces your legal exposure.
+              </p>
+            </div>
+          </li>
+        </ul>
       </section>
 
-      <section id="services" aria-labelledby="services-heading">
+      <section id="services" aria-labelledby="services-heading" class="skyband">
         <h2 id="services-heading">Services Provided</h2>
-        <!--Third Segment: Services, the tiers/different grades; have asymmetric layout bottom to top resembiling stairs; where bottom left is Beginner, middle is Growth, and top right is Advanced.
-            When you click one from the left you see a transition background fade in and text appear which describes what is offered and pricing.
-        In the center bottom in a sunlight-esq CTA will be Book an Assessment. If they do click Book an Assessment It should then take them to contact, where the tier they selected is chosen in a dropdown.
-    On click the sunlight should radiate out from the CTA; before transitioning into a Contact Form. 
- -->
-        <article aria-labelledby="starter-heading" class="skyband">
+        <article
+          aria-labelledby="starter-heading"
+          id="starter-service"
+          class="tier-stair"
+        >
           <h3 id="starter-heading">Starter</h3>
           <p class="price">$895</p>
           <ul>
@@ -273,101 +232,409 @@
           </ul>
         </article>
 
-        <article aria-labelledby="growth-heading">
+        <article
+          aria-labelledby="growth-heading"
+          id="growth-service"
+          class="tier-stair"
+        >
           <h3 id="growth-heading">Growth</h3>
           <p class="price">$2,195</p>
           <ul>
-            <li>One page, mobile responsive</li>
-            <li>Contact form</li>
-            <li>Basic SEO</li>
-            <li>Other stuff</li>
-            <li>Other Stuff</li>
+            <li>Up to 5 pages, mobile responsive</li>
+            <li>Google Business Profile</li>
+            <li>Advanced SEO &amp; analytics</li>
+            <li>Copywriting assistance</li>
           </ul>
         </article>
 
-        <article aria-labelledby="advanced-heading">
+        <article
+          aria-labelledby="advanced-heading"
+          id="advanced-service"
+          class="tier-stair"
+        >
           <h3 id="advanced-heading">Advanced</h3>
           <p class="price">Request Quote</p>
           <ul>
-            <li>One page, mobile responsive</li>
-            <li>Contact form</li>
-            <li>Basic SEO</li>
-            <li>Lots of stuff 1</li>
-            <li>Lots of stuff 2</li>
-            <li>Lots of stuff 3</li>
-            <li>Lots of stuff 4</li>
-            <li>Lots of stuff 5</li>
+            <li>Unlimited pages</li>
+            <li>Booking &amp; e-commerce</li>
+            <li>Custom functionality</li>
+            <li>Multi-language</li>
           </ul>
         </article>
       </section>
 
-      <section id="tier-comparison" aria-labelledby="tier-comparison-heading">
-        <h2 id="tier-comparison-heading">Tier Comparison</h2>
-        <!--
-        Blue sky band:
-        This is the comparison segment, compare all the different tiers, what is included. Headers/Rows essentially. -->
-        <!--How to represent this in semantic HTML, it has rows and headers, so as a table?-->
+      <!--General Information -->
+      <section
+        id="general-info"
+        aria-labelledby="general-info-heading"
+        class="skyband"
+      >
+        <h2 id="general-info-heading">Having a website presence matters.</h2>
+        <p>TODO: 3 sub-sections — benefits of a website.</p>
+        <p>TODO: Online presence — conversion, leads, sales.</p>
+        <p>TODO: Competitive edge.</p>
+        <p>TODO: Local SEO / showing up locally.</p>
+        <p>TODO: Security when handling payments — XSS.</p>
+        <p>TODO: Google Business Profile effect.</p>
+      </section>
+
+      <!--Care plan -->
+      <section
+        id="care-plan"
+        aria-labelledby="care-plan-heading"
+        class="skyband"
+      >
+        <h2 id="care-plan-heading">Progressive Support</h2>
+        <p>
+          TODO: benefits of continual support, management, uptime, security
+          compliance.
+        </p>
+        <p>
+          TODO: soft description of the care plan — ongoing hosting and
+          maintenance.
+        </p>
+      </section>
+
+      <!--TIER COMPARISON-->
+      <section
+        id="tier-comparison"
+        aria-labelledby="comparison-heading"
+        class="skyband"
+      >
+        <h2 id="comparison-heading">Compare Tiers</h2>
+
+        <div class="table-wrap">
+          <table class="comparison-table">
+            <caption>
+              Features included in each tier
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">Starter</th>
+                <th scope="col">Growth</th>
+                <th scope="col">Advanced</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Pages</th>
+                <td>1 page</td>
+                <td>Up to 5 pages</td>
+                <td>Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row">Mobile responsive</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Contact form</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Semantic, accessible HTML</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Basic on-page SEO</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">SSL &amp; security headers</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Google Business Profile setup</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Copywriting assistance</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Advanced SEO &amp; schema markup</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Analytics setup</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Photo gallery / portfolio</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Blog / news section</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Booking / scheduling integration</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">E-commerce / payments</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Custom functionality</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Multi-language</th>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✕</span
+                  ><span class="sr-only">Not included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Revision rounds</th>
+                <td>1</td>
+                <td>3</td>
+                <td>Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row">Turnaround</th>
+                <td>~1 week</td>
+                <td>~2–3 weeks</td>
+                <td>Scoped per project</td>
+              </tr>
+              <tr>
+                <th scope="row">Care plan (first 3 months free)</th>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+                <td>
+                  <span aria-hidden="true">✓</span
+                  ><span class="sr-only">Included</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section id="examples" aria-labelledby="examples-heading" class="skyband">
-        <h2 id="examples-heading">Examples of Our Work.</h2>
-        <p id="examples-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <!--
-        White band
-         Examples of work; the photo of the hero, and maybe some pages. This should be empty right now; the friend websites I build will go here, and testimonials to the right corresponding to the website-->
-        <picture>
-          <source srcset="PRIMARY.webp" type="image/webp" />
-          <source srcset="BACKUP.jpg" type="image/jpeg" />
-          <img
-            src="3rd FALLBACK"
-            alt="PHTO DESC"
-            aria-describedby="website1-desc"
-          />
-        </picture>
-        <p id="website1-desc">PHOTO DESC FOR WEBSITE 1</p>
+        <h2 id="examples-heading">Examples of Our Work</h2>
 
-        <picture>
-          <source srcset="PRIMARY.webp" type="image/webp" />
-          <source srcset="BACKUP.jpg" type="image/jpeg" />
-          <img
-            src="3rd FALLBACK"
-            alt="PHTO DESC"
-            aria-describedby="website2-desc"
-          />
-        </picture>
-        <p id="website2-desc">PHOTO DESC FOR WEBSITE 2</p>
+        <ul class="examples-grid">
+          <li class="example example--up">
+            <figure>
+              <picture>
+                <!-- <source srcset="PRIMARY.webp" type="image/webp" />
+                <source srcset="BACKUP.jpg" type="image/jpeg" /> ADD THESE WHEN DONE PLACEHOLDING -->
+                <img
+                  id="img1"
+                  src="images/clouds-background.jpg"
+                  alt="TODO: project screenshot"
+                />
+              </picture>
+              <figcaption>
+                <h3>Client One</h3>
+                <p>What we built for them, one line.</p>
+              </figcaption>
+            </figure>
+            <!--Detail panel gets done on JS day.-->
+            <div class="example-detail" hidden>
+              <p class="testimonial">"Their review goes here."</p>
+              <p class="work-summary">What we did, in a paragraph.</p>
+            </div>
+          </li>
+
+          <li class="example example--down">
+            <figure>
+              <picture>
+                <!-- <source srcset="PRIMARY.webp" type="image/webp" />
+                <source srcset="BACKUP.jpg" type="image/jpeg" /> ADD THESE WHEN DONE PLACEHOLDING -->
+                <img
+                  id="img2"
+                  src="images/clouds-background.jpg"
+                  alt="TODO: project screenshot"
+                />
+              </picture>
+              <figcaption>
+                <h3>Client Two</h3>
+                <p>What we built for them, one line.</p>
+              </figcaption>
+            </figure>
+            <!--Detail panel gets done on JS day.-->
+            <div class="example-detail" hidden>
+              <p class="testimonial">"Their review goes here."</p>
+              <p class="work-summary">What we did, in a paragraph.</p>
+            </div>
+          </li>
+        </ul>
       </section>
 
       <section id="roadmap" aria-labelledby="roadmap-heading">
-        <h2 id="roadmap-heading">
-          Roadmap, the process to creating your dream website.
-        </h2>
-        <p id="roadmap-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <!--
-        Blue Sky band
-
-        This can definitely be Flex, it's box layout, with SVG icons for each card, and a brief description.
-        As they scroll down, have it progress, the first one is highlighted then a line connecting the second shoots to the next card, 
-        as they scroll down - which symbolizes progress down the page, and that next card becomes highlighted.
-
-        Roadmap, give an outline of the process, as they scroll down the roadmap interactively outlines the steps.
-        -->
+        <h2 id="roadmap-heading">The process to creating your dream website</h2>
+        <p id="roadmap-desc">TODO: intro to the roadmap.</p>
         <ol>
           <li>
             <h3>Discovery</h3>
@@ -390,33 +657,27 @@
 
       <section id="contact-us" aria-labelledby="contact-header">
         <h2 id="contact-header">Contact Us</h2>
-        <!-- Contact Us; FreeForm, or Netlify since I will use it for deployment anyways possibly.
-         A contact form, where they specify the tier of their interest, their name, email, phone number, and optional additional information-->
+        <!-- TODO: Netlify form — name, email, phone, tier dropdown, message -->
       </section>
     </main>
 
     <footer id="footer">
-      <!--Email, contact number, region served, copyright, social media links -->
       <address>
         Email us at:
-        <a href="mailto:info@getpegauslabs.com">info@getpegasuslabs.com</a
+        <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a
         ><br />
-        Or, give us a call at: <a href="tel:+15133994566">+1 (513) 399-4566</a
-        ><br />
+        Or, give us a call at:
+        <a href="tel:+15133994566">+1 (513) 399-4566</a><br />
       </address>
       <div class="social-buttons" aria-labelledby="social-media-header">
         <h3 id="social-media-header">Social Media</h3>
-        <h4>Get in touch:</h4>
-        <br />
         <ul>
           <li>
             <a href="https://facebook.com" class="facebook-icon"
               >FACEBOOK ICON</a
             >
           </li>
-          <li>
-            <a href="https://twitter.com" class="twitter-icon">X ICON</a>
-          </li>
+          <li><a href="https://twitter.com" class="twitter-icon">X ICON</a></li>
           <li>
             <a href="https://instagram.com" class="instagram-icon"
               >INSTAGRAM ICON</a
