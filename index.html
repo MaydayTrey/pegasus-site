@@ -94,6 +94,122 @@
 
     <main id="main">
       <section id="hero" aria-labelledby="hero-heading" class="skyband">
+        <!--glowing line-art pegasus; each path draws itself in on load-->
+        <svg
+          class="pegasus-figure"
+          viewBox="0 0 520 400"
+          aria-hidden="true"
+        >
+          <g class="pegasus-lines">
+            <!--far wing, faint, behind the body-->
+            <path
+              class="pegasus-path pegasus-path--far"
+              d="M 210 148 C 250 118 300 98 352 94"
+              pathLength="1"
+            />
+            <!--near wing: leading edge sweeping to the tip-->
+            <path
+              class="pegasus-path"
+              d="M 195 150 C 240 96 300 60 380 44 C 402 40 424 40 444 46"
+              pathLength="1"
+            />
+            <!--wing trailing edge back toward the shoulder-->
+            <path
+              class="pegasus-path"
+              d="M 444 46 C 420 70 390 92 356 108 C 322 124 286 138 252 148"
+              pathLength="1"
+            />
+            <!--feather separations-->
+            <path
+              class="pegasus-path"
+              d="M 400 52 C 380 78 352 98 320 114"
+              pathLength="1"
+            />
+            <path
+              class="pegasus-path"
+              d="M 350 66 C 334 88 310 106 282 122"
+              pathLength="1"
+            />
+            <path
+              class="pegasus-path"
+              d="M 300 84 C 288 102 268 118 246 132"
+              pathLength="1"
+            />
+            <!--muzzle over the brow-->
+            <path
+              class="pegasus-path"
+              d="M 95 152 C 108 140 122 132 138 130"
+              pathLength="1"
+            />
+            <!--ear-->
+            <path
+              class="pegasus-path"
+              d="M 138 130 L 148 112 L 156 128"
+              pathLength="1"
+            />
+            <!--jaw-->
+            <path
+              class="pegasus-path"
+              d="M 95 152 C 100 162 110 168 122 168 C 132 168 140 162 146 152"
+              pathLength="1"
+            />
+            <!--crest of the neck into the back-->
+            <path
+              class="pegasus-path"
+              d="M 138 130 C 165 132 185 140 200 152 C 250 168 300 170 340 178"
+              pathLength="1"
+            />
+            <!--throat down to the chest-->
+            <path
+              class="pegasus-path"
+              d="M 122 168 C 140 186 155 198 172 208"
+              pathLength="1"
+            />
+            <!--belly-->
+            <path
+              class="pegasus-path"
+              d="M 172 208 C 220 228 280 228 320 220"
+              pathLength="1"
+            />
+            <!--rump-->
+            <path
+              class="pegasus-path"
+              d="M 340 178 C 355 184 362 196 360 210"
+              pathLength="1"
+            />
+            <!--hind leg trailing in flight-->
+            <path
+              class="pegasus-path"
+              d="M 320 220 C 335 232 350 240 368 244 C 385 248 398 258 402 272 L 415 292"
+              pathLength="1"
+            />
+            <!--front legs tucked-->
+            <path
+              class="pegasus-path"
+              d="M 185 208 C 190 226 185 240 172 248 C 165 252 160 260 162 268"
+              pathLength="1"
+            />
+            <path
+              class="pegasus-path"
+              d="M 205 212 C 208 228 202 240 192 246"
+              pathLength="1"
+            />
+            <!--tail streaming back-->
+            <path
+              class="pegasus-path"
+              d="M 356 196 C 390 200 420 214 440 240 C 448 250 452 262 450 274"
+              pathLength="1"
+            />
+            <path
+              class="pegasus-path"
+              d="M 360 210 C 388 218 408 232 420 252"
+              pathLength="1"
+            />
+            <!--eye-->
+            <circle class="pegasus-eye" cx="128" cy="146" r="2.5" />
+          </g>
+        </svg>
+
         <h1 id="hero-heading">
           We help your business reach <span class="bold">new heights</span>.
         </h1>
@@ -1212,101 +1328,63 @@
     </main>
 
     <footer id="footer">
-      <!--diagonal-stripe band down the right edge-->
-      <div class="footer-stripes" aria-hidden="true"></div>
-
-      <div class="footer-main">
-        <!--LEFT: phone, address, typographic tagline stack, copyright-->
-        <div class="footer-col footer-col--left">
-          <p class="footer-phone">
-            <a href="tel:+15133994566">(513) 399.4566</a>
-          </p>
-          <address class="footer-address">
-            Serving Cincinnati, Dayton,<br />
-            and Northern Kentucky
-          </address>
-
-          <div class="footer-tagline">
-            <p class="tagline-top">We build</p>
-            <p class="tagline-sub">websites that</p>
-            <p class="tagline-big">Soar</p>
-            <p class="tagline-script">to new heights</p>
-          </div>
-
-          <div class="footer-copyright">
-            <div>
-              <p class="copyright-label">Copyright 2026</p>
-              <p class="copyright-name">Pegasus Labs</p>
-            </div>
-            <span class="copyright-x" aria-hidden="true">&times;</span>
-          </div>
+      <div class="footer-inner">
+        <!--clean invitation + direct lines-->
+        <p class="footer-kicker">
+          Reach out<span class="kicker-dot">.</span>
+        </p>
+        <div class="footer-contact">
+          <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a>
+          <a href="tel:+15133994566">(513) 399-4566</a>
         </div>
 
-        <!--dotted vertical rule-->
-        <div class="footer-rule" aria-hidden="true"></div>
-
-        <!--RIGHT: nav, logo, CONNECT block with newsletter + socials-->
-        <div class="footer-col footer-col--right">
-          <nav class="footer-nav" aria-label="Footer">
-            <a href="#about-us">About Us</a>
-            <a href="#services">Services</a>
-            <a href="#examples">Our Work</a>
-            <a href="#contact-us">Contact</a>
-          </nav>
-
-          <img
-            class="footer-logo"
-            src="images/pegasus-placeholder.png"
-            alt="Pegasus Labs"
-            width="220"
-            height="220"
-            loading="lazy"
-          />
-
-          <div class="footer-connect">
-            <span class="connect-label" aria-hidden="true">Connect</span>
-            <div class="connect-body">
-              <form
-                class="newsletter"
-                name="newsletter"
-                method="POST"
-                data-netlify="true"
-              >
-                <label class="newsletter-label" for="newsletter-email"
-                  >Email newsletter sign-up</label
-                >
-                <div class="newsletter-row">
-                  <input
-                    id="newsletter-email"
-                    name="email"
-                    type="email"
-                    placeholder="Email address"
-                    autocomplete="email"
-                    required
+        <!--rotating carousel of glowing outline social icons.
+            Each face counter-rotates so the icon always reads upright.-->
+        <div class="social-carousel" aria-label="Social media">
+          <div class="carousel-ring">
+            <a
+              class="social-card"
+              href="https://facebook.com"
+              aria-label="Facebook"
+            >
+              <span class="social-face">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M15.5 4.5 H13.8 A3 3 0 0 0 10.8 7.5 V10 H8.5 V13 H10.8 V19.5 M10.8 13 H14.5"
                   />
-                  <button type="submit">Go</button>
-                </div>
-              </form>
-
-              <hr class="connect-dashes" />
-
-              <div class="footer-socials">
-                <ul>
-                  <li><a href="https://facebook.com">Facebook</a></li>
-                  <li><a href="https://twitter.com">X</a></li>
-                  <li><a href="https://instagram.com">Instagram</a></li>
-                </ul>
-                <p class="socials-label">Socials</p>
-              </div>
-
-              <address class="footer-email">
-                <a href="mailto:info@getpegasuslabs.com"
-                  >info@getpegasuslabs.com</a
-                >
-              </address>
-            </div>
+                </svg>
+              </span>
+            </a>
+            <a class="social-card" href="https://twitter.com" aria-label="X">
+              <span class="social-face">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5.5 4.5 L18.5 19.5 M18.5 4.5 L5.5 19.5" />
+                </svg>
+              </span>
+            </a>
+            <a
+              class="social-card"
+              href="https://instagram.com"
+              aria-label="Instagram"
+            >
+              <span class="social-face">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="4.5" y="4.5" width="15" height="15" rx="4.5" />
+                  <circle cx="12" cy="12" r="3.6" />
+                  <circle class="icon-dot" cx="16.6" cy="7.4" r="1" />
+                </svg>
+              </span>
+            </a>
           </div>
         </div>
+
+        <!--the half-faded wordmark-->
+        <p class="footer-wordmark" aria-hidden="true">Pegasus Labs</p>
+
+        <p class="footer-fineprint">
+          &copy; 2026 Pegasus Labs &mdash; Cincinnati &middot; Dayton &middot;
+          Northern Kentucky
+        </p>
       </div>
     </footer>
   </body>

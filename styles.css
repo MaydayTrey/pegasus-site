@@ -140,6 +140,80 @@ header {
   height: 100dvh;
 }
 
+/* --- the glowing pegasus --- */
+.pegasus-figure {
+  grid-column: 6 / 13;
+  grid-row: 1 / 8;
+  justify-self: end;
+  align-self: center;
+  width: min(46vw, 560px);
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  /* the same glow treatment as the care-plan cross */
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.45));
+  animation: pegasus-float 7s ease-in-out infinite alternate;
+}
+
+@keyframes pegasus-float {
+  from {
+    translate: 0 -10px;
+  }
+  to {
+    translate: 0 10px;
+  }
+}
+
+.pegasus-path {
+  fill: none;
+  stroke: whitesmoke;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* each stroke draws itself in on load (pathLength=1 in the markup) */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: pegasus-draw 1.6s ease forwards;
+}
+
+/* the wing feathers and details lag slightly behind the body */
+.pegasus-path:nth-of-type(-n + 6) {
+  animation-delay: 0.7s;
+}
+
+.pegasus-path--far {
+  stroke-width: 2.5;
+  opacity: 0.45;
+}
+
+@keyframes pegasus-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.pegasus-eye {
+  fill: whitesmoke;
+  stroke: none;
+  opacity: 0;
+  animation: pegasus-blink-in 0.6s ease 1.9s forwards;
+}
+
+@keyframes pegasus-blink-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 700px) {
+  .pegasus-figure {
+    grid-column: 3 / 13;
+    grid-row: 1 / 7;
+    width: min(78vw, 420px);
+  }
+}
+
 #hero h1 {
   font-family: var(--font-display);
   font-weight: 600;
@@ -171,7 +245,7 @@ header {
 /* ABOUT US */
 /* ---- WHO WE ARE: full-viewport statement panel ----
    Sweeps in from the left edge as you scroll to it. */
-/* the observed wrapper — stays in the flow so it can intersect */
+/* the observed wrapper â€” stays in the flow so it can intersect */
 .who-wrap {
   width: 100vw;
   min-height: 108vh; /* fills the viewport with a little extra */
@@ -202,7 +276,7 @@ header {
     #000 86%,
     transparent 100%
   );
-  /* off to the left until it scrolls into view — a long unhurried glide */
+  /* off to the left until it scrolls into view â€” a long unhurried glide */
   translate: -100% 0;
   opacity: 0;
   transition:
@@ -221,7 +295,7 @@ header {
    so they're timed against the panel's arrival (~1s of visible travel):
    eyebrow 1.6s, lines 1.95s / 2.25s / 2.55s. */
 
-/* the widely-tracked label in the top left — first text on stage */
+/* the widely-tracked label in the top left â€” first text on stage */
 .who-eyebrow {
   position: absolute;
   top: clamp(var(--space-lg), 6vh, 4rem);
@@ -438,14 +512,14 @@ header {
   box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
 
   transform: translateX(-100%); /* start fully off-screen to the left */
-  /* long, gentle glide — 1.4s with a soft ease-out tail */
+  /* long, gentle glide â€” 1.4s with a soft ease-out tail */
   transition:
     transform 1.4s cubic-bezier(0.33, 1, 0.68, 1),
     display 1.4s ease allow-discrete,
     overlay 1.4s ease allow-discrete;
 }
 
-/* open state — slid into place */
+/* open state â€” slid into place */
 #about-dialog[open] {
   display: flex;
   align-items: center;
@@ -470,7 +544,7 @@ header {
     overlay 0.9s ease allow-discrete;
 }
 
-/* open state — the final dark, blurred look */
+/* open state â€” the final dark, blurred look */
 #about-dialog[open]::backdrop {
   background-color: rgba(32, 31, 30, 0.7);
   backdrop-filter: blur(4px);
@@ -484,7 +558,7 @@ header {
   }
 }
 
-/* THE CLOSE X — a bare glyph, no circle. It spins into position while
+/* THE CLOSE X â€” a bare glyph, no circle. It spins into position while
    the dialog glides right, unspins the other way on close, and settles
    as an upright grey X at full expansion. `rotate` and `translate` are
    separate CSS properties, so spin and hover-raise never fight. */
@@ -524,7 +598,7 @@ header {
   translate: 0 -4px;
 }
 
-/* CONTENT — rides in from the left after the panel, leaves with it */
+/* CONTENT â€” rides in from the left after the panel, leaves with it */
 #dialog-content {
   max-width: 62ch; /* readable line length */
   padding: var(--space-lg) var(--space-xl);
@@ -560,7 +634,7 @@ header {
   line-height: 1.2;
 }
 
-/* accent line under the title — brand blue into the CTA gold */
+/* accent line under the title â€” brand blue into the CTA gold */
 .dialog-divider {
   display: block;
   width: 90px;
@@ -648,9 +722,9 @@ header {
   position: relative;
   display: grid;
   /* written out longhand (no repeat()) so collapsed and expanded track
-     lists share the exact same structure — matching structures is what
+     lists share the exact same structure â€” matching structures is what
      lets the browser interpolate them smoothly instead of snapping.
-     minmax(0, …) + the locked height stop the page being shoved around:
+     minmax(0, â€¦) + the locked height stop the page being shoved around:
      a bare fr keeps a content-sized minimum. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
@@ -661,7 +735,7 @@ header {
     grid-template-rows 0.8s ease;
 }
 
-/* the tier close X — grey, red on hover, no rotation */
+/* the tier close X â€” grey, red on hover, no rotation */
 #services-close {
   position: absolute;
   top: var(--space-md);
@@ -724,7 +798,7 @@ header {
   opacity: 1;
 }
 
-/* stagger so the staircase builds bottom-up — but ONLY for the initial
+/* stagger so the staircase builds bottom-up â€” but ONLY for the initial
    grow-in. Left unscoped, these delays also postponed every click
    transition (padding, fade, scale) by a different amount per tier,
    which is what made expanding feel jagged. */
@@ -747,7 +821,7 @@ header {
     scale 0.8s ease;
 }
 
-/* the open tier gets room to breathe — type scales up with the box */
+/* the open tier gets room to breathe â€” type scales up with the box */
 .tier-grid[data-expanded] .tier-stair.is-open {
   padding: var(--space-xl);
   gap: var(--space-sm);
@@ -801,7 +875,7 @@ header {
 }
 
 .tier-stair > ul li::before {
-  content: "✓ ";
+  content: "âœ“ ";
   color: #2f9e44;
   font-weight: 700;
 }
@@ -821,7 +895,7 @@ header {
   line-height: 1.7;
 }
 
-/* THE EXPAND DETAIL — collapsed via the 0fr grid-row trick, grows
+/* THE EXPAND DETAIL â€” collapsed via the 0fr grid-row trick, grows
    into place and fades up once its tier owns the viewport */
 .tier-more {
   display: grid;
@@ -852,7 +926,7 @@ header {
 }
 
 .tier-perks li::before {
-  content: "— ";
+  content: "â€” ";
   color: hsl(42, 100%, 45%);
   font-weight: 700;
 }
@@ -894,11 +968,11 @@ header {
   grid-row: 1;
 }
 
-/* EXPANSION — set from JS on click.
-   Every track is minmax(0, …): a bare `0fr` is really minmax(auto, 0fr),
+/* EXPANSION â€” set from JS on click.
+   Every track is minmax(0, â€¦): a bare `0fr` is really minmax(auto, 0fr),
    so collapsed tracks keep a content-sized minimum, the open tile never
    fills the grid, and it lands somewhere different depending on which
-   row/column it came from — which is what made the close X wander. */
+   row/column it came from â€” which is what made the close X wander. */
 .tier-grid[data-expanded="starter"] {
   grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
   grid-template-rows: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
@@ -965,7 +1039,7 @@ header {
     font-size: 1.05rem;
   }
 
-  /* no hover on touch — the detail is simply always visible */
+  /* no hover on touch â€” the detail is simply always visible */
   .tier-more {
     grid-template-rows: 1fr;
     opacity: 1;
@@ -1032,7 +1106,7 @@ header {
   font-family: var(--font-body);
 }
 
-/* SCROLL REVEAL — rows start low + invisible, glide up when the
+/* SCROLL REVEAL â€” rows start low + invisible, glide up when the
    IntersectionObserver in script.js marks them in */
 .comparison-table tbody tr {
   opacity: 0;
@@ -1048,7 +1122,7 @@ header {
   translate: 0 0;
 }
 
-/* THE FOCUSED ROW — the row in line with the scroll rises, brightens,
+/* THE FOCUSED ROW â€” the row in line with the scroll rises, brightens,
    and its marks glow; as the scroll moves on it drifts back down */
 .comparison-table tbody tr.row-active {
   translate: 0 -6px;
@@ -1114,7 +1188,7 @@ header {
   align-items: start; /* generally centered, per your read of the reference */
 }
 
-/* the subtle stagger — one slightly up, one slightly down */
+/* the subtle stagger â€” one slightly up, one slightly down */
 .example--up {
   grid-row: 1 / 4;
 }
@@ -1133,9 +1207,9 @@ header {
   height: 500px;
   display: block;
   object-fit: cover;
-  /* no CSS transition here — GSAP drives the transform now, and a
+  /* no CSS transition here â€” GSAP drives the transform now, and a
      CSS transition on the same property would fight its tweening */
-  transform-origin: right center; /* anchor the RIGHT — left edge moves */
+  transform-origin: right center; /* anchor the RIGHT â€” left edge moves */
   will-change: transform;
   border-radius: 6px;
   box-shadow: 0 18px 40px rgba(0, 30, 60, 0.3);
@@ -1299,7 +1373,7 @@ header {
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(6px);
-  /* reveal on scroll — class added by the observer in script.js */
+  /* reveal on scroll â€” class added by the observer in script.js */
   opacity: 0;
   translate: 0 26px;
   transition:
@@ -1471,7 +1545,7 @@ header {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* CARE PLAN — Progressive Support */
+/* CARE PLAN â€” Progressive Support */
 #care-plan {
   display: flex;
   flex-wrap: wrap;
@@ -1592,7 +1666,7 @@ header {
   color: #dfe9f2;
 }
 
-/* ROADMAP — the treasure map.
+/* ROADMAP â€” the treasure map.
    The section is deliberately tall and the map is sticky inside it, so
    the trail draws across a long stretch of scrolling while the map
    stays pinned in view, instead of racing to the end in half a screen. */
@@ -1642,7 +1716,7 @@ header {
   display: block;
 }
 
-/* the dashed trail — round caps make the dashes read hand-drawn */
+/* the dashed trail â€” round caps make the dashes read hand-drawn */
 .map-trail {
   stroke: whitesmoke;
   stroke-width: 6;
@@ -1650,7 +1724,7 @@ header {
   filter: drop-shadow(0 2px 3px rgba(0, 30, 60, 0.4));
 }
 
-/* X marks the spot — lives OUTSIDE the reveal mask (the mask's round
+/* X marks the spot â€” lives OUTSIDE the reveal mask (the mask's round
    edge was slicing it into a circular blob mid-scroll) and stamps in
    with a springy pop once the trail arrives */
 .map-x {
@@ -1717,7 +1791,7 @@ header {
   r: 15;
 }
 
-/* stages you've sailed past get struck through — completed */
+/* stages you've sailed past get struck through â€” completed */
 .stage-strike {
   stroke: rgba(255, 255, 255, 0.9);
   stroke-width: 3;
@@ -1749,7 +1823,7 @@ header {
   font-size: 1.2rem;
 }
 
-/* PARALLAX SKY — fixed decorative layer behind the content */
+/* PARALLAX SKY â€” fixed decorative layer behind the content */
 #parallax-sky {
   position: fixed;
   inset: 0;
@@ -1833,7 +1907,7 @@ header {
   width: clamp(250px, 30vw, 400px);
 }
 
-/* the actual controls — scoped to the form */
+/* the actual controls â€” scoped to the form */
 .field input,
 .field select,
 .field textarea {
@@ -1846,7 +1920,7 @@ header {
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.8);
 }
 
-/* focus state — outline removed, replaced with visible styling */
+/* focus state â€” outline removed, replaced with visible styling */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
@@ -1873,7 +1947,7 @@ header {
   transform: scaleX(1);
 }
 
-/* custom dropdown arrow (native select — the no-JS fallback) */
+/* custom dropdown arrow (native select â€” the no-JS fallback) */
 .field select {
   appearance: none;
   background-image: url("images/dropdown-menu-svgrepo-com.svg");
@@ -2050,7 +2124,7 @@ header {
 }
 
 #contact-form button[type="submit"]::before {
-  content: ""; /* empty — just the gradient layer, text stays on the button */
+  content: ""; /* empty â€” just the gradient layer, text stays on the button */
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -2073,7 +2147,7 @@ header {
 }
 
 /* ---- SUNBEAMS BEHIND THE PAGE ----
-   Not on the button — this is the backdrop of the whole contact
+   Not on the button â€” this is the backdrop of the whole contact
    section. A sun sits off the top-right corner and beams fan out
    across the sky toward the form; hovering Send Inquiry fades the
    whole thing in. */
@@ -2084,7 +2158,7 @@ header {
 }
 
 .sunbeams {
-  /* one shared anchor for the sun — the core and the beams both key off
+  /* one shared anchor for the sun â€” the core and the beams both key off
      these, so they can never drift out of alignment */
   --sun-x: 92%;
   --sun-y: 4%;
@@ -2148,7 +2222,7 @@ header {
   }
 }
 
-/* the sun itself — a soft warm core centred on the shared anchor */
+/* the sun itself â€” a soft warm core centred on the shared anchor */
 .sun-core {
   position: absolute;
   left: var(--sun-x);
@@ -2176,368 +2250,229 @@ header {
   }
 }
 /* ============ FOOTER ============
-   Dark ink canvas, gold accents, dotted column rule, diagonal-stripe
-   band down the right edge — the reference layout in our palette. */
+   Modernist: deep blues, white, a single touch of sunlight yellow.
+   A clean invitation, a rotating ring of glowing outline icons, and
+   the wordmark half-dissolved into the night sky. */
 #footer {
   position: relative;
-  min-height: 160vh; /* taller than a screen, like the reference */
-  background: #1f1e1d;
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  background: linear-gradient(180deg, #0b3a5e 0%, #072338 55%, #051a2b 100%);
   color: whitesmoke;
-  padding: 12vh clamp(var(--space-lg), 6vw, 6rem);
   overflow: hidden;
+  padding: 14vh clamp(var(--space-lg), 6vw, 6rem) 5vh;
 }
 
-/* the hatched band down the right edge */
-.footer-stripes {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: clamp(36px, 4vw, 72px);
-  background: repeating-linear-gradient(
-    45deg,
-    hsl(42, 100%, 50%) 0 3px,
-    transparent 3px 14px
-  );
-  opacity: 0.75;
-}
-
-.footer-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.25fr);
-  gap: clamp(var(--space-lg), 4vw, 4rem);
-  max-width: 1300px;
-  margin: 0 auto;
-  min-height: 136vh;
-}
-
-/* dotted vertical rule between the columns */
-.footer-rule {
-  width: 2px;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0 6px,
-    transparent 6px 14px
-  );
-}
-
-.footer-col {
+.footer-inner {
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* --- LEFT COLUMN --- */
-.footer-phone a {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(2rem, 3vw + 0.5rem, 3.2rem);
-  letter-spacing: 0.02em;
-  color: hsl(42, 100%, 55%);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-phone a:hover {
-  color: hsl(42, 100%, 70%);
-}
-
-.footer-address {
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
-  border-top: 2px solid rgba(255, 255, 255, 0.6);
-  font-style: normal;
-  font-family: var(--font-body);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  color: #cfd6dd;
-  line-height: 1.8;
-}
-
-/* the typographic stack, reference-style: grey caps, white caps,
-   huge gold word, then a script line with an underline */
-.footer-tagline {
-  margin: auto 0; /* floats between address and copyright */
-  padding: var(--space-xl) 0;
-}
-
-.tagline-top {
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: clamp(1.8rem, 2.6vw + 0.4rem, 2.8rem);
-  color: #8b949c; /* the muted grey step */
-  line-height: 1.1;
-}
-
-.tagline-sub {
+/* the clean invitation */
+.footer-kicker {
   font-family: var(--font-body);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: clamp(1rem, 1.2vw + 0.3rem, 1.4rem);
-  color: whitesmoke;
-  line-height: 1.4;
+  font-size: clamp(2.4rem, 4vw + 0.5rem, 4.2rem);
+  letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
-.tagline-big {
-  font-family: var(--font-body);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: clamp(3.6rem, 7vw + 0.5rem, 6.5rem);
-  line-height: 1;
-  color: hsl(42, 100%, 55%);
-  letter-spacing: 0.01em;
+/* the one drop of sunlight */
+.kicker-dot {
+  color: hsl(42, 100%, 60%);
 }
 
-.tagline-script {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(2rem, 3.4vw + 0.4rem, 3.4rem);
-  color: #efe9dc;
-  display: inline-block;
-  padding: 0 var(--space-md) var(--space-xs);
-  border-bottom: 2px solid #efe9dc;
-}
-
-/* the black copyright plate with the gold × */
-.footer-copyright {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-lg);
-  align-self: flex-start;
-  background: #000;
-  padding: var(--space-md) var(--space-lg);
-}
-
-.copyright-label {
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.8rem;
-}
-
-.copyright-name {
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 1.5rem;
-  color: #cfd6dd;
-}
-
-.copyright-x {
-  font-size: 3rem;
-  line-height: 1;
-  color: hsl(42, 100%, 55%);
-  font-weight: 700;
-}
-
-/* --- RIGHT COLUMN --- */
-.footer-nav {
+.footer-contact {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 2px solid hsl(42, 100%, 55%);
+  justify-content: center;
+  gap: var(--space-md) var(--space-xl);
+  margin-top: var(--space-md);
 }
 
-.footer-nav a {
+.footer-contact a {
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: whitesmoke;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-nav a:hover {
-  color: hsl(42, 100%, 55%);
-}
-
-.footer-logo {
-  align-self: flex-end;
-  width: clamp(140px, 16vw, 220px);
-  height: auto;
-  margin: var(--space-xl) 0;
-  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
-}
-
-/* CONNECT block: vertical gold label beside the newsletter + socials */
-.footer-connect {
-  display: flex;
-  gap: var(--space-lg);
-  margin-top: auto; /* sinks toward the bottom of the tall column */
-}
-
-.connect-label {
-  font-family: var(--font-body);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: clamp(2.4rem, 3.4vw, 3.6rem);
-  color: hsl(42, 100%, 55%);
-  writing-mode: vertical-rl;
-  rotate: 180deg;
-  line-height: 1;
-  align-self: center;
-}
-
-.connect-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.newsletter-label {
-  display: block;
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.95rem;
-  color: #8b949c;
-  margin-bottom: var(--space-sm);
-}
-
-.newsletter-row {
-  display: flex;
-}
-
-.newsletter-row input {
-  flex: 1;
-  min-width: 0;
-  padding: var(--space-md);
-  border: none;
-  background: #e8e4da;
-  color: #1f1e1d;
-  font: inherit;
-  letter-spacing: 0.08em;
-}
-
-.newsletter-row input:focus {
-  outline: 3px solid hsl(42, 100%, 55%);
-  outline-offset: -3px;
-}
-
-.newsletter-row button {
-  padding: 0 var(--space-lg);
-  border: none;
-  background: hsl(42, 100%, 50%);
-  color: #1f1e1d;
-  font-family: var(--font-body);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.newsletter-row button:hover {
-  background: hsl(42, 100%, 62%);
-}
-
-.connect-dashes {
-  border: none;
-  border-top: 2px dashed rgba(255, 255, 255, 0.4);
-  margin: var(--space-xl) 0;
-}
-
-.footer-socials {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--space-sm);
-}
-
-.footer-socials ul {
-  display: flex;
-  gap: var(--space-lg);
-  list-style: none;
-}
-
-.footer-socials a {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #8b949c;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-socials a:hover {
-  color: hsl(42, 100%, 55%);
-}
-
-.socials-label {
-  padding-top: var(--space-sm);
-  border-top: 2px solid rgba(255, 255, 255, 0.4);
-  min-width: 220px;
-  text-align: center;
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.85rem;
-  color: hsl(42, 100%, 55%);
-}
-
-.footer-email {
-  margin-top: var(--space-lg);
-  font-style: normal;
-  text-align: right;
-}
-
-.footer-email a {
-  color: #cfd6dd;
-  font-family: var(--font-body);
+  font-size: 1.05rem;
   letter-spacing: 0.06em;
+  color: #8fd0ff;
   text-decoration: none;
-  transition: color 0.3s ease;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
-.footer-email a:hover {
-  color: hsl(42, 100%, 55%);
+.footer-contact a:hover {
+  color: hsl(42, 100%, 65%);
+  border-color: hsl(42, 100%, 65%);
 }
 
-/* mobile: stack the columns, drop the vertical furniture */
-@media (max-width: 800px) {
+/* --- the social carousel --- */
+.social-carousel {
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 190px;
+  margin-top: var(--space-xl);
+}
+
+.carousel-ring {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  transform-style: preserve-3d;
+  animation: ring-spin 16s linear infinite;
+}
+
+@keyframes ring-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+/* three cards stationed around the ring */
+.social-card {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.social-card:nth-child(1) {
+  transform: rotateY(0deg) translateZ(150px);
+}
+.social-card:nth-child(2) {
+  transform: rotateY(120deg) translateZ(150px);
+}
+.social-card:nth-child(3) {
+  transform: rotateY(240deg) translateZ(150px);
+}
+
+/* each face counter-rotates the ring's spin (negative delays offset
+   each one by its station angle), so icons always read upright */
+.social-face {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 22px;
+  background: rgba(143, 208, 255, 0.1);
+  animation: ring-counter 16s linear infinite;
+  transition: border-color 0.3s ease;
+}
+
+.social-card:nth-child(2) .social-face {
+  animation-delay: calc(16s / -3);
+}
+.social-card:nth-child(3) .social-face {
+  animation-delay: calc(16s / -3 * 2);
+}
+
+@keyframes ring-counter {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+
+/* the ring holds still while you aim at an icon */
+.social-carousel:hover .carousel-ring,
+.social-carousel:hover .social-face,
+.social-carousel:focus-within .carousel-ring,
+.social-carousel:focus-within .social-face {
+  animation-play-state: paused;
+}
+
+.social-card:hover .social-face,
+.social-card:focus-visible .social-face {
+  border-color: hsl(42, 100%, 60%);
+}
+
+/* white glowing outlines, same treatment as the pegasus */
+.social-icon {
+  width: 46px;
+  height: 46px;
+  fill: none;
+  stroke: whitesmoke;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 14px rgba(143, 208, 255, 0.55));
+}
+
+.social-icon .icon-dot {
+  fill: whitesmoke;
+  stroke: none;
+}
+
+/* --- the half-faded wordmark --- */
+.footer-wordmark {
+  margin-top: auto; /* sinks to the bottom of the footer */
+  padding-top: var(--space-xl);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 11.5vw, 11rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  /* solid at the top, dissolving to nothing at the baseline */
+  background: linear-gradient(
+    180deg,
+    rgba(245, 245, 245, 0.9) 0%,
+    rgba(245, 245, 245, 0.45) 55%,
+    rgba(245, 245, 245, 0.02) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
+.footer-fineprint {
+  margin-top: var(--space-lg);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, 0.5);
+  text-align: center;
+}
+
+@media (max-width: 700px) {
   #footer {
-    min-height: 0;
-    padding-right: calc(clamp(36px, 4vw, 72px) + var(--space-lg));
+    padding-top: 10vh;
   }
 
-  .footer-main {
-    grid-template-columns: 1fr;
-    min-height: 0;
-    gap: var(--space-xl);
+  .carousel-ring {
+    width: 76px;
+    height: 76px;
   }
 
-  .footer-rule {
-    display: none;
+  .social-card:nth-child(1) {
+    transform: rotateY(0deg) translateZ(110px);
+  }
+  .social-card:nth-child(2) {
+    transform: rotateY(120deg) translateZ(110px);
+  }
+  .social-card:nth-child(3) {
+    transform: rotateY(240deg) translateZ(110px);
   }
 
-  .footer-tagline {
-    padding: var(--space-lg) 0;
-  }
-
-  .footer-logo {
-    align-self: flex-start;
-    margin: var(--space-lg) 0;
-  }
-
-  .connect-label {
-    display: none;
-  }
-
-  .footer-socials {
-    align-items: flex-start;
-  }
-
-  .footer-email {
-    text-align: left;
+  .footer-wordmark {
+    letter-spacing: 0.02em;
   }
 }
