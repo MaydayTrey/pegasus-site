@@ -110,11 +110,16 @@
         <div class="who-wrap" id="who-wrap">
           <div class="who-panel">
             <h2 id="about-us-heading" class="who-eyebrow">Who We Are</h2>
+            <!--three lines revealed top to bottom after the panel lands-->
             <p class="who-statement">
-              We are a web development agency building websites with
-              personality and creativity, that represents your business,
-              driving sales and engagement. Complex things made simple, for
-              you.
+              <span class="who-line">
+                We are a web development agency building websites with
+                personality and creativity,
+              </span>
+              <span class="who-line">
+                that represents your business, driving sales and engagement.
+              </span>
+              <span class="who-line">Complex things made simple, for you.</span>
             </p>
           </div>
         </div>
@@ -1207,36 +1212,102 @@
     </main>
 
     <footer id="footer">
-    <div id="footer-left">
-        <!--DESIGNS GO HERE-->
-        <img src="/images/pegasus-placeholder.png">
-    </div>
-    <div id="footer-right">
-        <address>
-            Email us at:
-            <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a
-            ><br />
-            Or, give us a call at:
-            <a href="tel:+15133994566">+1 (513) 399-4566</a><br />
-        </address>
-        <div class="social-buttons" aria-labelledby="social-media-header">
-            <h3 id="social-media-header">Social Media</h3>
-            <ul>
-            <li>
-                <a href="https://facebook.com" class="facebook-icon"
-                >FACEBOOK ICON</a
-                >
-            </li>
-            <li><a href="https://twitter.com" class="twitter-icon">X ICON</a></li>
-            <li>
-                <a href="https://instagram.com" class="instagram-icon"
-                >INSTAGRAM ICON</a
-                >
-            </li>
-            </ul>
+      <!--diagonal-stripe band down the right edge-->
+      <div class="footer-stripes" aria-hidden="true"></div>
+
+      <div class="footer-main">
+        <!--LEFT: phone, address, typographic tagline stack, copyright-->
+        <div class="footer-col footer-col--left">
+          <p class="footer-phone">
+            <a href="tel:+15133994566">(513) 399.4566</a>
+          </p>
+          <address class="footer-address">
+            Serving Cincinnati, Dayton,<br />
+            and Northern Kentucky
+          </address>
+
+          <div class="footer-tagline">
+            <p class="tagline-top">We build</p>
+            <p class="tagline-sub">websites that</p>
+            <p class="tagline-big">Soar</p>
+            <p class="tagline-script">to new heights</p>
+          </div>
+
+          <div class="footer-copyright">
+            <div>
+              <p class="copyright-label">Copyright 2026</p>
+              <p class="copyright-name">Pegasus Labs</p>
+            </div>
+            <span class="copyright-x" aria-hidden="true">&times;</span>
+          </div>
         </div>
-        <p>&copy; 2026 Pegasus Labs</p>
-        </footer>
-    </div>
+
+        <!--dotted vertical rule-->
+        <div class="footer-rule" aria-hidden="true"></div>
+
+        <!--RIGHT: nav, logo, CONNECT block with newsletter + socials-->
+        <div class="footer-col footer-col--right">
+          <nav class="footer-nav" aria-label="Footer">
+            <a href="#about-us">About Us</a>
+            <a href="#services">Services</a>
+            <a href="#examples">Our Work</a>
+            <a href="#contact-us">Contact</a>
+          </nav>
+
+          <img
+            class="footer-logo"
+            src="images/pegasus-placeholder.png"
+            alt="Pegasus Labs"
+            width="220"
+            height="220"
+            loading="lazy"
+          />
+
+          <div class="footer-connect">
+            <span class="connect-label" aria-hidden="true">Connect</span>
+            <div class="connect-body">
+              <form
+                class="newsletter"
+                name="newsletter"
+                method="POST"
+                data-netlify="true"
+              >
+                <label class="newsletter-label" for="newsletter-email"
+                  >Email newsletter sign-up</label
+                >
+                <div class="newsletter-row">
+                  <input
+                    id="newsletter-email"
+                    name="email"
+                    type="email"
+                    placeholder="Email address"
+                    autocomplete="email"
+                    required
+                  />
+                  <button type="submit">Go</button>
+                </div>
+              </form>
+
+              <hr class="connect-dashes" />
+
+              <div class="footer-socials">
+                <ul>
+                  <li><a href="https://facebook.com">Facebook</a></li>
+                  <li><a href="https://twitter.com">X</a></li>
+                  <li><a href="https://instagram.com">Instagram</a></li>
+                </ul>
+                <p class="socials-label">Socials</p>
+              </div>
+
+              <address class="footer-email">
+                <a href="mailto:info@getpegasuslabs.com"
+                  >info@getpegasuslabs.com</a
+                >
+              </address>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
