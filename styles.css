@@ -140,80 +140,6 @@ header {
   height: 100dvh;
 }
 
-/* --- the glowing pegasus --- */
-.pegasus-figure {
-  grid-column: 6 / 13;
-  grid-row: 1 / 8;
-  justify-self: end;
-  align-self: center;
-  width: min(46vw, 560px);
-  height: auto;
-  overflow: visible;
-  pointer-events: none;
-  /* the same glow treatment as the care-plan cross */
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))
-    drop-shadow(0 0 22px rgba(255, 255, 255, 0.45));
-  animation: pegasus-float 7s ease-in-out infinite alternate;
-}
-
-@keyframes pegasus-float {
-  from {
-    translate: 0 -10px;
-  }
-  to {
-    translate: 0 10px;
-  }
-}
-
-.pegasus-path {
-  fill: none;
-  stroke: whitesmoke;
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  /* each stroke draws itself in on load (pathLength=1 in the markup) */
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: pegasus-draw 1.6s ease forwards;
-}
-
-/* the wing feathers and details lag slightly behind the body */
-.pegasus-path:nth-of-type(-n + 6) {
-  animation-delay: 0.7s;
-}
-
-.pegasus-path--far {
-  stroke-width: 2.5;
-  opacity: 0.45;
-}
-
-@keyframes pegasus-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.pegasus-eye {
-  fill: whitesmoke;
-  stroke: none;
-  opacity: 0;
-  animation: pegasus-blink-in 0.6s ease 1.9s forwards;
-}
-
-@keyframes pegasus-blink-in {
-  to {
-    opacity: 1;
-  }
-}
-
-@media (max-width: 700px) {
-  .pegasus-figure {
-    grid-column: 3 / 13;
-    grid-row: 1 / 7;
-    width: min(78vw, 420px);
-  }
-}
-
 #hero h1 {
   font-family: var(--font-display);
   font-weight: 600;
@@ -715,6 +641,94 @@ header {
 .services-intro.in-view .services-sub {
   opacity: 1;
   translate: 0 0;
+}
+
+/* --- the editorial spread beneath the title --- */
+.services-editorial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  max-width: 1050px;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.7); /* hairline rule */
+  text-align: left;
+  opacity: 0;
+  translate: 0 24px;
+  transition:
+    opacity 0.9s ease 0.35s,
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+}
+
+.services-intro.in-view .services-editorial {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (min-width: 800px) {
+  .services-editorial {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-xl);
+  }
+
+  /* thin column rules, magazine-style */
+  .edit-col + .edit-col {
+    border-left: 1px solid rgba(255, 255, 255, 0.45);
+    padding-left: var(--space-xl);
+  }
+}
+
+.edit-kicker {
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.75rem;
+  color: whitesmoke;
+  margin-bottom: var(--space-sm);
+}
+
+/* the issue number in sunlight yellow */
+.edit-kicker span {
+  color: hsl(42, 100%, 55%);
+  margin-right: var(--space-sm);
+}
+
+.edit-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* editorial drop cap on the opening column */
+.edit-body--dropcap::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.2em;
+  font-weight: 700;
+  float: left;
+  line-height: 0.8;
+  padding-right: 0.12em;
+  color: whitesmoke;
+}
+
+.edit-pullquote {
+  max-width: 1050px;
+  width: 100%;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.4vw + 0.6rem, 1.6rem);
+  color: whitesmoke;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.9s ease 0.6s;
+}
+
+.services-intro.in-view .edit-pullquote {
+  opacity: 1;
 }
 
 /* --- the staircase grid --- */
@@ -2258,13 +2272,76 @@ header {
   min-height: 100vh;
   display: flex;
   align-items: stretch;
-  background: linear-gradient(180deg, #0b3a5e 0%, #072338 55%, #051a2b 100%);
+  /* the same sky blues as the rest of the site */
+  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 45%, #149dff 100%);
   color: whitesmoke;
   overflow: hidden;
   padding: 14vh clamp(var(--space-lg), 6vw, 6rem) 5vh;
 }
 
+/* --- the footer's sun: always on, top-left, rays across the page --- */
+.footer-sky {
+  --sun-x: 10%;
+  --sun-y: 6%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.footer-sun-rays {
+  position: absolute;
+  left: var(--sun-x);
+  top: var(--sun-y);
+  width: 170vmax;
+  height: 170vmax;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(
+    from 96deg at 50% 50%,
+    rgba(255, 241, 194, 0) 0deg,
+    rgba(255, 241, 194, 0) 3.2deg,
+    rgba(255, 236, 170, 0.4) 4.4deg,
+    rgba(255, 246, 214, 0.5) 6deg,
+    rgba(255, 236, 170, 0.34) 7.4deg,
+    rgba(255, 241, 194, 0) 9deg,
+    rgba(255, 241, 194, 0) 13deg,
+    rgba(255, 240, 186, 0.26) 15deg,
+    rgba(255, 240, 186, 0) 17.5deg,
+    rgba(255, 241, 194, 0) 23deg
+  );
+  mask-image: radial-gradient(
+    closest-side at 50% 50%,
+    #000 2%,
+    rgba(0, 0, 0, 0.8) 12%,
+    rgba(0, 0, 0, 0.4) 28%,
+    transparent 52%
+  );
+  filter: blur(2px);
+  animation: beam-drift 26s ease-in-out infinite alternate;
+}
+
+.footer-sun-core {
+  position: absolute;
+  left: var(--sun-x);
+  top: var(--sun-y);
+  width: 44vw;
+  height: 44vw;
+  max-width: 620px;
+  max-height: 620px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 250, 0.95) 0%,
+    rgba(255, 246, 205, 0.8) 14%,
+    rgba(255, 226, 138, 0.5) 30%,
+    rgba(255, 210, 110, 0.24) 48%,
+    rgba(255, 200, 90, 0) 70%
+  );
+  filter: blur(6px);
+}
+
 .footer-inner {
+  position: relative; /* rides above the sun layers */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2273,18 +2350,19 @@ header {
   margin: 0 auto;
 }
 
-/* the clean invitation */
+/* the clean invitation — the same whitesmoke as the rest of the site */
 .footer-kicker {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: clamp(2.4rem, 4vw + 0.5rem, 4.2rem);
   letter-spacing: -0.01em;
-  color: #ffffff;
+  color: whitesmoke;
+  text-shadow: 0 2px 12px rgba(0, 30, 60, 0.3);
 }
 
-/* the one drop of sunlight */
+/* the one drop of deeper sunlight */
 .kicker-dot {
-  color: hsl(42, 100%, 60%);
+  color: hsl(42, 100%, 50%);
 }
 
 .footer-contact {
@@ -2299,7 +2377,8 @@ header {
   font-family: var(--font-body);
   font-size: 1.05rem;
   letter-spacing: 0.06em;
-  color: #8fd0ff;
+  color: whitesmoke;
+  text-shadow: 0 1px 6px rgba(0, 30, 60, 0.3);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition:
@@ -2308,8 +2387,8 @@ header {
 }
 
 .footer-contact a:hover {
-  color: hsl(42, 100%, 65%);
-  border-color: hsl(42, 100%, 65%);
+  color: hsl(42, 100%, 50%);
+  border-color: hsl(42, 100%, 50%);
 }
 
 /* --- the social carousel --- */
@@ -2322,81 +2401,38 @@ header {
   margin-top: var(--space-xl);
 }
 
+/* rotation is driven entirely from script.js (idle spin + tween to
+   whichever icon the mouse targets), so no CSS animations here */
 .carousel-ring {
+  --ring-radius: 150px; /* read by script.js when placing the cards */
   position: relative;
   width: 92px;
   height: 92px;
   transform-style: preserve-3d;
-  animation: ring-spin 16s linear infinite;
 }
 
-@keyframes ring-spin {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(360deg);
-  }
-}
-
-/* three cards stationed around the ring */
+/* three cards stationed around the ring; JS composes each card's
+   rotateY(station) translateZ with the ring angle */
 .social-card {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
 }
 
-.social-card:nth-child(1) {
-  transform: rotateY(0deg) translateZ(150px);
-}
-.social-card:nth-child(2) {
-  transform: rotateY(120deg) translateZ(150px);
-}
-.social-card:nth-child(3) {
-  transform: rotateY(240deg) translateZ(150px);
-}
-
-/* each face counter-rotates the ring's spin (negative delays offset
-   each one by its station angle), so icons always read upright */
 .social-face {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(255, 255, 255, 0.75);
   border-radius: 22px;
-  background: rgba(143, 208, 255, 0.1);
-  animation: ring-counter 16s linear infinite;
+  background: rgba(255, 255, 255, 0.16);
   transition: border-color 0.3s ease;
-}
-
-.social-card:nth-child(2) .social-face {
-  animation-delay: calc(16s / -3);
-}
-.social-card:nth-child(3) .social-face {
-  animation-delay: calc(16s / -3 * 2);
-}
-
-@keyframes ring-counter {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(-360deg);
-  }
-}
-
-/* the ring holds still while you aim at an icon */
-.social-carousel:hover .carousel-ring,
-.social-carousel:hover .social-face,
-.social-carousel:focus-within .carousel-ring,
-.social-carousel:focus-within .social-face {
-  animation-play-state: paused;
 }
 
 .social-card:hover .social-face,
 .social-card:focus-visible .social-face {
-  border-color: hsl(42, 100%, 60%);
+  border-color: hsl(42, 100%, 50%);
 }
 
 /* white glowing outlines, same treatment as the pegasus */
@@ -2458,18 +2494,9 @@ header {
   }
 
   .carousel-ring {
+    --ring-radius: 110px;
     width: 76px;
     height: 76px;
-  }
-
-  .social-card:nth-child(1) {
-    transform: rotateY(0deg) translateZ(110px);
-  }
-  .social-card:nth-child(2) {
-    transform: rotateY(120deg) translateZ(110px);
-  }
-  .social-card:nth-child(3) {
-    transform: rotateY(240deg) translateZ(110px);
   }
 
   .footer-wordmark {

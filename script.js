@@ -448,6 +448,68 @@ if (globeStage && meridians.length && typeof gsap !== "undefined") {
   globeStage.addEventListener("pointercancel", endDrag);
 }
 
+/* --- footer social carousel ---
+   JS owns the rotation outright: an idle spin while unattended, and a
+   tween that swings whichever icon the mouse reaches to the front —
+   tracking the pointer instead of freezing the whole ring. */
+const socialCarousel = document.querySelector(".social-carousel");
+const carouselRing = document.querySelector(".carousel-ring");
+
+if (socialCarousel && carouselRing && typeof gsap !== "undefined") {
+  const ringCards = [...carouselRing.querySelectorAll(".social-card")];
+  const ringFaces = ringCards.map((c) => c.querySelector(".social-face"));
+  const stations = ringCards.map((_, i) => (360 / ringCards.length) * i);
+  const radius =
+    parseFloat(
+      getComputedStyle(carouselRing).getPropertyValue("--ring-radius"),
+    ) || 150;
+
+  const ring = { angle: 0 };
+  let engaged = false; // pointer is inside the carousel area
+
+  function drawRing() {
+    ringCards.forEach((card, i) => {
+      const total = ring.angle + stations[i];
+      card.style.transform = `rotateY(${total}deg) translateZ(${radius}px)`;
+      // faces counter-rotate so the icons always read upright
+      ringFaces[i].style.transform = `rotateY(${-total}deg)`;
+    });
+  }
+
+  const IDLE_DEG = 360 / (16 * 60); // one lap every ~16s at 60fps
+
+  if (!prefersReducedMotion) {
+    gsap.ticker.add(() => {
+      if (!engaged) ring.angle += IDLE_DEG;
+      drawRing();
+    });
+  }
+  drawRing();
+
+  // swing station i to the front along the shortest arc
+  function targetStation(i) {
+    engaged = true;
+    const target = -stations[i];
+    const delta = ((((target - ring.angle) % 360) + 540) % 360) - 180;
+    gsap.to(ring, {
+      angle: ring.angle + delta,
+      duration: prefersReducedMotion ? 0 : 0.8,
+      ease: "power3.out",
+      overwrite: "auto",
+      onUpdate: drawRing,
+    });
+  }
+
+  ringCards.forEach((card, i) => {
+    card.addEventListener("mouseenter", () => targetStation(i));
+    card.addEventListener("focusin", () => targetStation(i)); // keyboard too
+  });
+
+  socialCarousel.addEventListener("mouseleave", () => {
+    engaged = false; // the idle spin resumes from wherever we are
+  });
+}
+
 /* --- sunbeams behind the contact form --- */
 const contactSection = document.getElementById("contact-us");
 const submitBtn = document.querySelector('#contact-form button[type="submit"]');

@@ -94,122 +94,6 @@
 
     <main id="main">
       <section id="hero" aria-labelledby="hero-heading" class="skyband">
-        <!--glowing line-art pegasus; each path draws itself in on load-->
-        <svg
-          class="pegasus-figure"
-          viewBox="0 0 520 400"
-          aria-hidden="true"
-        >
-          <g class="pegasus-lines">
-            <!--far wing, faint, behind the body-->
-            <path
-              class="pegasus-path pegasus-path--far"
-              d="M 210 148 C 250 118 300 98 352 94"
-              pathLength="1"
-            />
-            <!--near wing: leading edge sweeping to the tip-->
-            <path
-              class="pegasus-path"
-              d="M 195 150 C 240 96 300 60 380 44 C 402 40 424 40 444 46"
-              pathLength="1"
-            />
-            <!--wing trailing edge back toward the shoulder-->
-            <path
-              class="pegasus-path"
-              d="M 444 46 C 420 70 390 92 356 108 C 322 124 286 138 252 148"
-              pathLength="1"
-            />
-            <!--feather separations-->
-            <path
-              class="pegasus-path"
-              d="M 400 52 C 380 78 352 98 320 114"
-              pathLength="1"
-            />
-            <path
-              class="pegasus-path"
-              d="M 350 66 C 334 88 310 106 282 122"
-              pathLength="1"
-            />
-            <path
-              class="pegasus-path"
-              d="M 300 84 C 288 102 268 118 246 132"
-              pathLength="1"
-            />
-            <!--muzzle over the brow-->
-            <path
-              class="pegasus-path"
-              d="M 95 152 C 108 140 122 132 138 130"
-              pathLength="1"
-            />
-            <!--ear-->
-            <path
-              class="pegasus-path"
-              d="M 138 130 L 148 112 L 156 128"
-              pathLength="1"
-            />
-            <!--jaw-->
-            <path
-              class="pegasus-path"
-              d="M 95 152 C 100 162 110 168 122 168 C 132 168 140 162 146 152"
-              pathLength="1"
-            />
-            <!--crest of the neck into the back-->
-            <path
-              class="pegasus-path"
-              d="M 138 130 C 165 132 185 140 200 152 C 250 168 300 170 340 178"
-              pathLength="1"
-            />
-            <!--throat down to the chest-->
-            <path
-              class="pegasus-path"
-              d="M 122 168 C 140 186 155 198 172 208"
-              pathLength="1"
-            />
-            <!--belly-->
-            <path
-              class="pegasus-path"
-              d="M 172 208 C 220 228 280 228 320 220"
-              pathLength="1"
-            />
-            <!--rump-->
-            <path
-              class="pegasus-path"
-              d="M 340 178 C 355 184 362 196 360 210"
-              pathLength="1"
-            />
-            <!--hind leg trailing in flight-->
-            <path
-              class="pegasus-path"
-              d="M 320 220 C 335 232 350 240 368 244 C 385 248 398 258 402 272 L 415 292"
-              pathLength="1"
-            />
-            <!--front legs tucked-->
-            <path
-              class="pegasus-path"
-              d="M 185 208 C 190 226 185 240 172 248 C 165 252 160 260 162 268"
-              pathLength="1"
-            />
-            <path
-              class="pegasus-path"
-              d="M 205 212 C 208 228 202 240 192 246"
-              pathLength="1"
-            />
-            <!--tail streaming back-->
-            <path
-              class="pegasus-path"
-              d="M 356 196 C 390 200 420 214 440 240 C 448 250 452 262 450 274"
-              pathLength="1"
-            />
-            <path
-              class="pegasus-path"
-              d="M 360 210 C 388 218 408 232 420 252"
-              pathLength="1"
-            />
-            <!--eye-->
-            <circle class="pegasus-eye" cx="128" cy="146" r="2.5" />
-          </g>
-        </svg>
-
         <h1 id="hero-heading">
           We help your business reach <span class="bold">new heights</span>.
         </h1>
@@ -419,6 +303,43 @@
           <h2 id="services-heading">Services Provided</h2>
           <p class="services-sub">
             Three ways to get your business off the ground.
+          </p>
+
+          <!--editorial spread: placeholder copy laid out magazine-style-->
+          <div class="services-editorial">
+            <div class="edit-col">
+              <p class="edit-kicker"><span>No. 01</span> The Work</p>
+              <p class="edit-body edit-body--dropcap">
+                Every engagement starts the same way: we listen. Placeholder
+                copy for now — this column will describe how a project moves
+                from first conversation to a site your customers actually
+                use, and why the process stays simple on your side of the
+                table.
+              </p>
+            </div>
+            <div class="edit-col">
+              <p class="edit-kicker"><span>No. 02</span> The Craft</p>
+              <p class="edit-body">
+                Hand-built pages, no bloated templates. Placeholder copy —
+                here we'll talk about performance budgets, accessibility as a
+                default, and design decisions that are made on purpose rather
+                than inherited from a theme.
+              </p>
+            </div>
+            <div class="edit-col">
+              <p class="edit-kicker"><span>No. 03</span> The Promise</p>
+              <p class="edit-body">
+                Launch is the beginning, not the end. Placeholder copy — this
+                column will cover what happens after go-live: monitoring,
+                updates, and a team that still answers the phone in month
+                nine.
+              </p>
+            </div>
+          </div>
+
+          <p class="edit-pullquote">
+            &ldquo;Every tier ships with the same care &mdash; only the scope
+            changes.&rdquo;
           </p>
         </div>
 
@@ -1328,6 +1249,12 @@
     </main>
 
     <footer id="footer">
+      <!--the footer's own sun: always shining, rays drifting slowly-->
+      <div class="footer-sky" aria-hidden="true">
+        <span class="footer-sun-rays"></span>
+        <span class="footer-sun-core"></span>
+      </div>
+
       <div class="footer-inner">
         <!--clean invitation + direct lines-->
         <p class="footer-kicker">
