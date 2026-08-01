@@ -178,14 +178,108 @@ header {
   justify-items: center;
 }
 
+/* each card is a little window looking out on the sky */
 .about-card {
+  position: relative;
+  overflow: hidden; /* clips the drifting clouds */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
   width: 300px;
   max-width: 100%; /* only shrinks when it truly can't fit */
   aspect-ratio: 1;
-  border: 2px solid black;
-  border-radius: 20px;
-  gap: var(--space-sm);
-  list-style: none;
+  /* window frame: thick white sash + thin outer trim + inner pane line */
+  border: 8px solid #fdfdfd;
+  outline: 2px solid rgba(0, 30, 60, 0.3);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.7),
+    0 12px 26px rgba(0, 30, 60, 0.25);
+  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 100%);
+  cursor: pointer;
+  transition:
+    translate 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.about-card:hover,
+.about-card:focus-visible {
+  translate: 0 -6px;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.7),
+    0 20px 36px rgba(0, 30, 60, 0.35);
+}
+
+/* clouds drifting past the window */
+.about-card::before,
+.about-card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.about-card::before {
+  width: 75%;
+  height: 32%;
+  top: 12%;
+  left: 0;
+  animation: cloud-drift 16s linear infinite;
+}
+
+.about-card::after {
+  width: 60%;
+  height: 26%;
+  top: 60%;
+  left: 0;
+  animation: cloud-drift 22s linear infinite;
+  animation-delay: -9s; /* start mid-journey so they're offset */
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
+/* the topic icon */
+.card-icon {
+  width: 56px;
+  height: 56px;
+  stroke: whitesmoke;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  position: relative; /* stacks above the clouds */
+  filter: drop-shadow(0 2px 4px rgba(0, 30, 60, 0.35));
+}
+
+.card-icon .icon-fill {
+  fill: whitesmoke;
+  stroke: none;
+}
+
+.about-card h3 {
+  position: relative; /* stacks above the clouds */
+  color: whitesmoke; /* same white as the care plan copy */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.25rem;
+  padding: 0 var(--space-md);
+  text-shadow: 0 1px 4px rgba(0, 30, 60, 0.45);
 }
 
 /*About loading in */
@@ -216,10 +310,11 @@ header {
   box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
 
   transform: translateX(-100%); /* start fully off-screen to the left */
+  /* long, gentle glide — 1.4s with a soft ease-out tail */
   transition:
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    display 0.8s ease allow-discrete,
-    overlay 0.8s ease allow-discrete;
+    transform 1.4s cubic-bezier(0.33, 1, 0.68, 1),
+    display 1.4s ease allow-discrete,
+    overlay 1.4s ease allow-discrete;
 }
 
 /* open state — slid into place */
@@ -241,10 +336,10 @@ header {
   background-color: rgba(32, 31, 30, 0);
   backdrop-filter: blur(0px);
   transition:
-    background-color 0.4s ease,
-    backdrop-filter 0.4s ease,
-    display 0.4s ease allow-discrete,
-    overlay 0.4s ease allow-discrete;
+    background-color 0.9s ease,
+    backdrop-filter 0.9s ease,
+    display 0.9s ease allow-discrete,
+    overlay 0.9s ease allow-discrete;
 }
 
 /* open state — the final dark, blurred look */
@@ -261,33 +356,26 @@ header {
   }
 }
 
-/* THE CLOSE X — upper right; spins into position while the dialog
-   glides right, and unspins (opposite direction) on the way out.
-   `rotate` and `translate` are separate CSS properties here, so the
-   spin choreography and the hover raise never fight each other. */
+/* THE CLOSE X — a bare glyph, no circle. It spins into position while
+   the dialog glides right, unspins the other way on close, and settles
+   as an upright grey X at full expansion. `rotate` and `translate` are
+   separate CSS properties, so spin and hover-raise never fight. */
 .dialog-close {
   position: absolute;
   top: var(--space-md);
-  right: var(--space-md);
+  right: var(--space-lg);
   z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border: 2px solid #a5a5a5;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.75);
-  color: #8a8a8a; /* grey at rest */
-  font-size: 1.7rem;
+  border: none;
+  background: none;
+  color: #9a9a9a; /* grey at rest */
+  font-size: 2.6rem;
   line-height: 1;
   cursor: pointer;
   rotate: -540deg; /* wound up while closed */
   transition:
-    rotate 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 1.4s cubic-bezier(0.33, 1, 0.68, 1),
     translate 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+    color 0.25s ease;
 }
 
 /* open: unwind 1.5 turns into place, synced with the glide */
@@ -305,9 +393,7 @@ header {
 .dialog-close:hover,
 .dialog-close:focus-visible {
   color: #e03131;
-  border-color: #e03131;
   translate: 0 -4px;
-  box-shadow: 0 8px 16px rgba(224, 49, 49, 0.3);
 }
 
 /* CONTENT — rides in from the left after the panel, leaves with it */
@@ -325,7 +411,8 @@ header {
 #about-dialog[open] #dialog-content {
   opacity: 1;
   translate: 0 0;
-  transition-delay: 0.5s; /* waits for the panel to arrive */
+  transition-duration: 0.7s;
+  transition-delay: 0.9s; /* waits for the slower panel to arrive */
 }
 
 /* on close the delay is gone (base rule), so the text immediately
@@ -400,6 +487,13 @@ header {
   overflow: hidden;
   min-width: 0;
   min-height: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* collapsing tiers fade out completely before their squish could
+   ever show (0.3s vs the grid's 0.8s), then fade back on reset */
+#services[data-expanded] .tier-stair:not(.is-open) {
+  opacity: 0;
 }
 
 /* blue-to-gold accent rail across the top of each tier */
@@ -676,7 +770,7 @@ header {
   translate: 0 26px;
   transition:
     opacity 0.6s ease,
-    translate 0.6s ease,
+    translate 0.5s ease,
     background-color 0.4s ease;
 }
 
@@ -685,37 +779,51 @@ header {
   translate: 0 0;
 }
 
-.comparison-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.65);
+/* THE FOCUSED ROW — the row in line with the scroll rises, brightens,
+   and its marks glow; as the scroll moves on it drifts back down */
+.comparison-table tbody tr.row-active {
+  translate: 0 -6px;
+  background: rgba(255, 255, 255, 0.85);
 }
 
-/* the marks: green checks, red exes (classes added by script.js) */
+/* the marks: green checks, red exes (classes added by script.js).
+   Muted at rest so the focused row's full color visibly pops. */
 .mark-yes {
-  color: #2f9e44;
+  color: rgba(47, 158, 68, 0.55);
   font-weight: 700;
   font-size: 1.15rem;
-  transition: color 0.6s ease;
+  transition:
+    color 0.4s ease,
+    text-shadow 0.4s ease;
 }
 
 .mark-no {
-  color: #e03131;
+  color: rgba(224, 49, 49, 0.55);
   font-weight: 700;
   font-size: 1.15rem;
-  transition: color 0.6s ease;
+  transition:
+    color 0.4s ease,
+    text-shadow 0.4s ease;
 }
 
-/* rows you've scrolled past keep their colors, just less vibrant —
-   the freshest rows near the bottom carry the saturation */
-.comparison-table tbody tr.row-past {
-  color: #666;
+.comparison-table tbody tr.row-active .mark-yes {
+  color: #2f9e44;
+  text-shadow: 0 0 12px rgba(47, 158, 68, 0.85);
 }
 
-.comparison-table tbody tr.row-past .mark-yes {
-  color: rgba(47, 158, 68, 0.45);
+.comparison-table tbody tr.row-active .mark-no {
+  color: #e03131;
+  text-shadow: 0 0 12px rgba(224, 49, 49, 0.85);
 }
 
-.comparison-table tbody tr.row-past .mark-no {
-  color: rgba(224, 49, 49, 0.45);
+/* reduced motion: no focus choreography, so marks stay full-strength */
+@media (prefers-reduced-motion: reduce) {
+  .mark-yes {
+    color: #2f9e44;
+  }
+  .mark-no {
+    color: #e03131;
+  }
 }
 
 /*======================*/
@@ -973,7 +1081,24 @@ header {
   filter: drop-shadow(0 2px 3px rgba(0, 30, 60, 0.4));
 }
 
-/* X marks the spot */
+/* X marks the spot — lives OUTSIDE the reveal mask (the mask's round
+   edge was slicing it into a circular blob mid-scroll) and stamps in
+   with a springy pop once the trail arrives */
+.map-x {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  scale: 0.2;
+  transition:
+    opacity 0.35s ease,
+    scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.map-x.stamped {
+  opacity: 1;
+  scale: 1;
+}
+
 .map-x path {
   stroke: #e03131;
   stroke-width: 10;
@@ -998,7 +1123,9 @@ header {
   font-size: 1.6rem;
   font-style: italic;
   text-anchor: middle;
-  transition: fill 0.4s ease;
+  transition:
+    fill 0.4s ease,
+    font-size 0.4s ease;
 }
 
 .map-stage.reached circle {
@@ -1009,9 +1136,34 @@ header {
   fill: whitesmoke;
 }
 
+/* hitting a marker is an EVENT: the label swells and goes gold,
+   and its waypoint dot grows */
 .map-stage.current text {
   fill: hsl(42, 100%, 60%);
   font-weight: 700;
+  font-size: 2.1rem;
+}
+
+.map-stage.current circle {
+  r: 15;
+}
+
+/* stages you've sailed past get struck through — completed */
+.stage-strike {
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.5s ease 0.15s;
+}
+
+.map-stage.passed .stage-strike {
+  stroke-dashoffset: 0;
+}
+
+.map-stage.passed text {
+  fill: rgba(255, 255, 255, 0.65);
 }
 
 #map-status {

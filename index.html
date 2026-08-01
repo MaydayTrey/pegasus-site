@@ -116,6 +116,11 @@
               aria-expanded="false"
               aria-controls="detail-seo"
             >
+              <!--magnifying glass-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <circle cx="20" cy="20" r="11" />
+                <line x1="28.5" y1="28.5" x2="40" y2="40" />
+              </svg>
               <h3>Search Engine Optimization</h3>
             </button>
             <div class="card-detail" id="detail-seo" hidden>
@@ -136,6 +141,13 @@
               aria-expanded="false"
               aria-controls="detail-cta"
             >
+              <!--clicking cursor-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M19 14 L19 38 L25 32 L30 41 L34 39 L29 30 L37 29 Z" />
+                <line x1="13" y1="7" x2="15" y2="12" />
+                <line x1="6" y1="14" x2="11" y2="16" />
+                <line x1="24" y1="5" x2="23" y2="10" />
+              </svg>
               <h3>Driving Sales — CTAs</h3>
             </button>
             <div class="card-detail" id="detail-cta" hidden>
@@ -155,6 +167,13 @@
               aria-expanded="false"
               aria-controls="detail-analytics"
             >
+              <!--rising bar chart-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <line x1="8" y1="41" x2="40" y2="41" />
+                <rect class="icon-fill" x="11" y="28" width="6" height="10" />
+                <rect class="icon-fill" x="21" y="20" width="6" height="18" />
+                <rect class="icon-fill" x="31" y="10" width="6" height="28" />
+              </svg>
               <h3>Measurable Performance — Analytics</h3>
             </button>
             <div class="card-detail" id="detail-analytics" hidden>
@@ -174,6 +193,13 @@
               aria-expanded="false"
               aria-controls="detail-security"
             >
+              <!--shield with check-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path
+                  d="M24 5 L39 11 V22 C39 32 33 39.5 24 43 C15 39.5 9 32 9 22 V11 Z"
+                />
+                <polyline points="17 23 22 28 31 17" />
+              </svg>
               <h3>Peace of Mind — Security</h3>
             </button>
             <div class="card-detail" id="detail-security" hidden>
@@ -193,6 +219,14 @@
               aria-expanded="false"
               aria-controls="detail-ux"
             >
+              <!--layout wireframe-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <rect x="7" y="8" width="34" height="32" rx="3" />
+                <line x1="7" y1="17" x2="41" y2="17" />
+                <line x1="19" y1="17" x2="19" y2="40" />
+                <circle class="icon-fill" cx="13" cy="12.5" r="1.6" />
+                <circle class="icon-fill" cx="18" cy="12.5" r="1.6" />
+              </svg>
               <h3>User Experience</h3>
             </button>
             <div class="card-detail" id="detail-ux" hidden>
@@ -212,6 +246,14 @@
               aria-expanded="false"
               aria-controls="detail-a11y"
             >
+              <!--universal access figure-->
+              <svg class="card-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <circle class="icon-fill" cx="24" cy="9" r="4" />
+                <path d="M8 18 C18 22 30 22 40 18" />
+                <line x1="24" y1="20" x2="24" y2="29" />
+                <line x1="24" y1="29" x2="16" y2="43" />
+                <line x1="24" y1="29" x2="32" y2="43" />
+              </svg>
               <h3>Open to All — Accessibility</h3>
             </button>
             <div class="card-detail" id="detail-a11y" hidden>
@@ -770,29 +812,63 @@
                 fill="none"
                 stroke-linecap="round"
               />
-              <!--X marks the spot, revealed last-->
-              <g class="map-x">
-                <path d="M 856 516 L 904 564" />
-                <path d="M 904 516 L 856 564" />
-              </g>
             </g>
 
-            <!--waypoints + labels, lit as the trail reaches them-->
+            <!--X marks the spot — outside the mask, stamped in by JS-->
+            <g class="map-x">
+              <path d="M 856 516 L 904 564" />
+              <path d="M 904 516 L 856 564" />
+            </g>
+
+            <!--waypoints + labels, lit as the trail reaches them;
+                each label carries its own strikethrough line-->
             <g class="map-stage" data-at="0">
               <circle cx="90" cy="100" r="11" />
               <text x="90" y="152">Discovery</text>
+              <line
+                class="stage-strike"
+                x1="15"
+                y1="143"
+                x2="165"
+                y2="143"
+                pathLength="1"
+              />
             </g>
             <g class="map-stage" data-at="0.24">
               <circle cx="770" cy="150" r="11" />
               <text x="770" y="202">Design</text>
+              <line
+                class="stage-strike"
+                x1="715"
+                y1="193"
+                x2="825"
+                y2="193"
+                pathLength="1"
+              />
             </g>
             <g class="map-stage" data-at="0.5">
               <circle cx="240" cy="310" r="11" />
               <text x="240" y="362">Build</text>
+              <line
+                class="stage-strike"
+                x1="195"
+                y1="353"
+                x2="285"
+                y2="353"
+                pathLength="1"
+              />
             </g>
             <g class="map-stage" data-at="0.74">
               <circle cx="690" cy="440" r="11" />
               <text x="690" y="492">Revise</text>
+              <line
+                class="stage-strike"
+                x1="635"
+                y1="483"
+                x2="745"
+                y2="483"
+                pathLength="1"
+              />
             </g>
             <g class="map-stage map-stage--final" data-at="0.97">
               <text x="880" y="602">Launch</text>

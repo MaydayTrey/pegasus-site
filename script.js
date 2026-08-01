@@ -103,22 +103,29 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
     { threshold: 0.2 },
   );
 
-  // vibrancy: rows scrolled past (above the top ~35% of the viewport)
-  // keep their colors but dim — the newest rows stay saturated
-  const pastObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const scrolledPast =
-          !entry.isIntersecting && entry.boundingClientRect.top < 0;
-        entry.target.classList.toggle("row-past", scrolledPast);
-      });
-    },
-    { rootMargin: "-35% 0px 0px 0px" },
-  );
+  tableRows.forEach((row) => revealObserver.observe(row));
+}
+
+// the row nearest the focal line (~55% down the viewport) rises and
+// its marks glow; it drifts back as the scroll moves on — runs inside
+// the shared scroll handler below
+function updateFocusedRow(vh) {
+  const focalY = vh * 0.55;
+  let best = null;
+  let bestDist = Infinity;
 
   tableRows.forEach((row) => {
-    revealObserver.observe(row);
-    pastObserver.observe(row);
+    const r = row.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > vh) return; // off-screen
+    const dist = Math.abs(r.top + r.height / 2 - focalY);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = row;
+    }
+  });
+
+  tableRows.forEach((row) => {
+    row.classList.toggle("row-active", row === best && bestDist < 120);
   });
 }
 
@@ -177,6 +184,7 @@ const clouds = [
 
 const roadmap = document.getElementById("roadmap");
 const mapProgress = document.getElementById("map-progress");
+const mapX = document.querySelector(".map-x");
 const mapStages = [...document.querySelectorAll(".map-stage")];
 const statusStage = document.getElementById("map-status-stage");
 const statusDesc = document.getElementById("map-status-desc");
@@ -199,13 +207,24 @@ function updateRoadmap(progress) {
     if (reached) current = stage;
   });
 
-  mapStages.forEach((s) => s.classList.remove("current"));
+  // current = the marker just hit (big + gold); everything before it
+  // is passed and earns its strikethrough
+  mapStages.forEach((stage) => {
+    stage.classList.toggle("current", stage === current);
+    stage.classList.toggle(
+      "passed",
+      stage.classList.contains("reached") && stage !== current,
+    );
+  });
+
   if (current) {
-    current.classList.add("current");
     const name = current.querySelector("text").textContent;
     statusStage.textContent = name;
     statusDesc.textContent = stageInfo[name] ?? "";
   }
+
+  // stamp the X once the trail reaches the destination
+  mapX.classList.toggle("stamped", progress >= 0.97);
 }
 
 if (prefersReducedMotion) {
@@ -225,12 +244,15 @@ if (prefersReducedMotion) {
         el.style.transform = `translate3d(0, ${-(y * speed)}px, 0)`;
       });
 
-      const rect = roadmap.getBoundingClientRect();
       const vh = window.innerHeight;
-      // starts drawing as the section enters, completes as it fills
-      // the screen, and never un-draws below 0
+      updateFocusedRow(vh);
+
+      const rect = roadmap.getBoundingClientRect();
+      // the trail only starts once the map is properly on screen
+      // (section top reaches 55% of the viewport) and finishes about
+      // three-quarters of a screen of scrolling later
       const progress = Math.min(
-        Math.max((vh * 0.9 - rect.top) / (rect.height * 0.9), 0),
+        Math.max((vh * 0.55 - rect.top) / (vh * 0.75), 0),
         1,
       );
       updateRoadmap(progress);
