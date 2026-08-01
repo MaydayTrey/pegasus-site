@@ -188,6 +188,81 @@ header {
   list-style: none;
 }
 
+/*About loading in */
+/* <dialog id="about-dialog">
+          <button class="dialog-close" aria-label="Close">&times;</button>
+          <div id="dialog-content"></div>
+        </dialog>
+
+        <template id="dialog-template">
+          <div class="dialog-header">
+            <img class="dialog-image" src="" alt="" />
+          </div>
+          <div class="dialog-body"></div>
+         </template> */
+
+#about-dialog {
+  /* closed/resting state — off-screen left, filling the height */
+  margin: 0; /* pin to the left edge, no auto-centering */
+  margin-top: 10vh;
+  height: 80vh;
+  max-height: 100vh;
+  width: 100vw; /* fills the LEFT half; use 100vw for full screen */
+  max-width: 100vw;
+  border: none;
+  padding: 0;
+
+  transform: translateX(-100%); /* start fully off-screen to the left */
+  transition:
+    transform 0.8s ease,
+    display 0.8s ease allow-discrete,
+    overlay 0.8s ease allow-discrete;
+}
+
+/* open state — slid into place */
+#about-dialog[open] {
+  transform: translateX(0);
+}
+
+/* where the slide STARTS from when it opens */
+@starting-style {
+  #about-dialog[open] {
+    transform: translateX(-100%);
+  }
+}
+
+#about-dialog::backdrop {
+  background-color: rgba(32, 31, 30, 0);
+  backdrop-filter: blur(0px);
+  transition:
+    background-color 0.4s ease,
+    backdrop-filter 0.4s ease,
+    display 0.4s ease allow-discrete,
+    overlay 0.4s ease allow-discrete;
+}
+
+/* open state — the final dark, blurred look */
+#about-dialog[open]::backdrop {
+  background-color: rgba(32, 31, 30, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+/* where the fade STARTS when it opens */
+@starting-style {
+  #about-dialog[open]::backdrop {
+    background-color: rgba(32, 31, 30, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+.dialog-close {
+  border: 2px solid purple;
+}
+
+.dialog-content {
+  border: 2px solid orange;
+}
+
 /* tablet: 2 columns, 3 rows */
 @media (min-width: 600px) {
   #about-us-cards {
