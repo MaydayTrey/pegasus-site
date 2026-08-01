@@ -202,7 +202,6 @@ header {
          </template> */
 
 #about-dialog {
-  /* closed/resting state — off-screen left, filling the height */
   margin: 0; /* pin to the left edge, no auto-centering */
   margin-top: 10vh;
   height: 80vh;
@@ -211,16 +210,23 @@ header {
   max-width: 100vw;
   border: none;
   padding: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #eaf6ff 55%, #d9efff 100%);
+  border-top: 4px solid var(--primary-color);
+  border-bottom: 4px solid var(--primary-color);
+  box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
 
   transform: translateX(-100%); /* start fully off-screen to the left */
   transition:
-    transform 0.8s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
     display 0.8s ease allow-discrete,
     overlay 0.8s ease allow-discrete;
 }
 
 /* open state — slid into place */
 #about-dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translateX(0);
 }
 
@@ -255,12 +261,105 @@ header {
   }
 }
 
+/* THE CLOSE X — upper right; spins into position while the dialog
+   glides right, and unspins (opposite direction) on the way out.
+   `rotate` and `translate` are separate CSS properties here, so the
+   spin choreography and the hover raise never fight each other. */
 .dialog-close {
-  border: 2px solid purple;
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #a5a5a5;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  color: #8a8a8a; /* grey at rest */
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  rotate: -540deg; /* wound up while closed */
+  transition:
+    rotate 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.dialog-content {
-  border: 2px solid orange;
+/* open: unwind 1.5 turns into place, synced with the glide */
+#about-dialog[open] .dialog-close {
+  rotate: 0deg;
+}
+
+@starting-style {
+  #about-dialog[open] .dialog-close {
+    rotate: -540deg;
+  }
+}
+
+/* hover: red and raised */
+.dialog-close:hover,
+.dialog-close:focus-visible {
+  color: #e03131;
+  border-color: #e03131;
+  translate: 0 -4px;
+  box-shadow: 0 8px 16px rgba(224, 49, 49, 0.3);
+}
+
+/* CONTENT — rides in from the left after the panel, leaves with it */
+#dialog-content {
+  max-width: 62ch; /* readable line length */
+  padding: var(--space-lg) var(--space-xl);
+  text-align: center;
+  opacity: 0;
+  translate: -40px 0;
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s ease;
+}
+
+#about-dialog[open] #dialog-content {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.5s; /* waits for the panel to arrive */
+}
+
+/* on close the delay is gone (base rule), so the text immediately
+   shifts back left and fades while the panel departs */
+@starting-style {
+  #about-dialog[open] #dialog-content {
+    opacity: 0;
+    translate: -40px 0;
+  }
+}
+
+.dialog-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.4rem);
+  font-weight: 600;
+  color: #1f1e1d;
+  line-height: 1.2;
+}
+
+/* accent line under the title — brand blue into the CTA gold */
+.dialog-divider {
+  display: block;
+  width: 90px;
+  height: 3px;
+  margin: var(--space-md) auto var(--space-lg);
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary-color), hsl(42, 100%, 50%));
+}
+
+.dialog-body p {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
 }
 
 /* tablet: 2 columns, 3 rows */
@@ -288,12 +387,122 @@ header {
 }
 
 .tier-stair {
-  background-color: whitesmoke;
-  box-shadow: 0 0 2px 0 black;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f2faff 100%);
+  box-shadow: 0 2px 14px rgba(0, 30, 60, 0.15);
   overflow: hidden;
   min-width: 0;
   min-height: 0;
 }
+
+/* blue-to-gold accent rail across the top of each tier */
+.tier-stair::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), hsl(42, 100%, 50%));
+}
+
+.tier-tag {
+  font-style: italic;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7a7a7a;
+}
+
+.tier-stair h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.tier-stair .price {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.tier-stair > ul {
+  list-style: none;
+}
+
+.tier-stair > ul li::before {
+  content: "✓ ";
+  color: #2f9e44;
+  font-weight: 700;
+}
+
+/* THE EXPAND DETAIL — collapsed via the 0fr grid-row trick, grows
+   into place and fades up once its tier owns the viewport */
+.tier-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    grid-template-rows 0.6s ease 0.15s,
+    opacity 0.5s ease 0.25s,
+    translate 0.5s ease 0.25s;
+}
+
+.tier-more-inner {
+  overflow: hidden;
+  max-width: 46ch;
+}
+
+.tier-more p {
+  margin-bottom: var(--space-sm);
+  color: #444;
+}
+
+.tier-perks {
+  list-style: none;
+  margin-bottom: var(--space-md);
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.tier-perks li::before {
+  content: "— ";
+  color: hsl(42, 100%, 45%);
+  font-weight: 700;
+}
+
+.tier-cta {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 30px;
+  background: #1f1e1d;
+  color: #f2f2f2;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.tier-cta:hover {
+  background: var(--primary-color);
+  box-shadow: 0 6px 14px rgba(20, 157, 255, 0.4);
+}
+
+.tier-stair.is-open .tier-more {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  translate: 0 0;
+}
+
 /*SHRINK/GROW CSS PROPERTY OF TIERS */
 #starter-service {
   grid-column: 1;
@@ -307,19 +516,29 @@ header {
   grid-column: 3;
   grid-row: 1;
 }
-@media (hover: hover) and (min-width: 701px) {
-  #services:has(#starter-service:hover) {
-    grid-template-columns: 1fr 0fr 0fr;
-    grid-template-rows: 0fr 0fr 1fr;
-  }
-  #services:has(#growth-service:hover) {
-    grid-template-columns: 0fr 1fr 0fr;
-    grid-template-rows: 0fr 1fr 0fr;
-  }
-  #services:has(#advanced-service:hover) {
-    grid-template-columns: 0fr 0fr 1fr;
-    grid-template-rows: 1fr 0fr 0fr;
-  }
+
+/* EXPANSION — driven by data-expanded (set from JS on mouseenter,
+   cleared when the pointer leaves the whole section) instead of
+   :has(:hover). With :hover, the grid re-layout slides other tiles
+   under a stationary cursor mid-transition, which re-targets the
+   hover and makes the whole thing oscillate — the glitch. */
+#services[data-expanded="starter"] {
+  grid-template-columns: 1fr 0fr 0fr;
+  grid-template-rows: 0fr 0fr 1fr;
+}
+#services[data-expanded="growth"] {
+  grid-template-columns: 0fr 1fr 0fr;
+  grid-template-rows: 0fr 1fr 0fr;
+}
+#services[data-expanded="advanced"] {
+  grid-template-columns: 0fr 0fr 1fr;
+  grid-template-rows: 1fr 0fr 0fr;
+}
+
+/* while one tier owns the stage, the collapsed tiers can't steal
+   pointer events mid-transition — the other half of the glitch fix */
+#services[data-expanded] .tier-stair:not(.is-open) {
+  pointer-events: none;
 }
 
 #services-heading {
@@ -330,7 +549,7 @@ header {
     max-height 0.6s ease,
     margin 0.6s ease;
 }
-#services:has(.tier-stair:hover) #services-heading {
+#services[data-expanded] #services-heading {
   opacity: 0;
   max-height: 0;
   margin: 0;
@@ -382,33 +601,121 @@ header {
   .tier-stair h3 {
     font-size: 1.05rem;
   }
+
+  /* no hover on touch — the detail is simply always visible */
+  .tier-more {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
 /* TIER COMPARISON */
+#tier-comparison {
+  padding: var(--space-xl) var(--space-lg);
+}
+
+#comparison-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: center;
+  color: whitesmoke;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  margin-bottom: var(--space-lg);
+}
+
+/* frosted glass card holding the table */
 .table-wrap {
   overflow-x: auto;
+  max-width: 960px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 24px 60px rgba(0, 30, 60, 0.28);
 }
 
 .comparison-table {
   width: 100%;
   border-collapse: collapse; /* merges double borders into single lines */
-  max-width: 900px;
-  margin: 0 auto; /* the cap-and-center pattern again */
+}
+
+.comparison-table caption {
+  font-family: var(--font-display);
+  font-style: italic;
+  padding: var(--space-md);
+  color: #333;
+}
+
+.comparison-table thead th {
+  background: #1f1e1d;
+  color: whitesmoke;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--space-md);
 }
 
 .comparison-table th,
 .comparison-table td {
   padding: var(--space-md);
   text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .comparison-table th[scope="row"] {
   text-align: left; /* feature names read better left-aligned */
+  font-family: var(--font-body);
 }
 
-.comparison-table tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.5); /* zebra striping for scannability */
+/* SCROLL REVEAL — rows start low + invisible, glide up when the
+   IntersectionObserver in script.js marks them in */
+.comparison-table tbody tr {
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 0.6s ease,
+    translate 0.6s ease,
+    background-color 0.4s ease;
+}
+
+.comparison-table tbody tr.row-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.comparison-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* the marks: green checks, red exes (classes added by script.js) */
+.mark-yes {
+  color: #2f9e44;
+  font-weight: 700;
+  font-size: 1.15rem;
+  transition: color 0.6s ease;
+}
+
+.mark-no {
+  color: #e03131;
+  font-weight: 700;
+  font-size: 1.15rem;
+  transition: color 0.6s ease;
+}
+
+/* rows you've scrolled past keep their colors, just less vibrant —
+   the freshest rows near the bottom carry the saturation */
+.comparison-table tbody tr.row-past {
+  color: #666;
+}
+
+.comparison-table tbody tr.row-past .mark-yes {
+  color: rgba(47, 158, 68, 0.45);
+}
+
+.comparison-table tbody tr.row-past .mark-no {
+  color: rgba(224, 49, 49, 0.45);
 }
 
 /*======================*/
@@ -449,14 +756,12 @@ header {
   height: 500px;
   display: block;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  /* no CSS transition here — GSAP drives the transform now, and a
+     CSS transition on the same property would fight its tweening */
   transform-origin: right center; /* anchor the RIGHT — left edge moves */
-}
-
-.example figure:hover img {
-  /* left edge stretched taller, right edge shorter — a trapezoid */
-  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-    perspective(800px) rotateY(-12deg);
+  will-change: transform;
+  border-radius: 6px;
+  box-shadow: 0 18px 40px rgba(0, 30, 60, 0.3);
 }
 
 @media (max-width: 700px) {
@@ -505,12 +810,267 @@ header {
     right: -10%;
     text-align: right;
   }
-  .example figure:hover img {
-    transform: none;
+}
+
+/* CARE PLAN — Progressive Support */
+#care-plan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* the 3D stage: perspective lives on the parent, the cross spins inside */
+.care-scene {
+  perspective: 900px;
+  width: 260px;
+  height: 300px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.care-cross {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  transform-style: preserve-3d;
+  animation: cross-spin 9s linear infinite;
+}
+
+@keyframes cross-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
   }
 }
 
-/* ROADMAP */
+/* three translucent plus-shaped layers stacked in Z fake the volume */
+.cross-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.cross-layer:nth-child(1) {
+  transform: translateZ(-26px);
+}
+.cross-layer:nth-child(3) {
+  transform: translateZ(26px);
+}
+
+/* each layer's plus = vertical bar (::before) + horizontal bar (::after) */
+.cross-layer::before,
+.cross-layer::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.55);
+}
+
+.cross-layer::before {
+  width: 34%;
+  height: 100%;
+  left: 33%;
+  top: 0;
+}
+
+.cross-layer::after {
+  width: 100%;
+  height: 34%;
+  top: 33%;
+  left: 0;
+}
+
+.care-copy {
+  max-width: 48ch;
+  color: whitesmoke;
+}
+
+#care-plan-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  margin-bottom: var(--space-md);
+}
+
+.care-lede {
+  font-family: var(--font-body);
+  line-height: 1.7;
+  margin-bottom: var(--space-md);
+}
+
+.care-points {
+  list-style: none;
+  margin-bottom: var(--space-lg);
+  line-height: 1.9;
+}
+
+.care-points li::before {
+  content: "+ ";
+  color: hsl(42, 100%, 60%);
+  font-weight: 700;
+}
+
+.care-price {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+}
+
+.care-price-amount {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: hsl(42, 100%, 60%);
+}
+
+.care-price-period {
+  color: #dfe9f2;
+}
+
+/* ROADMAP — the treasure map */
+#roadmap {
+  padding: var(--space-xl) var(--space-lg);
+}
+
+#roadmap-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: center;
+  color: whitesmoke;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+}
+
+#roadmap-desc {
+  text-align: center;
+  color: whitesmoke;
+  font-style: italic;
+  max-width: 55ch;
+  margin: var(--space-sm) auto var(--space-lg);
+}
+
+.map-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#treasure-map {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* the dashed trail — round caps make the dashes read hand-drawn */
+.map-trail {
+  stroke: whitesmoke;
+  stroke-width: 6;
+  stroke-dasharray: 2 22;
+  filter: drop-shadow(0 2px 3px rgba(0, 30, 60, 0.4));
+}
+
+/* X marks the spot */
+.map-x path {
+  stroke: #e03131;
+  stroke-width: 10;
+  stroke-linecap: round;
+  fill: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+/* waypoints: dim until the trail reaches them */
+.map-stage circle {
+  fill: rgba(255, 255, 255, 0.35);
+  stroke: whitesmoke;
+  stroke-width: 3;
+  transition:
+    fill 0.4s ease,
+    r 0.4s ease;
+}
+
+.map-stage text {
+  fill: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-style: italic;
+  text-anchor: middle;
+  transition: fill 0.4s ease;
+}
+
+.map-stage.reached circle {
+  fill: hsl(42, 100%, 55%);
+}
+
+.map-stage.reached text {
+  fill: whitesmoke;
+}
+
+.map-stage.current text {
+  fill: hsl(42, 100%, 60%);
+  font-weight: 700;
+}
+
+#map-status {
+  text-align: center;
+  color: whitesmoke;
+  font-family: var(--font-body);
+  margin-top: var(--space-md);
+  min-height: 1.5em; /* no layout jump as the text changes */
+}
+
+#map-status strong {
+  color: hsl(42, 100%, 60%);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+/* PARALLAX SKY — fixed decorative layer behind the content */
+#parallax-sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* above the body gradient, below everything else */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.p-cloud {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  filter: blur(6px);
+  will-change: transform;
+}
+
+.p-cloud--1 {
+  width: 55vw;
+  height: 22vh;
+  top: 18%;
+  left: -8%;
+}
+
+.p-cloud--2 {
+  width: 40vw;
+  height: 18vh;
+  top: 55%;
+  right: -6%;
+  opacity: 0.8;
+}
+
+.p-cloud--3 {
+  width: 65vw;
+  height: 26vh;
+  top: 85%;
+  left: 12%;
+  opacity: 0.6;
+}
 
 /* CONTACT US */
 /* CONTACT US */
