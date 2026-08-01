@@ -55,22 +55,37 @@ closeBtn.addEventListener("click", () => dialog.close());
 // Combined with pointer-events:none on collapsed tiers (CSS), the grid
 // transition can no longer re-target hover mid-flight — the old glitch.
 const services = document.getElementById("services");
+const servicesClose = document.getElementById("services-close");
 const tiers = services.querySelectorAll(".tier-stair");
 const tierHoverable = window.matchMedia(
   "(hover: hover) and (min-width: 701px)",
 );
 
+// after the X is used, hovering must not immediately re-open the tier
+// the pointer is still sitting on — stay suppressed until they leave
+let expandSuppressed = false;
+
+function collapseTiers() {
+  delete services.dataset.expanded;
+  tiers.forEach((t) => t.classList.remove("is-open"));
+}
+
 tiers.forEach((tier) => {
   tier.addEventListener("mouseenter", () => {
-    if (!tierHoverable.matches) return;
+    if (!tierHoverable.matches || expandSuppressed) return;
     services.dataset.expanded = tier.dataset.tier;
     tiers.forEach((t) => t.classList.toggle("is-open", t === tier));
   });
 });
 
 services.addEventListener("mouseleave", () => {
-  delete services.dataset.expanded;
-  tiers.forEach((t) => t.classList.remove("is-open"));
+  expandSuppressed = false;
+  collapseTiers();
+});
+
+servicesClose.addEventListener("click", () => {
+  expandSuppressed = true;
+  collapseTiers();
 });
 
 /* ===================== */
@@ -247,12 +262,18 @@ if (prefersReducedMotion) {
       const vh = window.innerHeight;
       updateFocusedRow(vh);
 
+      // progress is measured against the section's own scroll runway
+      // (its height minus one screen), so the tall sticky section gives
+      // the trail a long, slow draw instead of finishing in half a screen
       const rect = roadmap.getBoundingClientRect();
-      // the trail only starts once the map is properly on screen
-      // (section top reaches 55% of the viewport) and finishes about
-      // three-quarters of a screen of scrolling later
+      const runway = Math.max(rect.height - vh, 1);
+      const travelled = Math.min(Math.max(-rect.top / runway, 0), 1);
+      // dead zone up front (nothing draws while you're still reading the
+      // heading) and a settled tail once the X is stamped
+      const LEAD_IN = 0.2;
+      const DRAW = 0.62;
       const progress = Math.min(
-        Math.max((vh * 0.55 - rect.top) / (vh * 0.75), 0),
+        Math.max((travelled - LEAD_IN) / DRAW, 0),
         1,
       );
       updateRoadmap(progress);
@@ -263,3 +284,240 @@ if (prefersReducedMotion) {
   window.addEventListener("resize", onScroll);
   onScroll();
 }
+
+/* ===================== */
+/* WEB PRESENCE SECTION  */
+/* ===================== */
+// reason cards and illustrations fade/scale in as they arrive
+const revealTargets = document.querySelectorAll(".gi-item, .gi-shot");
+
+if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+  revealTargets.forEach((el) => el.classList.add("in-view"));
+} else {
+  const giObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("in-view");
+        giObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.15 },
+  );
+  revealTargets.forEach((el) => giObserver.observe(el));
+}
+
+/* --- the globe: idle spin + drag to bobble --- */
+// The meridians are ellipses whose rx shrinks/grows to fake rotation;
+// stepping their rx through a sine wave reads as a sphere turning.
+const globeStage = document.getElementById("globe-stage");
+const meridians = document.querySelectorAll("#globe-meridians ellipse");
+
+if (globeStage && meridians.length && typeof gsap !== "undefined") {
+  const R = 82;
+  const spin = { angle: 0 };
+
+  function drawMeridians() {
+    meridians.forEach((m, i) => {
+      // evenly spaced around the sphere, offset by the current angle
+      const phase = spin.angle + (i * Math.PI) / meridians.length;
+      const rx = Math.abs(Math.cos(phase)) * R;
+      m.setAttribute("rx", Math.max(rx, 0.5).toFixed(2));
+      // meridians on the far side are dimmer
+      m.style.opacity = (0.35 + Math.abs(Math.sin(phase)) * 0.45).toFixed(2);
+    });
+  }
+
+  const idle = gsap.to(spin, {
+    angle: Math.PI * 2,
+    duration: 14,
+    ease: "none",
+    repeat: -1,
+    onUpdate: drawMeridians,
+  });
+
+  if (prefersReducedMotion) idle.pause();
+  drawMeridians();
+
+  // drag to bobble: dragging spins it by hand, releasing springs the
+  // speed back into the idle rotation
+  let dragging = false;
+  let lastX = 0;
+
+  globeStage.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    globeStage.setPointerCapture(e.pointerId);
+    idle.pause();
+  });
+
+  globeStage.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+    spin.angle += dx * 0.012;
+    drawMeridians();
+  });
+
+  const endDrag = (e) => {
+    if (!dragging) return;
+    dragging = false;
+    if (e.pointerId !== undefined && globeStage.hasPointerCapture(e.pointerId)) {
+      globeStage.releasePointerCapture(e.pointerId);
+    }
+    // wobble settle, then hand control back to the idle spin
+    if (!prefersReducedMotion) {
+      gsap.to(spin, {
+        angle: spin.angle + 0.5,
+        duration: 1.1,
+        ease: "elastic.out(1, 0.4)",
+        onUpdate: drawMeridians,
+        onComplete: () => {
+          // restart the loop from wherever the drag left it
+          idle.kill();
+          gsap.to(spin, {
+            angle: spin.angle + Math.PI * 2,
+            duration: 14,
+            ease: "none",
+            repeat: -1,
+            onUpdate: drawMeridians,
+          });
+        },
+      });
+    }
+  };
+
+  globeStage.addEventListener("pointerup", endDrag);
+  globeStage.addEventListener("pointercancel", endDrag);
+}
+
+/* ===================== */
+/* CUSTOM SELECT         */
+/* ===================== */
+// Progressive enhancement: the native <select> stays in the form as the
+// real control (and the no-JS fallback); this builds an animatable
+// listbox on top of it and keeps the two in sync.
+function enhanceSelect(select) {
+  const shell = document.createElement("div");
+  shell.className = "select-shell";
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "select-trigger";
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+  // the <label> points at the now-hidden native select, so carry its
+  // text over as the trigger's accessible name
+  const nativeLabel = document.querySelector(`label[for="${select.id}"]`);
+  if (nativeLabel) trigger.setAttribute("aria-label", nativeLabel.textContent);
+
+  const label = document.createElement("span");
+  const caret = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  caret.setAttribute("class", "select-caret");
+  caret.setAttribute("viewBox", "0 0 24 24");
+  caret.setAttribute("aria-hidden", "true");
+  const caretPath = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "polyline",
+  );
+  caretPath.setAttribute("points", "5 9 12 16 19 9");
+  caret.appendChild(caretPath);
+  trigger.append(label, caret);
+
+  const menu = document.createElement("ul");
+  menu.className = "select-menu";
+  menu.setAttribute("role", "listbox");
+
+  const options = [...select.options];
+  const items = options.map((opt, i) => {
+    const li = document.createElement("li");
+    li.className = "select-option";
+    li.setAttribute("role", "option");
+    li.textContent = opt.textContent;
+    li.dataset.index = String(i);
+    // the disabled prompt option isn't selectable, it's the placeholder
+    if (opt.disabled) li.hidden = true;
+    menu.appendChild(li);
+    return li;
+  });
+
+  select.parentNode.insertBefore(shell, select);
+  shell.append(trigger, menu);
+  select.classList.add("js-enhanced");
+  shell.after(select);
+
+  let activeIndex = select.selectedIndex;
+
+  function syncLabel() {
+    const opt = select.options[select.selectedIndex];
+    label.textContent = opt ? opt.textContent : "";
+    trigger.classList.toggle("is-placeholder", !!opt && opt.disabled);
+    items.forEach((li, i) =>
+      li.setAttribute("aria-selected", String(i === select.selectedIndex)),
+    );
+  }
+
+  function setActive(i) {
+    activeIndex = i;
+    items.forEach((li, idx) => li.classList.toggle("active", idx === i));
+  }
+
+  function openMenu() {
+    menu.classList.add("open");
+    trigger.setAttribute("aria-expanded", "true");
+    setActive(select.selectedIndex);
+  }
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  function choose(i) {
+    if (select.options[i].disabled) return;
+    select.selectedIndex = i;
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+    syncLabel();
+    closeMenu();
+    trigger.focus();
+  }
+
+  trigger.addEventListener("click", () => {
+    menu.classList.contains("open") ? closeMenu() : openMenu();
+  });
+
+  items.forEach((li, i) => {
+    li.addEventListener("click", () => choose(i));
+    li.addEventListener("mouseenter", () => setActive(i));
+  });
+
+  // keyboard: arrows move, Enter/Space commit, Escape closes
+  trigger.addEventListener("keydown", (e) => {
+    const isOpen = menu.classList.contains("open");
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!isOpen) return openMenu();
+      let next = activeIndex;
+      do {
+        next += e.key === "ArrowDown" ? 1 : -1;
+      } while (select.options[next] && select.options[next].disabled);
+      if (select.options[next]) setActive(next);
+    } else if (e.key === "Enter" || e.key === " ") {
+      if (isOpen) {
+        e.preventDefault();
+        choose(activeIndex);
+      }
+    } else if (e.key === "Escape" && isOpen) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!shell.contains(e.target)) closeMenu();
+  });
+
+  syncLabel();
+}
+
+document.querySelectorAll("#contact-form select").forEach(enhanceSelect);
+

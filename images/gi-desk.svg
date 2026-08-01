@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img" aria-label="A desk with a laptop showing a rising traffic chart">
+  <rect width="480" height="360" fill="#eaf6ff"/>
+  <rect y="286" width="480" height="74" fill="#d7ebfb"/>
+  <!-- laptop -->
+  <g>
+    <!-- screen -->
+    <rect x="96" y="66" width="288" height="190" rx="10" fill="#ffffff" stroke="#0b6bb5" stroke-width="4"/>
+    <rect x="112" y="82" width="256" height="158" rx="4" fill="#f5fbff"/>
+    <!-- chart bars -->
+    <rect x="140" y="180" width="26" height="44" rx="3" fill="#9ed2f7"/>
+    <rect x="180" y="158" width="26" height="66" rx="3" fill="#65bdf5"/>
+    <rect x="220" y="132" width="26" height="92" rx="3" fill="#149dff"/>
+    <rect x="260" y="112" width="26" height="112" rx="3" fill="#0b6bb5"/>
+    <rect x="300" y="96" width="26" height="128" rx="3" fill="#f0b429"/>
+    <!-- trend line -->
+    <polyline points="153 172 193 150 233 124 273 104 313 88" fill="none" stroke="#2f9e44" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="313" cy="88" r="6" fill="#2f9e44"/>
+    <!-- baseline -->
+    <line x1="132" y1="224" x2="336" y2="224" stroke="#cfe6f7" stroke-width="3"/>
+    <!-- title bar -->
+    <rect x="132" y="98" width="80" height="8" rx="4" fill="#cfe6f7"/>
+    <!-- base -->
+    <path d="M72 256 h336 l18 26 H54 z" fill="#ffffff" stroke="#0b6bb5" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <!-- mug -->
+  <g>
+    <rect x="404" y="228" width="44" height="48" rx="7" fill="#ffffff" stroke="#0b6bb5" stroke-width="3"/>
+    <path d="M448 240 h10 a10 10 0 0 1 0 20 h-10" fill="none" stroke="#0b6bb5" stroke-width="3"/>
+  </g>
+  <!-- sticky note -->
+  <rect x="26" y="196" width="60" height="60" rx="4" fill="#ffe9a8" stroke="#f0b429" stroke-width="2"/>
+  <g stroke="#c99417" stroke-width="3" stroke-linecap="round">
+    <line x1="38" y1="214" x2="74" y2="214"/>
+    <line x1="38" y1="228" x2="66" y2="228"/>
+    <line x1="38" y1="242" x2="70" y2="242"/>
+  </g>
+</svg>

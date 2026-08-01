@@ -284,6 +284,10 @@
 
       <section id="services" aria-labelledby="services-heading" class="skyband">
         <h2 id="services-heading">Services Provided</h2>
+        <!--closes an expanded tier; only interactive while one is open-->
+        <button id="services-close" type="button" aria-label="Close tier">
+          &times;
+        </button>
         <article
           aria-labelledby="starter-heading"
           id="starter-service"
@@ -389,13 +393,217 @@
         aria-labelledby="general-info-heading"
         class="skyband"
       >
-        <h2 id="general-info-heading">Having a website presence matters.</h2>
-        <p>TODO: 3 sub-sections — benefits of a website.</p>
-        <p>TODO: Online presence — conversion, leads, sales.</p>
-        <p>TODO: Competitive edge.</p>
-        <p>TODO: Local SEO / showing up locally.</p>
-        <p>TODO: Security when handling payments — XSS.</p>
-        <p>TODO: Google Business Profile effect.</p>
+        <div class="gi-intro">
+          <h2 id="general-info-heading">Having a website presence matters.</h2>
+          <p class="gi-lede">
+            Your customers are already looking. The only question is whether
+            they find you — or the business down the road that showed up
+            first.
+          </p>
+
+          <!--GSAP-driven globe: spins on its own, drag to bobble it-->
+          <div
+            class="globe-stage"
+            id="globe-stage"
+            role="img"
+            aria-label="A rotating globe representing the world wide web"
+          >
+            <svg class="globe" viewBox="0 0 200 200">
+              <defs>
+                <clipPath id="globe-clip">
+                  <circle cx="100" cy="100" r="82" />
+                </clipPath>
+                <radialGradient id="globe-shade" cx="35%" cy="30%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+                  <stop offset="55%" stop-color="#8fd0ff" stop-opacity="0.5" />
+                  <stop offset="100%" stop-color="#0b6bb5" stop-opacity="0.7" />
+                </radialGradient>
+              </defs>
+
+              <circle class="globe-ball" cx="100" cy="100" r="82" />
+
+              <!--meridians: the group JS scrolls sideways to spin-->
+              <g clip-path="url(#globe-clip)">
+                <g class="globe-lines" id="globe-lines">
+                  <!--latitudes stay put-->
+                  <ellipse cx="100" cy="100" rx="82" ry="82" />
+                  <line x1="18" y1="100" x2="182" y2="100" />
+                  <ellipse cx="100" cy="100" rx="82" ry="41" />
+                  <ellipse cx="100" cy="100" rx="82" ry="68" />
+                  <ellipse cx="100" cy="100" rx="82" ry="16" />
+                </g>
+                <g id="globe-meridians">
+                  <ellipse cx="100" cy="100" rx="20" ry="82" />
+                  <ellipse cx="100" cy="100" rx="48" ry="82" />
+                  <ellipse cx="100" cy="100" rx="72" ry="82" />
+                </g>
+              </g>
+
+              <circle class="globe-gloss" cx="100" cy="100" r="82" />
+            </svg>
+            <p class="globe-hint">Drag me</p>
+          </div>
+        </div>
+
+        <!--the six reasons-->
+        <ul class="gi-grid">
+          <li class="gi-item">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="20" cy="20" r="11" />
+              <line x1="28.5" y1="28.5" x2="40" y2="40" />
+            </svg>
+            <div class="gi-text">
+              <h3>Found on search</h3>
+              <p>
+                Roughly nine in ten buying decisions start with a search. Clean
+                titles, real headings, and structured data are what let a
+                search engine understand your business well enough to
+                recommend it — without them you are invisible to the people
+                actively looking to spend money.
+              </p>
+            </div>
+          </li>
+
+          <li class="gi-item">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <polyline points="8 34 19 22 27 29 40 13" />
+              <polyline points="31 13 40 13 40 22" />
+            </svg>
+            <div class="gi-text">
+              <h3>Online presence that converts</h3>
+              <p>
+                Traffic alone pays nothing. A site earns its keep by turning
+                visitors into leads and leads into sales: an obvious next step
+                on every page, a form that actually gets answered, and a phone
+                number one tap away. Presence is the start — conversion is the
+                point.
+              </p>
+            </div>
+          </li>
+
+          <li class="gi-item">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M12 40 V26 M24 40 V16 M36 40 V22" />
+              <path d="M6 40 H42" />
+              <path d="M24 6 L27 13 L34 13 L28 18 L30 25 L24 21 L18 25 L20 18 L14 13 L21 13 Z" />
+            </svg>
+            <div class="gi-text">
+              <h3>A competitive edge</h3>
+              <p>
+                Your competitors are one tab away, and customers compare
+                before they call. A site that loads fast, reads clearly, and
+                looks considered signals a business worth trusting — while an
+                outdated page quietly hands the decision to whoever looked
+                more professional.
+              </p>
+            </div>
+          </li>
+
+          <li class="gi-item">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M24 43 C33 33 39 26 39 19 A15 15 0 0 0 9 19 C9 26 15 33 24 43 Z" />
+              <circle class="icon-dot" cx="24" cy="19" r="5" />
+            </svg>
+            <div class="gi-text">
+              <h3>Showing up locally</h3>
+              <p>
+                "Near me" searches are how neighborhoods hire. Local SEO — real
+                service areas, consistent contact details, and location signals
+                a search engine can verify — puts you in the short list that
+                appears when someone two streets over needs exactly what you
+                do.
+              </p>
+            </div>
+          </li>
+
+          <li class="gi-item">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M24 5 L39 11 V22 C39 32 33 39.5 24 43 C15 39.5 9 32 9 22 V11 Z" />
+              <rect class="icon-dot" x="18" y="21" width="12" height="10" rx="2" />
+              <path d="M21 21 V18 A3 3 0 0 1 27 18 V21" />
+            </svg>
+            <div class="gi-text">
+              <h3>Security when money moves</h3>
+              <p>
+                The moment you take payments or collect details, you inherit a
+                duty of care. Cross-site scripting is the common way attackers
+                skim card and contact data off ordinary small business sites.
+                A content security policy, HTTPS everywhere, and sanitized
+                inputs shut that door before it opens.
+              </p>
+            </div>
+          </li>
+
+          <li class="gi-item gi-item--google">
+            <svg class="gi-icon" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="6" y="14" width="36" height="20" rx="10" />
+              <circle cx="16" cy="24" r="4" />
+              <line x1="19" y1="27" x2="23" y2="31" />
+            </svg>
+            <div class="gi-text">
+              <h3>Your Google Business Profile</h3>
+              <p>
+                A complete profile is what puts you on the map — literally.
+                Hours, photos, directions, and reviews appear beside your name
+                in results, and that panel is often the first and only thing a
+                customer reads before deciding to call.
+              </p>
+
+              <!--illustrative search mock, not a real search box-->
+              <div class="search-mock" aria-hidden="true">
+                <span class="search-mark">
+                  <span class="mark-b">P</span><span class="mark-r">e</span
+                  ><span class="mark-y">g</span><span class="mark-g">a</span>
+                </span>
+                <span class="search-field">
+                  <span class="search-typed">web designer near me</span>
+                  <span class="search-caret"></span>
+                </span>
+                <svg class="search-glass" viewBox="0 0 24 24">
+                  <circle cx="10" cy="10" r="6" />
+                  <line x1="14.5" y1="14.5" x2="20" y2="20" />
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <!--lazy-loaded illustrations that scale up as they scroll in-->
+        <div class="gi-gallery">
+          <figure class="gi-shot">
+            <img
+              src="images/gi-notepad.svg"
+              alt="A notepad and pen with a project plan sketched out"
+              width="480"
+              height="360"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>It starts on paper — scope before pixels.</figcaption>
+          </figure>
+          <figure class="gi-shot">
+            <img
+              src="images/gi-desk.svg"
+              alt="A desk with a laptop showing a traffic chart"
+              width="480"
+              height="360"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Then we measure what the site actually does.</figcaption>
+          </figure>
+          <figure class="gi-shot">
+            <img
+              src="images/gi-team.svg"
+              alt="Two people reviewing a website layout together"
+              width="480"
+              height="360"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>And we build it with you, not at you.</figcaption>
+          </figure>
+        </div>
       </section>
 
       <!--Care plan -->

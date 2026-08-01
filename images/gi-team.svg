@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img" aria-label="Two people reviewing a website layout together">
+  <rect width="480" height="360" fill="#eaf6ff"/>
+  <rect y="292" width="480" height="68" fill="#d7ebfb"/>
+  <!-- whiteboard with wireframe -->
+  <g>
+    <rect x="140" y="46" width="200" height="196" rx="8" fill="#ffffff" stroke="#0b6bb5" stroke-width="4"/>
+    <rect x="160" y="68" width="160" height="26" rx="4" fill="#149dff"/>
+    <rect x="160" y="106" width="72" height="54" rx="4" fill="#cfe6f7"/>
+    <rect x="244" y="106" width="76" height="10" rx="5" fill="#e2eef7"/>
+    <rect x="244" y="124" width="76" height="10" rx="5" fill="#e2eef7"/>
+    <rect x="244" y="142" width="52" height="10" rx="5" fill="#e2eef7"/>
+    <rect x="160" y="176" width="86" height="20" rx="10" fill="#f0b429"/>
+    <rect x="160" y="208" width="160" height="8" rx="4" fill="#e2eef7"/>
+  </g>
+  <!-- left person -->
+  <g>
+    <circle cx="72" cy="164" r="26" fill="#ffffff" stroke="#0b6bb5" stroke-width="4"/>
+    <path d="M28 292 v-52 a44 44 0 0 1 88 0 v52" fill="#149dff"/>
+    <!-- pointing arm toward the board -->
+    <path d="M110 236 L152 190" fill="none" stroke="#0b6bb5" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <!-- right person -->
+  <g>
+    <circle cx="408" cy="176" r="24" fill="#ffffff" stroke="#0b6bb5" stroke-width="4"/>
+    <path d="M368 292 v-46 a40 40 0 0 1 80 0 v46" fill="#0b6bb5"/>
+    <!-- holding a tablet -->
+    <rect x="336" y="216" width="46" height="60" rx="6" fill="#ffffff" stroke="#0b6bb5" stroke-width="4" transform="rotate(-12 359 246)"/>
+  </g>
+</svg>
