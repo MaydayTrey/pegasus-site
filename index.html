@@ -104,14 +104,19 @@
       </section>
 
       <section id="about-us" aria-labelledby="about-us-heading">
-        <!--full-viewport statement panel; sweeps in from the left-->
-        <div class="who-panel" id="who-panel">
-          <h2 id="about-us-heading" class="who-eyebrow">Who We Are</h2>
-          <p class="who-statement">
-            We are a web development agency building websites with personality
-            and creativity, that represents your business, driving sales and
-            engagement. Complex things made simple, for you.
-          </p>
+        <!--full-viewport statement panel; sweeps in from the left.
+            The wrapper stays put so the observer can actually see it —
+            the panel itself starts off-screen and would never intersect.-->
+        <div class="who-wrap" id="who-wrap">
+          <div class="who-panel">
+            <h2 id="about-us-heading" class="who-eyebrow">Who We Are</h2>
+            <p class="who-statement">
+              We are a web development agency building websites with
+              personality and creativity, that represents your business,
+              driving sales and engagement. Complex things made simple, for
+              you.
+            </p>
+          </div>
         </div>
 
         <ul id="about-us-cards">

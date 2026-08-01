@@ -171,14 +171,21 @@ header {
 /* ABOUT US */
 /* ---- WHO WE ARE: full-viewport statement panel ----
    Sweeps in from the left edge as you scroll to it. */
+/* the observed wrapper — stays in the flow so it can intersect */
+.who-wrap {
+  width: 100vw;
+  min-height: 100vh;
+  margin-left: calc(50% - 50vw); /* break out of any parent padding */
+  overflow: hidden; /* hides the panel while it waits off to the left */
+}
+
 .who-panel {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
-  margin-left: calc(50% - 50vw); /* break out of any parent padding */
   padding: var(--space-xl) clamp(var(--space-lg), 8vw, 10rem);
   background: linear-gradient(
     115deg,
@@ -196,7 +203,7 @@ header {
     opacity 0.6s ease;
 }
 
-.who-panel.in-view {
+.who-wrap.in-view .who-panel {
   translate: 0 0;
   opacity: 1;
 }
@@ -242,7 +249,7 @@ header {
     translate 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s;
 }
 
-.who-panel.in-view .who-statement {
+.who-wrap.in-view .who-statement {
   opacity: 1;
   translate: 0 0;
 }
@@ -844,21 +851,22 @@ header {
   grid-row: 1;
 }
 
-/* EXPANSION — driven by data-expanded, which JS sets from the pointer's
-   position against anchor points captured while collapsed. Using
-   :has(:hover) meant the grid re-layout slid tiles under a stationary
-   cursor, re-targeting the hover and oscillating — the old glitch. */
+/* EXPANSION — set from JS on click.
+   Every track is minmax(0, …): a bare `0fr` is really minmax(auto, 0fr),
+   so collapsed tracks keep a content-sized minimum, the open tile never
+   fills the grid, and it lands somewhere different depending on which
+   row/column it came from — which is what made the close X wander. */
 .tier-grid[data-expanded="starter"] {
-  grid-template-columns: 1fr 0fr 0fr;
-  grid-template-rows: 0fr 0fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
+  grid-template-rows: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
 }
 .tier-grid[data-expanded="growth"] {
-  grid-template-columns: 0fr 1fr 0fr;
-  grid-template-rows: 0fr 1fr 0fr;
+  grid-template-columns: minmax(0, 0fr) minmax(0, 1fr) minmax(0, 0fr);
+  grid-template-rows: minmax(0, 0fr) minmax(0, 1fr) minmax(0, 0fr);
 }
 .tier-grid[data-expanded="advanced"] {
-  grid-template-columns: 0fr 0fr 1fr;
-  grid-template-rows: 1fr 0fr 0fr;
+  grid-template-columns: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
 }
 
 @media (max-width: 700px) {
@@ -2033,6 +2041,11 @@ header {
 }
 
 .sunbeams {
+  /* one shared anchor for the sun — the core and the beams both key off
+     these, so they can never drift out of alignment */
+  --sun-x: 92%;
+  --sun-y: 4%;
+
   position: absolute;
   inset: 0;
   z-index: -1; /* behind the heading and form */
@@ -2050,13 +2063,15 @@ header {
    width so they read as light rather than a pinwheel */
 .sun-rays {
   position: absolute;
-  /* oversized box centred on the sun so the wedges reach the corners */
-  top: -110%;
-  right: -55%;
-  width: 190%;
-  height: 300%;
+  /* a big square centred exactly on the sun, so the conic origin and
+     the mask origin are both simply 50% 50% */
+  left: var(--sun-x);
+  top: var(--sun-y);
+  width: 170vmax;
+  height: 170vmax;
+  translate: -50% -50%;
   background: repeating-conic-gradient(
-    from 96deg at 71% 37%,
+    from 96deg at 50% 50%,
     rgba(255, 241, 194, 0) 0deg,
     rgba(255, 241, 194, 0) 3.2deg,
     rgba(255, 236, 170, 0.5) 4.4deg,
@@ -2070,11 +2085,11 @@ header {
   );
   /* beams dissolve as they travel away from the source */
   mask-image: radial-gradient(
-    closest-side at 71% 37%,
-    #000 4%,
-    rgba(0, 0, 0, 0.85) 22%,
-    rgba(0, 0, 0, 0.45) 52%,
-    transparent 82%
+    closest-side at 50% 50%,
+    #000 2%,
+    rgba(0, 0, 0, 0.85) 10%,
+    rgba(0, 0, 0, 0.42) 26%,
+    transparent 48%
   );
   filter: blur(2px);
   animation: beam-drift 22s ease-in-out infinite alternate;
@@ -2090,23 +2105,24 @@ header {
   }
 }
 
-/* the sun itself — a soft warm core with a wide falloff */
+/* the sun itself — a soft warm core centred on the shared anchor */
 .sun-core {
   position: absolute;
-  top: -16vh;
-  right: -10vw;
-  width: 60vw;
-  height: 60vw;
-  max-width: 780px;
-  max-height: 780px;
+  left: var(--sun-x);
+  top: var(--sun-y);
+  width: 46vw;
+  height: 46vw;
+  max-width: 640px;
+  max-height: 640px;
+  translate: -50% -50%;
   border-radius: 50%;
   background: radial-gradient(
     circle at center,
-    rgba(255, 255, 250, 0.92) 0%,
-    rgba(255, 246, 205, 0.75) 12%,
-    rgba(255, 226, 138, 0.45) 26%,
-    rgba(255, 210, 110, 0.22) 44%,
-    rgba(255, 200, 90, 0) 68%
+    rgba(255, 255, 250, 0.95) 0%,
+    rgba(255, 246, 205, 0.8) 14%,
+    rgba(255, 226, 138, 0.5) 30%,
+    rgba(255, 210, 110, 0.24) 48%,
+    rgba(255, 200, 90, 0) 70%
   );
   filter: blur(6px);
 }
