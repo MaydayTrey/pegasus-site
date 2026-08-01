@@ -54,9 +54,9 @@ closeBtn.addEventListener("click", () => dialog.close());
 // mouseenter commits to a tier; only leaving the whole section resets.
 // Combined with pointer-events:none on collapsed tiers (CSS), the grid
 // transition can no longer re-target hover mid-flight — the old glitch.
-const services = document.getElementById("services");
+const tierGrid = document.getElementById("tier-grid");
 const servicesClose = document.getElementById("services-close");
-const tiers = services.querySelectorAll(".tier-stair");
+const tiers = tierGrid.querySelectorAll(".tier-stair");
 const tierHoverable = window.matchMedia(
   "(hover: hover) and (min-width: 701px)",
 );
@@ -65,20 +65,57 @@ const tierHoverable = window.matchMedia(
 // the pointer is still sitting on — stay suppressed until they leave
 let expandSuppressed = false;
 
+// Anchor points are the tile centres captured in the COLLAPSED layout.
+// Targeting the nearest anchor (rather than whatever element happens to
+// be under the cursor) means you can still switch between tiers while
+// one is expanded, and the moving tiles can't re-target the pointer.
+let anchors = [];
+
+function measureAnchors() {
+  if (tierGrid.dataset.expanded) return; // only valid while collapsed
+  const grid = tierGrid.getBoundingClientRect();
+  anchors = [...tiers].map((tier) => {
+    const r = tier.getBoundingClientRect();
+    return {
+      tier,
+      x: r.left + r.width / 2 - grid.left,
+      y: r.top + r.height / 2 - grid.top,
+    };
+  });
+}
+
+function expandTier(tier) {
+  tierGrid.dataset.expanded = tier.dataset.tier;
+  tiers.forEach((t) => t.classList.toggle("is-open", t === tier));
+}
+
 function collapseTiers() {
-  delete services.dataset.expanded;
+  delete tierGrid.dataset.expanded;
   tiers.forEach((t) => t.classList.remove("is-open"));
 }
 
-tiers.forEach((tier) => {
-  tier.addEventListener("mouseenter", () => {
-    if (!tierHoverable.matches || expandSuppressed) return;
-    services.dataset.expanded = tier.dataset.tier;
-    tiers.forEach((t) => t.classList.toggle("is-open", t === tier));
+tierGrid.addEventListener("mousemove", (e) => {
+  if (!tierHoverable.matches || expandSuppressed || !anchors.length) return;
+  const grid = tierGrid.getBoundingClientRect();
+  const px = e.clientX - grid.left;
+  const py = e.clientY - grid.top;
+
+  let nearest = null;
+  let best = Infinity;
+  anchors.forEach((a) => {
+    const d = (a.x - px) ** 2 + (a.y - py) ** 2;
+    if (d < best) {
+      best = d;
+      nearest = a.tier;
+    }
   });
+
+  if (nearest && tierGrid.dataset.expanded !== nearest.dataset.tier) {
+    expandTier(nearest);
+  }
 });
 
-services.addEventListener("mouseleave", () => {
+tierGrid.addEventListener("mouseleave", () => {
   expandSuppressed = false;
   collapseTiers();
 });
@@ -87,6 +124,19 @@ servicesClose.addEventListener("click", () => {
   expandSuppressed = true;
   collapseTiers();
 });
+
+// touch / no-hover: tap to open, tap the X to close
+tiers.forEach((tier) => {
+  tier.addEventListener("click", () => {
+    if (tierHoverable.matches) return;
+    if (tier.classList.contains("is-open")) collapseTiers();
+    else expandTier(tier);
+  });
+});
+
+measureAnchors();
+window.addEventListener("resize", measureAnchors);
+window.addEventListener("load", measureAnchors);
 
 /* ===================== */
 /* COMPARISON TABLE      */
@@ -289,7 +339,9 @@ if (prefersReducedMotion) {
 /* WEB PRESENCE SECTION  */
 /* ===================== */
 // reason cards and illustrations fade/scale in as they arrive
-const revealTargets = document.querySelectorAll(".gi-item, .gi-shot");
+const revealTargets = document.querySelectorAll(
+  ".gi-item, .gi-shot, .services-intro, .tier-grid",
+);
 
 if (prefersReducedMotion || !("IntersectionObserver" in window)) {
   revealTargets.forEach((el) => el.classList.add("in-view"));
@@ -300,6 +352,10 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("in-view");
         giObserver.unobserve(entry.target);
+        // the tiles have their final size once they've grown in
+        if (entry.target.classList.contains("tier-grid")) {
+          setTimeout(measureAnchors, 700);
+        }
       });
     },
     { threshold: 0.15 },
@@ -311,52 +367,96 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
 // The meridians are ellipses whose rx shrinks/grows to fake rotation;
 // stepping their rx through a sine wave reads as a sphere turning.
 const globeStage = document.getElementById("globe-stage");
+const globeSvg = globeStage ? globeStage.querySelector(".globe") : null;
 const meridians = document.querySelectorAll("#globe-meridians ellipse");
+const latitudes = document.querySelectorAll("#globe-lines ellipse");
 
 if (globeStage && meridians.length && typeof gsap !== "undefined") {
   const R = 82;
-  const spin = { angle: 0 };
+  // angle = spin around the vertical axis, tilt = how far it's pitched
+  // toward/away from you, swing = the pendulum lean of the whole ball
+  const globe = { angle: 0, tilt: 0, swing: 0 };
+  // the latitudes' resting heights, used as the basis for the tilt
+  const baseRy = [...latitudes].map((l) =>
+    parseFloat(l.getAttribute("ry") || R),
+  );
 
-  function drawMeridians() {
+  function drawGlobe() {
     meridians.forEach((m, i) => {
       // evenly spaced around the sphere, offset by the current angle
-      const phase = spin.angle + (i * Math.PI) / meridians.length;
+      const phase = globe.angle + (i * Math.PI) / meridians.length;
       const rx = Math.abs(Math.cos(phase)) * R;
       m.setAttribute("rx", Math.max(rx, 0.5).toFixed(2));
       // meridians on the far side are dimmer
       m.style.opacity = (0.35 + Math.abs(Math.sin(phase)) * 0.45).toFixed(2);
     });
+
+    // pitching the globe flattens the latitude rings toward ellipses,
+    // which is what sells vertical rotation
+    const pitch = Math.cos(globe.tilt);
+    latitudes.forEach((l, i) => {
+      if (l.tagName !== "ellipse") return;
+      const ry = Math.abs(baseRy[i] * pitch);
+      l.setAttribute("ry", Math.max(ry, 0.5).toFixed(2));
+    });
+
+    // ball-on-a-string: the ball leans from a pivot above it (the
+    // caption is left out so it doesn't tilt with the globe)
+    gsap.set(globeSvg, { rotation: globe.swing, transformOrigin: "50% -40%" });
   }
 
-  const idle = gsap.to(spin, {
+  let idle = gsap.to(globe, {
     angle: Math.PI * 2,
     duration: 14,
     ease: "none",
     repeat: -1,
-    onUpdate: drawMeridians,
+    onUpdate: drawGlobe,
   });
 
   if (prefersReducedMotion) idle.pause();
-  drawMeridians();
+  drawGlobe();
 
-  // drag to bobble: dragging spins it by hand, releasing springs the
-  // speed back into the idle rotation
+  function startIdle() {
+    idle.kill();
+    idle = gsap.to(globe, {
+      angle: globe.angle + Math.PI * 2,
+      duration: 14,
+      ease: "none",
+      repeat: -1,
+      onUpdate: drawGlobe,
+    });
+  }
+
+  // drag in any direction: sideways spins it, vertical pitches it, and
+  // the horizontal throw also swings the ball on its string
   let dragging = false;
   let lastX = 0;
+  let lastY = 0;
+  let velX = 0;
 
   globeStage.addEventListener("pointerdown", (e) => {
     dragging = true;
     lastX = e.clientX;
+    lastY = e.clientY;
+    velX = 0;
     globeStage.setPointerCapture(e.pointerId);
     idle.pause();
+    gsap.killTweensOf(globe);
   });
 
   globeStage.addEventListener("pointermove", (e) => {
     if (!dragging) return;
     const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
     lastX = e.clientX;
-    spin.angle += dx * 0.012;
-    drawMeridians();
+    lastY = e.clientY;
+    velX = dx;
+
+    globe.angle += dx * 0.012;
+    // clamp the pitch so it can't turn inside out
+    globe.tilt = Math.max(Math.min(globe.tilt + dy * 0.01, 1.2), -1.2);
+    globe.swing = Math.max(Math.min(globe.swing + dx * 0.14, 26), -26);
+    drawGlobe();
   });
 
   const endDrag = (e) => {
@@ -365,30 +465,97 @@ if (globeStage && meridians.length && typeof gsap !== "undefined") {
     if (e.pointerId !== undefined && globeStage.hasPointerCapture(e.pointerId)) {
       globeStage.releasePointerCapture(e.pointerId);
     }
-    // wobble settle, then hand control back to the idle spin
-    if (!prefersReducedMotion) {
-      gsap.to(spin, {
-        angle: spin.angle + 0.5,
-        duration: 1.1,
-        ease: "elastic.out(1, 0.4)",
-        onUpdate: drawMeridians,
-        onComplete: () => {
-          // restart the loop from wherever the drag left it
-          idle.kill();
-          gsap.to(spin, {
-            angle: spin.angle + Math.PI * 2,
-            duration: 14,
-            ease: "none",
-            repeat: -1,
-            onUpdate: drawMeridians,
-          });
-        },
-      });
-    }
+    if (prefersReducedMotion) return;
+
+    // the release: the ball keeps travelling a little past where you let
+    // go, then springs back — elastic.out is the stretch-and-return
+    gsap.to(globe, {
+      angle: globe.angle + velX * 0.02,
+      duration: 1.4,
+      ease: "power2.out",
+      onUpdate: drawGlobe,
+    });
+    // the string settles level, overshooting either side as it does
+    gsap.to(globe, {
+      swing: 0,
+      tilt: 0,
+      duration: 2.2,
+      ease: "elastic.out(1.1, 0.28)",
+      onUpdate: drawGlobe,
+      onComplete: startIdle,
+    });
   };
 
   globeStage.addEventListener("pointerup", endDrag);
   globeStage.addEventListener("pointercancel", endDrag);
+}
+
+/* ===================== */
+/* CONTACT FORM          */
+/* ===================== */
+// phone: format North American numbers as you type so the field never
+// reads as one long digit string
+const phoneInput = document.getElementById("phone");
+
+if (phoneInput) {
+  const formatPhone = (value) => {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    // leading 1 is treated as the country code
+    const cc = digits.length === 11 && digits[0] === "1";
+    const d = cc ? digits.slice(1) : digits;
+    const prefix = cc ? "+1 " : "";
+
+    if (d.length <= 3) return prefix + d;
+    if (d.length <= 6) return `${prefix}(${d.slice(0, 3)}) ${d.slice(3)}`;
+    return `${prefix}(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
+  };
+
+  phoneInput.addEventListener("input", () => {
+    // don't fight the user while they're deleting
+    const atEnd =
+      phoneInput.selectionStart === phoneInput.value.length;
+    const formatted = formatPhone(phoneInput.value);
+    phoneInput.value = formatted;
+    if (atEnd) {
+      phoneInput.setSelectionRange(formatted.length, formatted.length);
+    }
+  });
+
+  // accepts (513) 399-4566 and +1 (513) 399-4566
+  phoneInput.setAttribute(
+    "pattern",
+    "^(\\+1 )?\\(\\d{3}\\) \\d{3}-\\d{4}$",
+  );
+  phoneInput.setAttribute("title", "Format: (513) 399-4566");
+
+  phoneInput.addEventListener("blur", () => {
+    const digits = phoneInput.value.replace(/\D/g, "");
+    // a partial number is worse than none — flag it rather than submit it
+    phoneInput.setCustomValidity(
+      phoneInput.value && digits.length < 10
+        ? "Please enter a complete 10-digit phone number."
+        : "",
+    );
+  });
+}
+
+// live character counter on the message field
+const messageField = document.getElementById("message");
+const charUsed = document.getElementById("char-used");
+
+if (messageField && charUsed) {
+  const LIMIT = 500;
+  const counter = charUsed.parentElement;
+
+  const updateCount = () => {
+    const n = messageField.value.length;
+    charUsed.textContent = String(n);
+    counter.classList.toggle("is-near", n >= LIMIT * 0.8 && n < LIMIT);
+    counter.classList.toggle("is-full", n >= LIMIT);
+  };
+
+  messageField.addEventListener("input", updateCount);
+  updateCount();
 }
 
 /* ===================== */

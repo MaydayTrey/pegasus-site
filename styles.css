@@ -466,6 +466,58 @@ header {
 /* SERVICES PROVIDED */
 #services {
   position: relative;
+  height: auto;
+  min-height: 0;
+}
+
+/* --- the title stage: one full screen, centred both ways --- */
+.services-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+#services-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: whitesmoke;
+  font-size: clamp(2.5rem, 6vw + 1rem, 6rem);
+  line-height: 1.1;
+  text-shadow: 0 4px 18px rgba(0, 30, 60, 0.35);
+  /* drops in from above as the section scrolls up */
+  opacity: 0;
+  translate: 0 -60px;
+  transition:
+    opacity 0.9s ease,
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.services-sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: whitesmoke;
+  font-size: clamp(1rem, 1vw + 0.6rem, 1.4rem);
+  margin-top: var(--space-md);
+  opacity: 0;
+  translate: 0 -30px;
+  transition:
+    opacity 0.9s ease 0.18s,
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
+}
+
+.services-intro.in-view #services-heading,
+.services-intro.in-view .services-sub {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* --- the staircase grid --- */
+.tier-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   /* minmax(0,1fr) + a locked height is what stops the page from being
@@ -500,7 +552,7 @@ header {
     translate 0.25s ease;
 }
 
-#services[data-expanded] #services-close {
+.tier-grid[data-expanded] #services-close {
   opacity: 1;
   pointer-events: auto;
 }
@@ -517,21 +569,54 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-lg);
+  gap: var(--space-xs);
+  padding: var(--space-md);
   text-align: center;
   background: linear-gradient(180deg, #ffffff 0%, #f2faff 100%);
   box-shadow: 0 2px 14px rgba(0, 30, 60, 0.15);
   overflow: hidden;
   min-width: 0;
   min-height: 0;
-  transition: opacity 0.3s ease;
+  /* cards grow to size as the grid scrolls into view */
+  scale: 0.9;
+  opacity: 0;
+  transition:
+    opacity 0.5s ease,
+    scale 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.6s ease,
+    gap 0.6s ease;
+}
+
+.tier-grid.in-view .tier-stair {
+  scale: 1;
+  opacity: 1;
+}
+
+/* stagger so the staircase builds bottom-up */
+.tier-grid.in-view #starter-service {
+  transition-delay: 0s;
+}
+.tier-grid.in-view #growth-service {
+  transition-delay: 0.12s;
+}
+.tier-grid.in-view #advanced-service {
+  transition-delay: 0.24s;
 }
 
 /* collapsing tiers fade out completely before their squish could
    ever show (0.3s vs the grid's 0.8s), then fade back on reset */
-#services[data-expanded] .tier-stair:not(.is-open) {
+.tier-grid[data-expanded] .tier-stair:not(.is-open) {
   opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    scale 0.6s ease;
+}
+
+/* the open tier gets room to breathe — type scales up with the box */
+.tier-grid[data-expanded] .tier-stair.is-open {
+  padding: var(--space-xl);
+  gap: var(--space-sm);
+  transition-delay: 0s;
 }
 
 /* blue-to-gold accent rail across the top of each tier */
@@ -545,35 +630,60 @@ header {
   background: linear-gradient(90deg, var(--primary-color), hsl(42, 100%, 50%));
 }
 
+/* Collapsed type is sized to FIT the third-of-a-screen tile so nothing
+   is clipped before you open it; each step scales up when expanded. */
 .tier-tag {
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #7a7a7a;
+  transition: font-size 0.6s ease;
 }
 
 .tier-stair h3 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  transition: font-size 0.6s ease;
 }
 
 .tier-stair .price {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  line-height: 1.2;
   color: var(--primary-color);
+  transition: font-size 0.6s ease;
 }
 
 .tier-stair > ul {
   list-style: none;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  transition: font-size 0.6s ease;
 }
 
 .tier-stair > ul li::before {
   content: "✓ ";
   color: #2f9e44;
   font-weight: 700;
+}
+
+/* expanded: everything grows into the bigger box */
+.tier-grid[data-expanded] .tier-stair.is-open .tier-tag {
+  font-size: 0.9rem;
+}
+.tier-grid[data-expanded] .tier-stair.is-open h3 {
+  font-size: 2.2rem;
+}
+.tier-grid[data-expanded] .tier-stair.is-open .price {
+  font-size: 3rem;
+}
+.tier-grid[data-expanded] .tier-stair.is-open > ul {
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
 /* THE EXPAND DETAIL — collapsed via the 0fr grid-row trick, grows
@@ -649,69 +759,54 @@ header {
   grid-row: 1;
 }
 
-/* EXPANSION — driven by data-expanded (set from JS on mouseenter,
-   cleared when the pointer leaves the whole section) instead of
-   :has(:hover). With :hover, the grid re-layout slides other tiles
-   under a stationary cursor mid-transition, which re-targets the
-   hover and makes the whole thing oscillate — the glitch. */
-#services[data-expanded="starter"] {
+/* EXPANSION — driven by data-expanded, which JS sets from the pointer's
+   position against anchor points captured while collapsed. Using
+   :has(:hover) meant the grid re-layout slid tiles under a stationary
+   cursor, re-targeting the hover and oscillating — the old glitch. */
+.tier-grid[data-expanded="starter"] {
   grid-template-columns: 1fr 0fr 0fr;
   grid-template-rows: 0fr 0fr 1fr;
 }
-#services[data-expanded="growth"] {
+.tier-grid[data-expanded="growth"] {
   grid-template-columns: 0fr 1fr 0fr;
   grid-template-rows: 0fr 1fr 0fr;
 }
-#services[data-expanded="advanced"] {
+.tier-grid[data-expanded="advanced"] {
   grid-template-columns: 0fr 0fr 1fr;
   grid-template-rows: 1fr 0fr 0fr;
 }
 
-/* while one tier owns the stage, the collapsed tiers can't steal
-   pointer events mid-transition — the other half of the glitch fix */
-#services[data-expanded] .tier-stair:not(.is-open) {
-  pointer-events: none;
-}
-
-#services-heading {
-  max-height: 5rem; /* a value comfortably taller than the heading */
-  overflow: hidden;
-  transition:
-    opacity 0.6s ease-out,
-    max-height 0.6s ease,
-    margin 0.6s ease;
-}
-#services[data-expanded] #services-heading {
-  opacity: 0;
-  max-height: 0;
-  margin: 0;
-}
-
 @media (max-width: 700px) {
   #services {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto; /* rows hug content */
-    gap: var(--space-lg);
-    padding: var(--space-lg);
-    height: auto; /* release any fixed section height */
+    height: auto;
     min-height: 0;
   }
 
-  #services-heading {
-    grid-column: 1;
-    grid-row: 1;
+  .services-intro {
+    height: auto;
+    padding: var(--space-xl) var(--space-lg);
   }
+
+  .tier-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto; /* rows hug content */
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    height: auto; /* release any fixed height */
+    overflow: visible;
+  }
+
   #starter-service {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 1;
   } /* $895 first */
   #growth-service {
     grid-column: 1;
-    grid-row: 3;
+    grid-row: 2;
   } /* $2,195 */
   #advanced-service {
     grid-column: 1;
-    grid-row: 4;
+    grid-row: 3;
   } /* Quote last */
 
   .tier-stair {
@@ -1781,45 +1876,129 @@ header {
   height: 200px;
 }
 
-/* submit button */
-#contact-form button[type="submit"] {
+/* live character counter under the textarea */
+.char-count {
+  align-self: flex-end;
+  font-size: 0.85rem;
+  color: #4a4a4a;
+  font-variant-numeric: tabular-nums; /* digits don't jitter as they change */
+  transition: color 0.3s ease;
+}
+
+.char-count.is-near {
+  color: hsl(42, 84%, 35%);
+  font-weight: 700;
+}
+
+.char-count.is-full {
+  color: #e03131;
+  font-weight: 700;
+}
+
+/* ---- SUBMIT BUTTON: sunray on hover ----
+   Three stacked layers inside the button: the warm gradient wash
+   (.btn-glow), the light shafts angling in from the top-left
+   (.btn-rays), and the label on top. */
+.send-btn {
   position: relative;
-  z-index: 0; /* stacking context so ::before sits above bg, below text */
-  overflow: hidden; /* clip gradient to rounded corners */
+  isolation: isolate; /* own stacking context for the layers */
+  overflow: hidden; /* clips the rays to the pill shape */
   background-color: #1f1e1d;
   appearance: none;
   border: none;
   border-radius: 30px;
   text-align: center;
-  width: 150px;
-  height: 40px;
+  width: 170px;
+  height: 46px;
   cursor: pointer;
   color: #f2f2f2;
-  transition: box-shadow 0.3s ease;
+  transition:
+    box-shadow 0.4s ease,
+    translate 0.3s ease;
   margin-bottom: var(--space-md);
 }
 
-#contact-form button[type="submit"]::before {
-  content: ""; /* empty — just the gradient layer, text stays on the button */
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: linear-gradient(
-    hsl(42, 100%, 87%),
-    hsl(42, 100%, 50%),
-    hsl(42, 84%, 49%)
-  );
-  opacity: 0;
-  transition: opacity 0.7s ease-in;
-  z-index: -1; /* behind text, above button bg due to button's z-index:0 */
+.btn-label {
+  position: relative;
+  z-index: 3;
+  transition: color 0.5s ease;
 }
 
-#contact-form button[type="submit"]:hover::before {
+/* the warm wash that "lights up" the surface */
+.btn-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: radial-gradient(
+    120% 140% at 12% -10%,
+    hsl(42, 100%, 92%) 0%,
+    hsl(42, 100%, 62%) 38%,
+    hsl(38, 90%, 48%) 70%,
+    rgba(31, 30, 29, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+
+/* the shafts of light: repeating transparent/white bands, rotated so
+   they fan in from the top-left corner like the reference */
+.btn-rays {
+  position: absolute;
+  z-index: 2;
+  /* oversized and off-origin so the rotated bands cover the pill */
+  top: -140%;
+  left: -60%;
+  width: 180%;
+  height: 380%;
+  background: repeating-linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0px,
+    rgba(255, 255, 255, 0) 7px,
+    rgba(255, 255, 255, 0.55) 9px,
+    rgba(255, 255, 255, 0.75) 11px,
+    rgba(255, 255, 255, 0) 14px,
+    rgba(255, 255, 255, 0) 22px
+  );
+  /* fades the shafts out as they travel away from the source corner */
+  mask-image: radial-gradient(
+    75% 75% at 30% 8%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 45%,
+    transparent 78%
+  );
+  opacity: 0;
+  rotate: -12deg;
+  translate: -32% -12%;
+  transition:
+    opacity 0.5s ease,
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.send-btn:hover .btn-glow,
+.send-btn:focus-visible .btn-glow {
   opacity: 1;
 }
 
-#contact-form button[type="submit"]:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+/* on hover the rays sweep down across the face */
+.send-btn:hover .btn-rays,
+.send-btn:focus-visible .btn-rays {
+  opacity: 1;
+  translate: 0% 0%;
+}
+
+.send-btn:hover .btn-label,
+.send-btn:focus-visible .btn-label {
+  color: #3d2c00; /* dark ink reads better on the lit surface */
+}
+
+.send-btn:hover,
+.send-btn:focus-visible {
+  translate: 0 -2px;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.3),
+    0 0 26px rgba(255, 196, 60, 0.55); /* warm spill around the button */
 }
 /* FOOTER */
 #footer {
