@@ -104,11 +104,16 @@
       </section>
 
       <section id="about-us" aria-labelledby="about-us-heading">
-        <h2 id="about-us-heading">About Us</h2>
-        <p id="about-us-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        <!--full-viewport statement panel; sweeps in from the left-->
+        <div class="who-panel" id="who-panel">
+          <h2 id="about-us-heading" class="who-eyebrow">Who We Are</h2>
+          <p class="who-statement">
+            We are a web development agency building websites with personality
+            and creativity, that represents your business, driving sales and
+            engagement. Complex things made simple, for you.
+          </p>
+        </div>
+
         <ul id="about-us-cards">
           <li>
             <button
@@ -1110,6 +1115,12 @@
       </section>
 
       <section id="contact-us" aria-labelledby="contact-header">
+        <!--sun + beams behind the page; fades in on Send Inquiry hover-->
+        <div class="sunbeams" aria-hidden="true">
+          <span class="sun-rays"></span>
+          <span class="sun-core"></span>
+        </div>
+
         <h2 id="contact-header">Hey. Looking to get started?</h2>
         <p>
           We look forward to helping your business grow. Every inquiry is
@@ -1185,12 +1196,7 @@
             </p>
           </div>
 
-          <!--the spans are the sunray layers; text stays in .btn-label-->
-          <button type="submit" class="send-btn">
-            <span class="btn-glow" aria-hidden="true"></span>
-            <span class="btn-rays" aria-hidden="true"></span>
-            <span class="btn-label">Send Inquiry</span>
-          </button>
+          <button type="submit">Send Inquiry</button>
         </form>
       </section>
     </main>

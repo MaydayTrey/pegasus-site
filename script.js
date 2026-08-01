@@ -57,86 +57,56 @@ closeBtn.addEventListener("click", () => dialog.close());
 const tierGrid = document.getElementById("tier-grid");
 const servicesClose = document.getElementById("services-close");
 const tiers = tierGrid.querySelectorAll(".tier-stair");
-const tierHoverable = window.matchMedia(
-  "(hover: hover) and (min-width: 701px)",
-);
 
-// after the X is used, hovering must not immediately re-open the tier
-// the pointer is still sitting on — stay suppressed until they leave
-let expandSuppressed = false;
-
-// Anchor points are the tile centres captured in the COLLAPSED layout.
-// Targeting the nearest anchor (rather than whatever element happens to
-// be under the cursor) means you can still switch between tiers while
-// one is expanded, and the moving tiles can't re-target the pointer.
-let anchors = [];
-
-function measureAnchors() {
-  if (tierGrid.dataset.expanded) return; // only valid while collapsed
-  const grid = tierGrid.getBoundingClientRect();
-  anchors = [...tiers].map((tier) => {
-    const r = tier.getBoundingClientRect();
-    return {
-      tier,
-      x: r.left + r.width / 2 - grid.left,
-      y: r.top + r.height / 2 - grid.top,
-    };
-  });
-}
-
+// CLICK, not hover. Hover-driven expansion fought itself: the grid
+// re-layout moves tiles under a stationary cursor, so the pointer kept
+// re-targeting whichever tile slid beneath it. A click is a single
+// deliberate event that nothing can retrigger.
 function expandTier(tier) {
   tierGrid.dataset.expanded = tier.dataset.tier;
-  tiers.forEach((t) => t.classList.toggle("is-open", t === tier));
+  tiers.forEach((t) => {
+    t.classList.toggle("is-open", t === tier);
+    t.setAttribute("aria-expanded", String(t === tier));
+  });
 }
 
 function collapseTiers() {
   delete tierGrid.dataset.expanded;
-  tiers.forEach((t) => t.classList.remove("is-open"));
+  tiers.forEach((t) => {
+    t.classList.remove("is-open");
+    t.setAttribute("aria-expanded", "false");
+  });
 }
 
-tierGrid.addEventListener("mousemove", (e) => {
-  if (!tierHoverable.matches || expandSuppressed || !anchors.length) return;
-  const grid = tierGrid.getBoundingClientRect();
-  const px = e.clientX - grid.left;
-  const py = e.clientY - grid.top;
-
-  let nearest = null;
-  let best = Infinity;
-  anchors.forEach((a) => {
-    const d = (a.x - px) ** 2 + (a.y - py) ** 2;
-    if (d < best) {
-      best = d;
-      nearest = a.tier;
-    }
-  });
-
-  if (nearest && tierGrid.dataset.expanded !== nearest.dataset.tier) {
-    expandTier(nearest);
-  }
-});
-
-tierGrid.addEventListener("mouseleave", () => {
-  expandSuppressed = false;
-  collapseTiers();
-});
-
-servicesClose.addEventListener("click", () => {
-  expandSuppressed = true;
-  collapseTiers();
-});
-
-// touch / no-hover: tap to open, tap the X to close
 tiers.forEach((tier) => {
+  tier.setAttribute("role", "button");
+  tier.setAttribute("tabindex", "0");
+  tier.setAttribute("aria-expanded", "false");
+
   tier.addEventListener("click", () => {
-    if (tierHoverable.matches) return;
+    // clicking the open tier again closes it
     if (tier.classList.contains("is-open")) collapseTiers();
     else expandTier(tier);
   });
+
+  // keyboard parity with the click
+  tier.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      tier.click();
+    }
+  });
 });
 
-measureAnchors();
-window.addEventListener("resize", measureAnchors);
-window.addEventListener("load", measureAnchors);
+servicesClose.addEventListener("click", (e) => {
+  e.stopPropagation(); // don't let the click fall through to the tier
+  collapseTiers();
+});
+
+// Escape closes an open tier
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && tierGrid.dataset.expanded) collapseTiers();
+});
 
 /* ===================== */
 /* COMPARISON TABLE      */
@@ -340,7 +310,7 @@ if (prefersReducedMotion) {
 /* ===================== */
 // reason cards and illustrations fade/scale in as they arrive
 const revealTargets = document.querySelectorAll(
-  ".gi-item, .gi-shot, .services-intro, .tier-grid",
+  ".gi-item, .gi-shot, .services-intro, .tier-grid, .who-panel",
 );
 
 if (prefersReducedMotion || !("IntersectionObserver" in window)) {
@@ -352,10 +322,6 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("in-view");
         giObserver.unobserve(entry.target);
-        // the tiles have their final size once they've grown in
-        if (entry.target.classList.contains("tier-grid")) {
-          setTimeout(measureAnchors, 700);
-        }
       });
     },
     { threshold: 0.15 },
@@ -400,39 +366,31 @@ if (globeStage && meridians.length && typeof gsap !== "undefined") {
       l.setAttribute("ry", Math.max(ry, 0.5).toFixed(2));
     });
 
-    // ball-on-a-string: the ball leans from a pivot above it (the
-    // caption is left out so it doesn't tilt with the globe)
-    gsap.set(globeSvg, { rotation: globe.swing, transformOrigin: "50% -40%" });
+    // the ball tilts about its OWN centre — a spinning globe leaning on
+    // its axis, not a pendulum hanging from a point above it
+    gsap.set(globeSvg, { rotation: globe.swing, transformOrigin: "50% 50%" });
   }
 
-  let idle = gsap.to(globe, {
-    angle: Math.PI * 2,
-    duration: 14,
-    ease: "none",
-    repeat: -1,
-    onUpdate: drawGlobe,
-  });
+  // Rotation is velocity-driven rather than a fixed tween, so it never
+  // stops: a flick just adds to the speed, and the speed eases back to
+  // the resting drift while continuing in whichever way you swiped.
+  const IDLE_VEL = (Math.PI * 2) / (14 * 60); // one turn per ~14s at 60fps
+  const spin = { vel: IDLE_VEL };
 
-  if (prefersReducedMotion) idle.pause();
-  drawGlobe();
-
-  function startIdle() {
-    idle.kill();
-    idle = gsap.to(globe, {
-      angle: globe.angle + Math.PI * 2,
-      duration: 14,
-      ease: "none",
-      repeat: -1,
-      onUpdate: drawGlobe,
-    });
-  }
-
-  // drag in any direction: sideways spins it, vertical pitches it, and
-  // the horizontal throw also swings the ball on its string
+  // drag any direction: sideways spins, vertical pitches, and the throw
+  // leaves the globe rocking on its axis
   let dragging = false;
   let lastX = 0;
   let lastY = 0;
   let velX = 0;
+
+  function tick() {
+    if (!dragging) globe.angle += spin.vel;
+    drawGlobe();
+  }
+
+  if (!prefersReducedMotion) gsap.ticker.add(tick);
+  drawGlobe();
 
   globeStage.addEventListener("pointerdown", (e) => {
     dragging = true;
@@ -440,8 +398,7 @@ if (globeStage && meridians.length && typeof gsap !== "undefined") {
     lastY = e.clientY;
     velX = 0;
     globeStage.setPointerCapture(e.pointerId);
-    idle.pause();
-    gsap.killTweensOf(globe);
+    gsap.killTweensOf([globe, spin]);
   });
 
   globeStage.addEventListener("pointermove", (e) => {
@@ -467,27 +424,41 @@ if (globeStage && meridians.length && typeof gsap !== "undefined") {
     }
     if (prefersReducedMotion) return;
 
-    // the release: the ball keeps travelling a little past where you let
-    // go, then springs back — elastic.out is the stretch-and-return
-    gsap.to(globe, {
-      angle: globe.angle + velX * 0.02,
-      duration: 1.4,
+    // carry the throw: spin keeps going the way you swiped, then bleeds
+    // back down to the idle drift (signed, so a left swipe keeps left)
+    const thrown = Math.max(Math.min(velX * 0.0035, 0.18), -0.18);
+    spin.vel = thrown || IDLE_VEL;
+    gsap.to(spin, {
+      vel: velX < 0 ? -IDLE_VEL : IDLE_VEL,
+      duration: 2.6,
       ease: "power2.out",
-      onUpdate: drawGlobe,
     });
-    // the string settles level, overshooting either side as it does
+
+    // the ball rocks level again, overshooting either side as it settles
     gsap.to(globe, {
       swing: 0,
       tilt: 0,
       duration: 2.2,
       ease: "elastic.out(1.1, 0.28)",
       onUpdate: drawGlobe,
-      onComplete: startIdle,
     });
   };
 
   globeStage.addEventListener("pointerup", endDrag);
   globeStage.addEventListener("pointercancel", endDrag);
+}
+
+/* --- sunbeams behind the contact form --- */
+const contactSection = document.getElementById("contact-us");
+const submitBtn = document.querySelector('#contact-form button[type="submit"]');
+
+if (contactSection && submitBtn) {
+  const sunOn = () => contactSection.classList.add("sun-on");
+  const sunOff = () => contactSection.classList.remove("sun-on");
+  submitBtn.addEventListener("mouseenter", sunOn);
+  submitBtn.addEventListener("mouseleave", sunOff);
+  submitBtn.addEventListener("focus", sunOn);
+  submitBtn.addEventListener("blur", sunOff);
 }
 
 /* ===================== */

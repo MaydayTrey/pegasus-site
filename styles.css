@@ -169,6 +169,90 @@ header {
 }
 
 /* ABOUT US */
+/* ---- WHO WE ARE: full-viewport statement panel ----
+   Sweeps in from the left edge as you scroll to it. */
+.who-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  margin-left: calc(50% - 50vw); /* break out of any parent padding */
+  padding: var(--space-xl) clamp(var(--space-lg), 8vw, 10rem);
+  background: linear-gradient(
+    115deg,
+    #0b6bb5 0%,
+    #149dff 45%,
+    #52b7ff 100%
+  );
+  box-shadow: 0 24px 60px rgba(0, 30, 60, 0.35);
+  overflow: hidden;
+  /* off to the left until it scrolls into view */
+  translate: -100% 0;
+  opacity: 0;
+  transition:
+    translate 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.6s ease;
+}
+
+.who-panel.in-view {
+  translate: 0 0;
+  opacity: 1;
+}
+
+/* the widely-tracked label in the top left */
+.who-eyebrow {
+  position: absolute;
+  top: clamp(var(--space-lg), 6vh, 4rem);
+  left: clamp(var(--space-lg), 8vw, 10rem);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 0.5vw + 0.6rem, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.55em; /* the W H O  W E  A R E spacing */
+  word-spacing: 0.5em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* a small rule under the label, for weight */
+.who-eyebrow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.9rem;
+  width: 64px;
+  height: 2px;
+  background: hsl(42, 100%, 60%);
+}
+
+.who-statement {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4.2vw + 0.5rem, 4.5rem);
+  line-height: 1.15;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 20, 45, 0.3);
+  /* the words settle in just after the panel lands */
+  opacity: 0;
+  translate: -40px 0;
+  transition:
+    opacity 0.8s ease 0.55s,
+    translate 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s;
+}
+
+.who-panel.in-view .who-statement {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (min-width: 900px) {
+  .who-statement {
+    max-width: 34ch;
+  }
+}
+
 #about-us-cards {
   display: grid;
   grid-template-columns: 1fr;
@@ -577,6 +661,7 @@ header {
   overflow: hidden;
   min-width: 0;
   min-height: 0;
+  cursor: pointer; /* they're click targets now */
   /* cards grow to size as the grid scrolls into view */
   scale: 0.9;
   opacity: 0;
@@ -1895,110 +1980,141 @@ header {
   font-weight: 700;
 }
 
-/* ---- SUBMIT BUTTON: sunray on hover ----
-   Three stacked layers inside the button: the warm gradient wash
-   (.btn-glow), the light shafts angling in from the top-left
-   (.btn-rays), and the label on top. */
-.send-btn {
+/* submit button */
+#contact-form button[type="submit"] {
   position: relative;
-  isolation: isolate; /* own stacking context for the layers */
-  overflow: hidden; /* clips the rays to the pill shape */
+  z-index: 0; /* stacking context so ::before sits above bg, below text */
+  overflow: hidden; /* clip gradient to rounded corners */
   background-color: #1f1e1d;
   appearance: none;
   border: none;
   border-radius: 30px;
   text-align: center;
-  width: 170px;
-  height: 46px;
+  width: 150px;
+  height: 40px;
   cursor: pointer;
   color: #f2f2f2;
-  transition:
-    box-shadow 0.4s ease,
-    translate 0.3s ease;
+  transition: box-shadow 0.3s ease;
   margin-bottom: var(--space-md);
 }
 
-.btn-label {
-  position: relative;
-  z-index: 3;
-  transition: color 0.5s ease;
-}
-
-/* the warm wash that "lights up" the surface */
-.btn-glow {
+#contact-form button[type="submit"]::before {
+  content: ""; /* empty — just the gradient layer, text stays on the button */
   position: absolute;
   inset: 0;
-  z-index: 1;
   border-radius: inherit;
-  background: radial-gradient(
-    120% 140% at 12% -10%,
-    hsl(42, 100%, 92%) 0%,
-    hsl(42, 100%, 62%) 38%,
-    hsl(38, 90%, 48%) 70%,
-    rgba(31, 30, 29, 0) 100%
+  background-image: linear-gradient(
+    hsl(42, 100%, 87%),
+    hsl(42, 100%, 50%),
+    hsl(42, 84%, 49%)
   );
   opacity: 0;
-  transition: opacity 0.55s ease;
+  transition: opacity 0.7s ease-in;
+  z-index: -1; /* behind text, above button bg due to button's z-index:0 */
 }
 
-/* the shafts of light: repeating transparent/white bands, rotated so
-   they fan in from the top-left corner like the reference */
-.btn-rays {
+#contact-form button[type="submit"]:hover::before {
+  opacity: 1;
+}
+
+#contact-form button[type="submit"]:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- SUNBEAMS BEHIND THE PAGE ----
+   Not on the button — this is the backdrop of the whole contact
+   section. A sun sits off the top-right corner and beams fan out
+   across the sky toward the form; hovering Send Inquiry fades the
+   whole thing in. */
+#contact-us {
+  position: relative;
+  overflow: hidden; /* keeps the oversized beam layer inside */
+  isolation: isolate;
+}
+
+.sunbeams {
   position: absolute;
-  z-index: 2;
-  /* oversized and off-origin so the rotated bands cover the pill */
-  top: -140%;
-  left: -60%;
-  width: 180%;
-  height: 380%;
-  background: repeating-linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 0px,
-    rgba(255, 255, 255, 0) 7px,
-    rgba(255, 255, 255, 0.55) 9px,
-    rgba(255, 255, 255, 0.75) 11px,
-    rgba(255, 255, 255, 0) 14px,
-    rgba(255, 255, 255, 0) 22px
-  );
-  /* fades the shafts out as they travel away from the source corner */
-  mask-image: radial-gradient(
-    75% 75% at 30% 8%,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 45%,
-    transparent 78%
-  );
-  opacity: 0;
-  rotate: -12deg;
-  translate: -32% -12%;
-  transition:
-    opacity 0.5s ease,
-    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  inset: 0;
+  z-index: -1; /* behind the heading and form */
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.1s ease;
 }
 
-.send-btn:hover .btn-glow,
-.send-btn:focus-visible .btn-glow {
+/* JS adds this when the submit button is hovered/focused */
+#contact-us.sun-on .sunbeams {
   opacity: 1;
 }
 
-/* on hover the rays sweep down across the face */
-.send-btn:hover .btn-rays,
-.send-btn:focus-visible .btn-rays {
-  opacity: 1;
-  translate: 0% 0%;
+/* the beams: wedges radiating from the sun's position, of uneven
+   width so they read as light rather than a pinwheel */
+.sun-rays {
+  position: absolute;
+  /* oversized box centred on the sun so the wedges reach the corners */
+  top: -110%;
+  right: -55%;
+  width: 190%;
+  height: 300%;
+  background: repeating-conic-gradient(
+    from 96deg at 71% 37%,
+    rgba(255, 241, 194, 0) 0deg,
+    rgba(255, 241, 194, 0) 3.2deg,
+    rgba(255, 236, 170, 0.5) 4.4deg,
+    rgba(255, 246, 214, 0.62) 6deg,
+    rgba(255, 236, 170, 0.42) 7.4deg,
+    rgba(255, 241, 194, 0) 9deg,
+    rgba(255, 241, 194, 0) 13deg,
+    rgba(255, 240, 186, 0.34) 15deg,
+    rgba(255, 240, 186, 0) 17.5deg,
+    rgba(255, 241, 194, 0) 23deg
+  );
+  /* beams dissolve as they travel away from the source */
+  mask-image: radial-gradient(
+    closest-side at 71% 37%,
+    #000 4%,
+    rgba(0, 0, 0, 0.85) 22%,
+    rgba(0, 0, 0, 0.45) 52%,
+    transparent 82%
+  );
+  filter: blur(2px);
+  animation: beam-drift 22s ease-in-out infinite alternate;
 }
 
-.send-btn:hover .btn-label,
-.send-btn:focus-visible .btn-label {
-  color: #3d2c00; /* dark ink reads better on the lit surface */
+/* a slow sway so the light feels alive rather than painted on */
+@keyframes beam-drift {
+  from {
+    rotate: -1.4deg;
+  }
+  to {
+    rotate: 1.4deg;
+  }
 }
 
-.send-btn:hover,
-.send-btn:focus-visible {
-  translate: 0 -2px;
-  box-shadow:
-    0 10px 22px rgba(0, 0, 0, 0.3),
-    0 0 26px rgba(255, 196, 60, 0.55); /* warm spill around the button */
+/* the sun itself — a soft warm core with a wide falloff */
+.sun-core {
+  position: absolute;
+  top: -16vh;
+  right: -10vw;
+  width: 60vw;
+  height: 60vw;
+  max-width: 780px;
+  max-height: 780px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 250, 0.92) 0%,
+    rgba(255, 246, 205, 0.75) 12%,
+    rgba(255, 226, 138, 0.45) 26%,
+    rgba(255, 210, 110, 0.22) 44%,
+    rgba(255, 200, 90, 0) 68%
+  );
+  filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sun-rays {
+    animation: none;
+  }
 }
 /* FOOTER */
 #footer {
