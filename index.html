@@ -367,18 +367,21 @@
           </p>
         </div>
 
-        <!--the staircase; cards grow to size as the grid scrolls in-->
-        <div class="tier-grid" id="tier-grid">
-          <!--closes an expanded tier; only interactive while one is open-->
-          <button id="services-close" type="button" aria-label="Close tier">
-            &times;
-          </button>
-          <article
+        <!--the card file: tiers stacked like cards, shuffled by scroll,
+            clicked to bring forward and expand-->
+        <div class="tier-stack-wrap" id="tier-stack-wrap">
+          <div class="tier-grid" id="tier-grid">
+            <!--closes an expanded tier; only interactive while one is open-->
+            <button id="services-close" type="button" aria-label="Close tier">
+              &times;
+            </button>
+            <article
           aria-labelledby="starter-heading"
           id="starter-service"
           class="tier-stair"
           data-tier="starter"
         >
+          <span class="click-cue" aria-hidden="true">Click me</span>
           <p class="tier-tag">Get on the map</p>
           <h3 id="starter-heading">Starter</h3>
           <p class="price">$895</p>
@@ -411,6 +414,7 @@
           class="tier-stair"
           data-tier="growth"
         >
+          <span class="click-cue" aria-hidden="true">Click me</span>
           <p class="tier-tag">Our most popular</p>
           <h3 id="growth-heading">Growth</h3>
           <p class="price">$2,195</p>
@@ -444,6 +448,7 @@
           class="tier-stair"
           data-tier="advanced"
         >
+          <span class="click-cue" aria-hidden="true">Click me</span>
           <p class="tier-tag">The whole sky</p>
           <h3 id="advanced-heading">Advanced</h3>
           <p class="price">Request Quote</p>
@@ -470,6 +475,7 @@
             </div>
           </div>
           </article>
+          </div>
         </div>
       </section>
 

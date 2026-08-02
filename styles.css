@@ -134,28 +134,37 @@ header {
   padding: var(--padding-size) var(--space-lg);
 }
 
-/* the MENU button, top right */
+/* the MENU button — pinned to the top right, follows the scroll, and
+   rides on a frosted chip so it stays readable over every section */
 #menu-toggle {
-  background: none;
-  border: none;
+  position: fixed;
+  top: var(--space-md);
+  right: var(--space-lg);
+  z-index: 90; /* above the page, below the open menu (100) */
+  background: rgba(31, 30, 29, 0.55);
+  backdrop-filter: blur(6px);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.3em;
+  text-indent: 0.3em; /* recentres the tracked text inside the pill */
   color: whitesmoke;
-  padding: var(--space-sm) 0;
-  border-bottom: 2px solid whitesmoke;
+  padding: var(--space-sm) var(--space-lg);
   cursor: pointer;
   transition:
     color 0.3s ease,
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 
 #menu-toggle:hover,
 #menu-toggle:focus-visible {
   color: hsl(42, 100%, 55%);
   border-color: hsl(42, 100%, 55%);
+  background: rgba(31, 30, 29, 0.75);
 }
 
 /* ---- THE FULL-SCREEN MENU ---- */
@@ -505,117 +514,110 @@ body.menu-locked {
   }
 }
 
+/* the showcase grid — big flush cards, no gaps between them */
 #about-us-cards {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-md);
+  gap: 0;
   list-style: none;
   padding: 0;
-  justify-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* each card is a little window looking out on the sky */
+@media (min-width: 800px) {
+  #about-us-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* each card: white dot-grid panel, dark title, Explore pill, and the
+   topic's own icon blown up as background art */
 .about-card {
   position: relative;
-  overflow: hidden; /* clips the drifting clouds */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  width: 300px;
-  max-width: 100%; /* only shrinks when it truly can't fit */
-  aspect-ratio: 1;
-  /* window frame: thick white sash + thin outer trim + inner pane line */
-  border: 8px solid #fdfdfd;
-  outline: 2px solid rgba(0, 30, 60, 0.3);
-  border-radius: 16px;
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.7),
-    0 12px 26px rgba(0, 30, 60, 0.25);
-  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 100%);
+  width: 100%;
+  min-height: 420px;
+  padding: var(--space-xl) var(--space-lg) 0;
+  border: none;
+  border-radius: 24px;
+  background:
+    radial-gradient(rgba(11, 58, 94, 0.1) 1.5px, transparent 1.5px),
+    linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
+  background-size:
+    24px 24px,
+    auto;
+  box-shadow: inset 0 0 0 1px rgba(11, 58, 94, 0.08);
   cursor: pointer;
   transition:
     translate 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    z-index 0s;
 }
 
 .about-card:hover,
 .about-card:focus-visible {
   translate: 0 -6px;
   box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.7),
-    0 20px 36px rgba(0, 30, 60, 0.35);
+    inset 0 0 0 1px rgba(11, 58, 94, 0.08),
+    0 20px 40px rgba(0, 30, 60, 0.25);
+  z-index: 2; /* lifted card's shadow rides over its neighbours */
 }
 
-/* clouds drifting past the window */
-.about-card::before,
+/* the title, dark and confident like the reference */
+.about-card h3 {
+  order: 1;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 1.4vw + 0.8rem, 2rem);
+  color: #1f1e1d;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+/* the Explore pill, drawn by CSS so the markup stays a plain button */
 .about-card::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  filter: blur(4px);
-  pointer-events: none;
+  content: "Explore \2192";
+  order: 2;
+  padding: 0.6em 1.6em;
+  border-radius: 30px;
+  background: rgba(20, 157, 255, 0.12);
+  color: var(--primary-color);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-.about-card::before {
-  width: 75%;
-  height: 32%;
-  top: 12%;
-  left: 0;
-  animation: cloud-drift 16s linear infinite;
+.about-card:hover::after,
+.about-card:focus-visible::after {
+  background: var(--primary-color);
+  color: whitesmoke;
 }
 
-.about-card::after {
-  width: 60%;
-  height: 26%;
-  top: 60%;
-  left: 0;
-  animation: cloud-drift 22s linear infinite;
-  animation-delay: -9s; /* start mid-journey so they're offset */
-}
-
-@keyframes cloud-drift {
-  from {
-    transform: translateX(-120%);
-  }
-  to {
-    transform: translateX(320%);
-  }
-}
-
-/* the topic icon */
+/* the topic icon as oversized background art along the bottom */
 .card-icon {
-  width: 56px;
-  height: 56px;
-  stroke: whitesmoke;
-  stroke-width: 2.5;
+  order: 3;
+  width: min(46%, 240px);
+  height: auto;
+  margin-top: auto;
+  margin-bottom: -7%; /* dips below the card edge, reference-style */
+  stroke: rgba(20, 157, 255, 0.35);
+  stroke-width: 2;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  position: relative; /* stacks above the clouds */
-  filter: drop-shadow(0 2px 4px rgba(0, 30, 60, 0.35));
 }
 
 .card-icon .icon-fill {
-  fill: whitesmoke;
+  fill: rgba(20, 157, 255, 0.35);
   stroke: none;
-}
-
-.about-card h3 {
-  position: relative; /* stacks above the clouds */
-  color: whitesmoke; /* same white as the care plan copy */
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-style: italic;
-  font-size: 1.25rem;
-  padding: 0 var(--space-md);
-  text-shadow: 0 1px 4px rgba(0, 30, 60, 0.45);
 }
 
 /*About loading in */
@@ -785,19 +787,6 @@ body.menu-locked {
   color: #333;
 }
 
-/* tablet: 2 columns, 3 rows */
-@media (min-width: 600px) {
-  #about-us-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* desktop: 3 columns, 2 rows */
-@media (min-width: 900px) {
-  #about-us-cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 
 /* SERVICES PROVIDED */
 #services {
@@ -939,22 +928,26 @@ body.menu-locked {
   opacity: 1;
 }
 
-/* --- the staircase grid --- */
-.tier-grid {
+/* --- THE CARD FILE ---
+   The three tiers sit stacked like cards in a file: offset, tilted,
+   z-ordered. Scrolling through the tall wrapper shuffles the front
+   card; clicking the front card expands it to fill the stage. */
+.tier-stack-wrap {
   position: relative;
-  display: grid;
-  /* written out longhand (no repeat()) so collapsed and expanded track
-     lists share the exact same structure — matching structures is what
-     lets the browser interpolate them smoothly instead of snapping.
-     minmax(0, …) + the locked height stop the page being shoved around:
-     a bare fr keeps a content-sized minimum. */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 260vh; /* the scroll runway that drives the shuffle */
+}
+
+.tier-grid {
+  position: sticky;
+  top: 0;
   height: 100vh;
   overflow: hidden;
-  transition:
-    grid-template-columns 0.8s ease,
-    grid-template-rows 0.8s ease;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.tier-grid.in-view {
+  opacity: 1;
 }
 
 /* the tier close X — grey, red on hover, no rotation */
@@ -962,7 +955,7 @@ body.menu-locked {
   position: absolute;
   top: var(--space-md);
   right: var(--space-lg);
-  z-index: 3;
+  z-index: 20;
   border: none;
   background: none;
   font-size: 2.6rem;
@@ -977,7 +970,7 @@ body.menu-locked {
     translate 0.25s ease;
 }
 
-.tier-grid[data-expanded] #services-close {
+.tier-grid.stack-expanded #services-close {
   opacity: 1;
   pointer-events: auto;
 }
@@ -989,65 +982,121 @@ body.menu-locked {
 }
 
 .tier-stair {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(540px, 86vw);
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  padding: var(--space-md);
+  padding: var(--space-lg);
   text-align: center;
+  border-radius: 22px;
   background: linear-gradient(180deg, #ffffff 0%, #f2faff 100%);
-  box-shadow: 0 2px 14px rgba(0, 30, 60, 0.15);
+  box-shadow: 0 24px 50px rgba(0, 30, 60, 0.35); /* deep — they float */
   overflow: hidden;
-  min-width: 0;
-  min-height: 0;
-  cursor: pointer; /* they're click targets now */
-  /* cards grow to size as the grid scrolls into view.
-     Every duration here matches the grid's 0.8s so the box, padding
-     and type all arrive together instead of at three different times. */
-  scale: 0.9;
-  opacity: 0;
+  cursor: pointer;
+  /* every stack move animates through the same clock */
   transition:
-    opacity 0.5s ease,
-    scale 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    padding 0.8s ease,
-    gap 0.8s ease;
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.7s ease,
+    height 0.7s ease,
+    min-height 0.7s ease,
+    border-radius 0.7s ease,
+    filter 0.7s ease,
+    opacity 0.4s ease,
+    padding 0.7s ease;
 }
 
-.tier-grid.in-view .tier-stair {
+/* the three stations of the pile (JS assigns these) */
+.tier-stair.pos-0 {
+  z-index: 3;
+  translate: -50% -50%;
+  rotate: 0deg;
   scale: 1;
+  filter: brightness(1);
+}
+
+.tier-stair.pos-1 {
+  z-index: 2;
+  translate: calc(-50% + 40px) calc(-50% + 26px);
+  rotate: 3deg;
+  scale: 0.96;
+  filter: brightness(0.95);
+}
+
+.tier-stair.pos-2 {
+  z-index: 1;
+  translate: calc(-50% - 36px) calc(-50% + 46px);
+  rotate: -3.5deg;
+  scale: 0.92;
+  filter: brightness(0.9);
+}
+
+/* the CLICK ME cue riding the front card */
+.click-cue {
+  position: absolute;
+  top: var(--space-md);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.45em 1.3em;
+  border-radius: 30px;
+  background: #1f1e1d;
+  color: whitesmoke;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: cue-bob 2.2s ease-in-out infinite;
+}
+
+.tier-stair.pos-0 .click-cue {
   opacity: 1;
 }
 
-/* stagger so the staircase builds bottom-up — but ONLY for the initial
-   grow-in. Left unscoped, these delays also postponed every click
-   transition (padding, fade, scale) by a different amount per tier,
-   which is what made expanding feel jagged. */
-.tier-grid.in-view:not([data-expanded]) #starter-service {
-  transition-delay: 0s;
-}
-.tier-grid.in-view:not([data-expanded]) #growth-service {
-  transition-delay: 0.12s;
-}
-.tier-grid.in-view:not([data-expanded]) #advanced-service {
-  transition-delay: 0.24s;
-}
-
-/* collapsing tiers fade out completely before their squish could
-   ever show (0.3s vs the grid's 0.8s), then fade back on reset */
-.tier-grid[data-expanded] .tier-stair:not(.is-open) {
+.tier-grid.stack-expanded .click-cue {
   opacity: 0;
-  transition:
-    opacity 0.3s ease,
-    scale 0.8s ease;
 }
 
-/* the open tier gets room to breathe — type scales up with the box */
-.tier-grid[data-expanded] .tier-stair.is-open {
+@keyframes cue-bob {
+  0%,
+  100% {
+    translate: -50% 0;
+  }
+  50% {
+    translate: -50% -7px;
+  }
+}
+
+/* EXPANDED: the front card grows to fill the stage */
+.tier-grid.stack-expanded .tier-stair.is-open {
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  translate: -50% -50%;
+  rotate: 0deg;
+  scale: 1;
+  border-radius: 0;
   padding: var(--space-xl);
   gap: var(--space-sm);
-  transition-delay: 0s;
+  overflow-y: auto;
+}
+
+/* the rest of the pile fades away while one card owns the stage */
+.tier-grid.stack-expanded .tier-stair:not(.is-open) {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* blue-to-gold accent rail across the top of each tier */
@@ -1103,16 +1152,16 @@ body.menu-locked {
 }
 
 /* expanded: everything grows into the bigger box */
-.tier-grid[data-expanded] .tier-stair.is-open .tier-tag {
+.tier-grid.stack-expanded .tier-stair.is-open .tier-tag {
   font-size: 0.9rem;
 }
-.tier-grid[data-expanded] .tier-stair.is-open h3 {
+.tier-grid.stack-expanded .tier-stair.is-open h3 {
   font-size: 2.2rem;
 }
-.tier-grid[data-expanded] .tier-stair.is-open .price {
+.tier-grid.stack-expanded .tier-stair.is-open .price {
   font-size: 3rem;
 }
-.tier-grid[data-expanded] .tier-stair.is-open > ul {
+.tier-grid.stack-expanded .tier-stair.is-open > ul {
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -1176,38 +1225,6 @@ body.menu-locked {
   translate: 0 0;
 }
 
-/*SHRINK/GROW CSS PROPERTY OF TIERS */
-#starter-service {
-  grid-column: 1;
-  grid-row: 3;
-}
-#growth-service {
-  grid-column: 2;
-  grid-row: 2;
-}
-#advanced-service {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-/* EXPANSION — set from JS on click.
-   Every track is minmax(0, …): a bare `0fr` is really minmax(auto, 0fr),
-   so collapsed tracks keep a content-sized minimum, the open tile never
-   fills the grid, and it lands somewhere different depending on which
-   row/column it came from — which is what made the close X wander. */
-.tier-grid[data-expanded="starter"] {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
-  grid-template-rows: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
-}
-.tier-grid[data-expanded="growth"] {
-  grid-template-columns: minmax(0, 0fr) minmax(0, 1fr) minmax(0, 0fr);
-  grid-template-rows: minmax(0, 0fr) minmax(0, 1fr) minmax(0, 0fr);
-}
-.tier-grid[data-expanded="advanced"] {
-  grid-template-columns: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
-}
-
 @media (max-width: 700px) {
   #services {
     height: auto;
@@ -1219,36 +1236,41 @@ body.menu-locked {
     padding: var(--space-xl) var(--space-lg);
   }
 
-  .tier-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto; /* rows hug content */
-    gap: var(--space-lg);
-    padding: var(--space-lg);
-    height: auto; /* release any fixed height */
-    overflow: visible;
+  /* no stack on touch — a plain stacked list, everything visible */
+  .tier-stack-wrap {
+    min-height: 0;
   }
 
-  #starter-service {
-    grid-column: 1;
-    grid-row: 1;
-  } /* $895 first */
-  #growth-service {
-    grid-column: 1;
-    grid-row: 2;
-  } /* $2,195 */
-  #advanced-service {
-    grid-column: 1;
-    grid-row: 3;
-  } /* Quote last */
+  .tier-grid {
+    position: static;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+  }
 
-  .tier-stair {
-    aspect-ratio: auto;
+  .tier-stair,
+  .tier-stair.pos-0,
+  .tier-stair.pos-1,
+  .tier-stair.pos-2 {
+    position: static;
+    width: 100%;
+    min-height: 0;
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+    filter: none;
     height: auto;
     padding: var(--space-lg);
     border-radius: 16px;
     text-align: left;
-    border: none;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .click-cue {
+    display: none;
   }
 
   .tier-stair p,

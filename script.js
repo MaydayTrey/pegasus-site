@@ -115,15 +115,33 @@ closeBtn.addEventListener("click", () => dialog.close());
 // Combined with pointer-events:none on collapsed tiers (CSS), the grid
 // transition can no longer re-target hover mid-flight — the old glitch.
 const tierGrid = document.getElementById("tier-grid");
+const tierStackWrap = document.getElementById("tier-stack-wrap");
 const servicesClose = document.getElementById("services-close");
-const tiers = tierGrid.querySelectorAll(".tier-stair");
+const tiers = [...tierGrid.querySelectorAll(".tier-stair")];
 
-// CLICK, not hover. Hover-driven expansion fought itself: the grid
-// re-layout moves tiles under a stationary cursor, so the pointer kept
-// re-targeting whichever tile slid beneath it. A click is a single
-// deliberate event that nothing can retrigger.
+// THE CARD FILE. frontIdx is which card leads the pile; scroll through
+// the wrapper shuffles it, clicking a back card brings it forward, and
+// clicking the front card expands it to fill the stage.
+let frontIdx = 0;
+let stackExpanded = false;
+
+function dealStack() {
+  tiers.forEach((tier, i) => {
+    const pos = (i - frontIdx + tiers.length) % tiers.length;
+    tier.classList.remove("pos-0", "pos-1", "pos-2");
+    tier.classList.add(`pos-${pos}`);
+  });
+}
+
+function setFront(idx) {
+  if (idx === frontIdx) return;
+  frontIdx = idx;
+  dealStack();
+}
+
 function expandTier(tier) {
-  tierGrid.dataset.expanded = tier.dataset.tier;
+  stackExpanded = true;
+  tierGrid.classList.add("stack-expanded");
   tiers.forEach((t) => {
     t.classList.toggle("is-open", t === tier);
     t.setAttribute("aria-expanded", String(t === tier));
@@ -131,22 +149,24 @@ function expandTier(tier) {
 }
 
 function collapseTiers() {
-  delete tierGrid.dataset.expanded;
+  stackExpanded = false;
+  tierGrid.classList.remove("stack-expanded");
   tiers.forEach((t) => {
     t.classList.remove("is-open");
     t.setAttribute("aria-expanded", "false");
   });
 }
 
-tiers.forEach((tier) => {
+tiers.forEach((tier, i) => {
   tier.setAttribute("role", "button");
   tier.setAttribute("tabindex", "0");
   tier.setAttribute("aria-expanded", "false");
 
   tier.addEventListener("click", () => {
-    // clicking the open tier again closes it
-    if (tier.classList.contains("is-open")) collapseTiers();
-    else expandTier(tier);
+    if (tier.classList.contains("is-open")) return; // open card stays put
+    // back cards come to the forefront first; the front card expands
+    if (i !== frontIdx && !stackExpanded) setFront(i);
+    else if (i === frontIdx) expandTier(tier);
   });
 
   // keyboard parity with the click
@@ -165,8 +185,20 @@ servicesClose.addEventListener("click", (e) => {
 
 // Escape closes an open tier
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && tierGrid.dataset.expanded) collapseTiers();
+  if (e.key === "Escape" && stackExpanded) collapseTiers();
 });
+
+// scroll through the wrapper shuffles the pile (hoisted; called from
+// the shared scroll handler further down)
+function updateStackShuffle(vh) {
+  if (stackExpanded) return; // never shuffle under an open card
+  const rect = tierStackWrap.getBoundingClientRect();
+  const runway = Math.max(rect.height - vh, 1);
+  const progress = Math.min(Math.max(-rect.top / runway, 0), 0.999);
+  setFront(Math.floor(progress * tiers.length));
+}
+
+dealStack();
 
 /* ===================== */
 /* COMPARISON TABLE      */
@@ -341,6 +373,7 @@ if (prefersReducedMotion) {
 
       const vh = window.innerHeight;
       updateFocusedRow(vh);
+      updateStackShuffle(vh);
 
       // progress is measured against the section's own scroll runway
       // (its height minus one screen), so the tall sticky section gives
