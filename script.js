@@ -487,8 +487,11 @@ if (socialCarousel && carouselRing && typeof gsap !== "undefined") {
   drawRing();
 
   // swing station i to the front along the shortest arc
+  let lastTarget = null;
   function targetStation(i) {
     engaged = true;
+    if (i === lastTarget) return; // already headed there
+    lastTarget = i;
     const target = -stations[i];
     const delta = ((((target - ring.angle) % 360) + 540) % 360) - 180;
     gsap.to(ring, {
@@ -500,13 +503,31 @@ if (socialCarousel && carouselRing && typeof gsap !== "undefined") {
     });
   }
 
+  // Track the MOUSE POSITION, not the cards. Targeting cards created a
+  // feedback loop: the rotation slid cards under the pointer, refiring
+  // mouseenter, retargeting, and spinning the ring wildly. Mapping the
+  // pointer's x across the carousel to a station is deterministic — the
+  // same mouse spot always means the same icon, so nothing can loop.
+  socialCarousel.addEventListener("mousemove", (e) => {
+    const r = socialCarousel.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - 0.5; // -0.5 .. 0.5
+    // left third, centre third, right third of the area
+    const i =
+      nx < -1 / 6
+        ? 2 // the station that swings in from the left
+        : nx > 1 / 6
+          ? 1 // and from the right
+          : 0;
+    targetStation(i);
+  });
+
   ringCards.forEach((card, i) => {
-    card.addEventListener("mouseenter", () => targetStation(i));
-    card.addEventListener("focusin", () => targetStation(i)); // keyboard too
+    card.addEventListener("focusin", () => targetStation(i)); // keyboard
   });
 
   socialCarousel.addEventListener("mouseleave", () => {
     engaged = false; // the idle spin resumes from wherever we are
+    lastTarget = null;
   });
 }
 

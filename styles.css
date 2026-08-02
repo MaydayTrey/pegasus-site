@@ -46,6 +46,9 @@
 html {
   -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
   text-size-adjust: 100%;
+  /* nav links glide to their section instead of jump-cutting
+     (the reduced-motion reset below overrides this to auto) */
+  scroll-behavior: smooth;
 }
 
 /* 4. Set core body defaults */
@@ -171,7 +174,7 @@ header {
 /* ABOUT US */
 /* ---- WHO WE ARE: full-viewport statement panel ----
    Sweeps in from the left edge as you scroll to it. */
-/* the observed wrapper â€” stays in the flow so it can intersect */
+/* the observed wrapper — stays in the flow so it can intersect */
 .who-wrap {
   width: 100vw;
   min-height: 108vh; /* fills the viewport with a little extra */
@@ -202,7 +205,7 @@ header {
     #000 86%,
     transparent 100%
   );
-  /* off to the left until it scrolls into view â€” a long unhurried glide */
+  /* off to the left until it scrolls into view — a long unhurried glide */
   translate: -100% 0;
   opacity: 0;
   transition:
@@ -221,7 +224,7 @@ header {
    so they're timed against the panel's arrival (~1s of visible travel):
    eyebrow 1.6s, lines 1.95s / 2.25s / 2.55s. */
 
-/* the widely-tracked label in the top left â€” first text on stage */
+/* the widely-tracked label in the top left — first text on stage */
 .who-eyebrow {
   position: absolute;
   top: clamp(var(--space-lg), 6vh, 4rem);
@@ -438,14 +441,14 @@ header {
   box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
 
   transform: translateX(-100%); /* start fully off-screen to the left */
-  /* long, gentle glide â€” 1.4s with a soft ease-out tail */
+  /* long, gentle glide — 1.4s with a soft ease-out tail */
   transition:
     transform 1.4s cubic-bezier(0.33, 1, 0.68, 1),
     display 1.4s ease allow-discrete,
     overlay 1.4s ease allow-discrete;
 }
 
-/* open state â€” slid into place */
+/* open state — slid into place */
 #about-dialog[open] {
   display: flex;
   align-items: center;
@@ -470,7 +473,7 @@ header {
     overlay 0.9s ease allow-discrete;
 }
 
-/* open state â€” the final dark, blurred look */
+/* open state — the final dark, blurred look */
 #about-dialog[open]::backdrop {
   background-color: rgba(32, 31, 30, 0.7);
   backdrop-filter: blur(4px);
@@ -484,7 +487,7 @@ header {
   }
 }
 
-/* THE CLOSE X â€” a bare glyph, no circle. It spins into position while
+/* THE CLOSE X — a bare glyph, no circle. It spins into position while
    the dialog glides right, unspins the other way on close, and settles
    as an upright grey X at full expansion. `rotate` and `translate` are
    separate CSS properties, so spin and hover-raise never fight. */
@@ -524,7 +527,7 @@ header {
   translate: 0 -4px;
 }
 
-/* CONTENT â€” rides in from the left after the panel, leaves with it */
+/* CONTENT — rides in from the left after the panel, leaves with it */
 #dialog-content {
   max-width: 62ch; /* readable line length */
   padding: var(--space-lg) var(--space-xl);
@@ -560,7 +563,7 @@ header {
   line-height: 1.2;
 }
 
-/* accent line under the title â€” brand blue into the CTA gold */
+/* accent line under the title — brand blue into the CTA gold */
 .dialog-divider {
   display: block;
   width: 90px;
@@ -736,9 +739,9 @@ header {
   position: relative;
   display: grid;
   /* written out longhand (no repeat()) so collapsed and expanded track
-     lists share the exact same structure â€” matching structures is what
+     lists share the exact same structure — matching structures is what
      lets the browser interpolate them smoothly instead of snapping.
-     minmax(0, â€¦) + the locked height stop the page being shoved around:
+     minmax(0, …) + the locked height stop the page being shoved around:
      a bare fr keeps a content-sized minimum. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
@@ -749,7 +752,7 @@ header {
     grid-template-rows 0.8s ease;
 }
 
-/* the tier close X â€” grey, red on hover, no rotation */
+/* the tier close X — grey, red on hover, no rotation */
 #services-close {
   position: absolute;
   top: var(--space-md);
@@ -812,7 +815,7 @@ header {
   opacity: 1;
 }
 
-/* stagger so the staircase builds bottom-up â€” but ONLY for the initial
+/* stagger so the staircase builds bottom-up — but ONLY for the initial
    grow-in. Left unscoped, these delays also postponed every click
    transition (padding, fade, scale) by a different amount per tier,
    which is what made expanding feel jagged. */
@@ -835,7 +838,7 @@ header {
     scale 0.8s ease;
 }
 
-/* the open tier gets room to breathe â€” type scales up with the box */
+/* the open tier gets room to breathe — type scales up with the box */
 .tier-grid[data-expanded] .tier-stair.is-open {
   padding: var(--space-xl);
   gap: var(--space-sm);
@@ -889,7 +892,7 @@ header {
 }
 
 .tier-stair > ul li::before {
-  content: "âœ“ ";
+  content: "✓ ";
   color: #2f9e44;
   font-weight: 700;
 }
@@ -909,7 +912,7 @@ header {
   line-height: 1.7;
 }
 
-/* THE EXPAND DETAIL â€” collapsed via the 0fr grid-row trick, grows
+/* THE EXPAND DETAIL — collapsed via the 0fr grid-row trick, grows
    into place and fades up once its tier owns the viewport */
 .tier-more {
   display: grid;
@@ -940,7 +943,7 @@ header {
 }
 
 .tier-perks li::before {
-  content: "â€” ";
+  content: "— ";
   color: hsl(42, 100%, 45%);
   font-weight: 700;
 }
@@ -982,11 +985,11 @@ header {
   grid-row: 1;
 }
 
-/* EXPANSION â€” set from JS on click.
-   Every track is minmax(0, â€¦): a bare `0fr` is really minmax(auto, 0fr),
+/* EXPANSION — set from JS on click.
+   Every track is minmax(0, …): a bare `0fr` is really minmax(auto, 0fr),
    so collapsed tracks keep a content-sized minimum, the open tile never
    fills the grid, and it lands somewhere different depending on which
-   row/column it came from â€” which is what made the close X wander. */
+   row/column it came from — which is what made the close X wander. */
 .tier-grid[data-expanded="starter"] {
   grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
   grid-template-rows: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 1fr);
@@ -1053,7 +1056,7 @@ header {
     font-size: 1.05rem;
   }
 
-  /* no hover on touch â€” the detail is simply always visible */
+  /* no hover on touch — the detail is simply always visible */
   .tier-more {
     grid-template-rows: 1fr;
     opacity: 1;
@@ -1120,7 +1123,7 @@ header {
   font-family: var(--font-body);
 }
 
-/* SCROLL REVEAL â€” rows start low + invisible, glide up when the
+/* SCROLL REVEAL — rows start low + invisible, glide up when the
    IntersectionObserver in script.js marks them in */
 .comparison-table tbody tr {
   opacity: 0;
@@ -1136,7 +1139,7 @@ header {
   translate: 0 0;
 }
 
-/* THE FOCUSED ROW â€” the row in line with the scroll rises, brightens,
+/* THE FOCUSED ROW — the row in line with the scroll rises, brightens,
    and its marks glow; as the scroll moves on it drifts back down */
 .comparison-table tbody tr.row-active {
   translate: 0 -6px;
@@ -1202,7 +1205,7 @@ header {
   align-items: start; /* generally centered, per your read of the reference */
 }
 
-/* the subtle stagger â€” one slightly up, one slightly down */
+/* the subtle stagger — one slightly up, one slightly down */
 .example--up {
   grid-row: 1 / 4;
 }
@@ -1221,9 +1224,9 @@ header {
   height: 500px;
   display: block;
   object-fit: cover;
-  /* no CSS transition here â€” GSAP drives the transform now, and a
+  /* no CSS transition here — GSAP drives the transform now, and a
      CSS transition on the same property would fight its tweening */
-  transform-origin: right center; /* anchor the RIGHT â€” left edge moves */
+  transform-origin: right center; /* anchor the RIGHT — left edge moves */
   will-change: transform;
   border-radius: 6px;
   box-shadow: 0 18px 40px rgba(0, 30, 60, 0.3);
@@ -1387,7 +1390,7 @@ header {
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(6px);
-  /* reveal on scroll â€” class added by the observer in script.js */
+  /* reveal on scroll — class added by the observer in script.js */
   opacity: 0;
   translate: 0 26px;
   transition:
@@ -1559,7 +1562,7 @@ header {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* CARE PLAN â€” Progressive Support */
+/* CARE PLAN — Progressive Support */
 #care-plan {
   display: flex;
   flex-wrap: wrap;
@@ -1680,7 +1683,7 @@ header {
   color: #dfe9f2;
 }
 
-/* ROADMAP â€” the treasure map.
+/* ROADMAP — the treasure map.
    The section is deliberately tall and the map is sticky inside it, so
    the trail draws across a long stretch of scrolling while the map
    stays pinned in view, instead of racing to the end in half a screen. */
@@ -1730,7 +1733,7 @@ header {
   display: block;
 }
 
-/* the dashed trail â€” round caps make the dashes read hand-drawn */
+/* the dashed trail — round caps make the dashes read hand-drawn */
 .map-trail {
   stroke: whitesmoke;
   stroke-width: 6;
@@ -1738,7 +1741,7 @@ header {
   filter: drop-shadow(0 2px 3px rgba(0, 30, 60, 0.4));
 }
 
-/* X marks the spot â€” lives OUTSIDE the reveal mask (the mask's round
+/* X marks the spot — lives OUTSIDE the reveal mask (the mask's round
    edge was slicing it into a circular blob mid-scroll) and stamps in
    with a springy pop once the trail arrives */
 .map-x {
@@ -1805,7 +1808,7 @@ header {
   r: 15;
 }
 
-/* stages you've sailed past get struck through â€” completed */
+/* stages you've sailed past get struck through — completed */
 .stage-strike {
   stroke: rgba(255, 255, 255, 0.9);
   stroke-width: 3;
@@ -1837,7 +1840,7 @@ header {
   font-size: 1.2rem;
 }
 
-/* PARALLAX SKY â€” fixed decorative layer behind the content */
+/* PARALLAX SKY — fixed decorative layer behind the content */
 #parallax-sky {
   position: fixed;
   inset: 0;
@@ -1900,8 +1903,38 @@ header {
 
 #contact-us p {
   grid-row: 2;
-  grid-column: 2 / 5;
-  font-size: clamp(0.8rem, 1.4vw + 1rem, 1.4rem);
+  grid-column: 2 / 4; /* narrowed so the photo has the right side */
+  font-size: clamp(0.8rem, 1vw + 0.8rem, 1.2rem);
+}
+
+/* the photo panel filling the outlined right side */
+.contact-photo {
+  grid-column: 4 / 6;
+  grid-row: 1 / 8;
+  align-self: start;
+  margin: var(--space-lg) var(--space-lg) 0 0;
+  max-height: 78vh;
+}
+
+.contact-photo img {
+  width: 100%;
+  height: 100%;
+  max-height: 78vh;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 48px rgba(0, 30, 60, 0.3);
+}
+
+@media (max-width: 700px) {
+  /* small screens: the form needs the width more than the photo */
+  .contact-photo {
+    display: none;
+  }
+
+  #contact-us p {
+    grid-column: 2 / 5;
+  }
 }
 
 #contact-form {
@@ -1921,7 +1954,7 @@ header {
   width: clamp(250px, 30vw, 400px);
 }
 
-/* the actual controls â€” scoped to the form */
+/* the actual controls — scoped to the form */
 .field input,
 .field select,
 .field textarea {
@@ -1934,7 +1967,7 @@ header {
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.8);
 }
 
-/* focus state â€” outline removed, replaced with visible styling */
+/* focus state — outline removed, replaced with visible styling */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
@@ -1961,7 +1994,7 @@ header {
   transform: scaleX(1);
 }
 
-/* custom dropdown arrow (native select â€” the no-JS fallback) */
+/* custom dropdown arrow (native select — the no-JS fallback) */
 .field select {
   appearance: none;
   background-image: url("images/dropdown-menu-svgrepo-com.svg");
@@ -2138,7 +2171,7 @@ header {
 }
 
 #contact-form button[type="submit"]::before {
-  content: ""; /* empty â€” just the gradient layer, text stays on the button */
+  content: ""; /* empty — just the gradient layer, text stays on the button */
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -2161,7 +2194,7 @@ header {
 }
 
 /* ---- SUNBEAMS BEHIND THE PAGE ----
-   Not on the button â€” this is the backdrop of the whole contact
+   Not on the button — this is the backdrop of the whole contact
    section. A sun sits off the top-right corner and beams fan out
    across the sky toward the form; hovering Send Inquiry fades the
    whole thing in. */
@@ -2172,7 +2205,7 @@ header {
 }
 
 .sunbeams {
-  /* one shared anchor for the sun â€” the core and the beams both key off
+  /* one shared anchor for the sun — the core and the beams both key off
      these, so they can never drift out of alignment */
   --sun-x: 92%;
   --sun-y: 4%;
@@ -2236,7 +2269,7 @@ header {
   }
 }
 
-/* the sun itself â€” a soft warm core centred on the shared anchor */
+/* the sun itself — a soft warm core centred on the shared anchor */
 .sun-core {
   position: absolute;
   left: var(--sun-x);
@@ -2277,6 +2310,20 @@ header {
   color: whitesmoke;
   overflow: hidden;
   padding: 14vh clamp(var(--space-lg), 6vw, 6rem) 5vh;
+}
+
+/* the blue-to-gold rail used on the tiers and dialog — a clean line
+   that says "the footer starts here", so the sun cropping against it
+   reads as intentional framing rather than a clipped graphic */
+#footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  z-index: 2;
+  background: linear-gradient(90deg, var(--primary-color), hsl(42, 100%, 50%));
 }
 
 /* --- the footer's sun: always on, top-left, rays across the page --- */
