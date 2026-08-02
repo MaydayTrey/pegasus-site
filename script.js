@@ -3,6 +3,66 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 /* ===================== */
+/* FULL-SCREEN MENU      */
+/* ===================== */
+const menuToggle = document.getElementById("menu-toggle");
+const siteMenu = document.getElementById("site-menu");
+
+if (menuToggle && siteMenu) {
+  const menuCloseBtn = siteMenu.querySelector(".menu-close");
+
+  function openMenu() {
+    siteMenu.classList.add("open");
+    menuToggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("menu-locked");
+    menuCloseBtn.focus();
+  }
+
+  function closeMenu() {
+    siteMenu.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("menu-locked");
+  }
+
+  menuToggle.addEventListener("click", openMenu);
+  menuCloseBtn.addEventListener("click", () => {
+    closeMenu();
+    menuToggle.focus();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && siteMenu.classList.contains("open")) {
+      closeMenu();
+      menuToggle.focus();
+    }
+  });
+
+  // menu links: jump instantly, then FADE the section in — reads as
+  // the section loading in rather than a long glide across the page
+  siteMenu.querySelectorAll(".menu-links a").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target) return; // let the browser handle a bad href
+      e.preventDefault();
+      closeMenu();
+
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+
+      if (!prefersReducedMotion) {
+        target.classList.remove("fade-arrive");
+        void target.offsetWidth; // restart the animation if re-visited
+        target.classList.add("fade-arrive");
+        target.addEventListener(
+          "animationend",
+          () => target.classList.remove("fade-arrive"),
+          { once: true },
+        );
+      }
+    });
+  });
+}
+
+/* ===================== */
 /* ABOUT CARDS + DIALOG  */
 /* ===================== */
 const dialog = document.getElementById("about-dialog");

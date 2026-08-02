@@ -84,13 +84,37 @@
     <a href="#main" class="skip-link">Skip to main content</a>
     <header>
       <a href="/" id="nav-logo">Pegasus Labs</a>
-      <nav>
+      <button
+        id="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        Menu
+      </button>
+    </header>
+
+    <!--full-screen menu overlay-->
+    <div id="site-menu" aria-label="Site menu">
+      <span class="menu-label" aria-hidden="true">Menu</span>
+      <button class="menu-close" type="button" aria-label="Close menu">
+        &times;
+      </button>
+
+      <nav class="menu-links">
         <a href="#about-us">About Us</a>
         <a href="#services">Services</a>
-        <a href="#examples">Examples of Our Work</a>
-        <a href="#contact-us">Contact Us</a>
+        <a href="#examples">Our Work</a>
+        <a href="#roadmap">Process</a>
+        <a href="#contact-us">Contact</a>
       </nav>
-    </header>
+
+      <div class="menu-contact">
+        <a href="mailto:info@getpegasuslabs.com">info@getpegasuslabs.com</a>
+        <a href="tel:+15133994566">(513) 399-4566</a>
+        <p>Serving Cincinnati, Dayton &amp; Northern Kentucky</p>
+      </div>
+    </div>
 
     <main id="main">
       <section id="hero" aria-labelledby="hero-heading" class="skyband">
@@ -1168,93 +1192,123 @@
           <span class="sun-core"></span>
         </div>
 
-        <h2 id="contact-header">Hey. Looking to get started?</h2>
-        <p>
-          We look forward to helping your business grow. Every inquiry is
-          handled personally, and we aim to respond within one business day.
-        </p>
+        <div class="contact-panel">
+          <div class="contact-intro">
+            <!--PLACEHOLDER avatar — swap for a real face when ready-->
+            <figure class="contact-avatar">
+              <img
+                src="images/pegasus-placeholder.png"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
 
-        <!--PLACEHOLDER photo beside the form — swap src when ready-->
-        <figure class="contact-photo">
-          <img
-            src="images/clouds-background.jpg"
-            alt="TODO: photo of the Pegasus Labs team at work"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-
-        <form
-          id="contact-form"
-          name="contact"
-          method="POST"
-          data-netlify="true"
-        >
-          <div class="field" id="name-field">
-            <label for="name" hidden>Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              autocomplete="name"
-              placeholder="Name"
-            />
-          </div>
-
-          <div class="field" id="email-field">
-            <label for="email" hidden>Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              autocomplete="email"
-              placeholder="Email"
-            />
-          </div>
-
-          <div class="field" id="phone-field">
-            <label for="phone" hidden>Phone (optional)</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              autocomplete="tel"
-              placeholder="Phone (Optional)"
-            />
-          </div>
-
-          <div class="field" id="tier-field">
-            <label for="tier" hidden>Which tier interests you?</label>
-            <select id="tier" name="tier">
-              <option value="" disabled selected hidden>
-                Which Tier interests you?
-              </option>
-              <option value="">Not sure yet</option>
-              <option value="starter">Starter</option>
-              <option value="growth">Growth</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-
-          <div class="field" id="info-field">
-            <label for="message" hidden>Tell us about your project</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="5"
-              placeholder="Tell us about the project: Scope, Timeline, Budget, etc."
-              maxlength="500"
-              aria-describedby="message-count"
-            ></textarea>
-            <p class="char-count" id="message-count" aria-live="polite">
-              <span id="char-used">0</span> / 500
+            <h2 id="contact-header">Hey. Looking to get started?</h2>
+            <p class="contact-note">
+              We look forward to helping your business grow. Every inquiry is
+              handled personally, and we aim to respond within one business
+              day.
             </p>
+
+            <!--PLACEHOLDER photo — swap src when ready-->
+            <figure class="contact-photo">
+              <img
+                src="images/clouds-background.jpg"
+                alt="TODO: photo of the Pegasus Labs team at work"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
           </div>
 
-          <button type="submit">Send Inquiry</button>
-        </form>
+          <form
+            id="contact-form"
+            name="contact"
+            method="POST"
+            data-netlify="true"
+          >
+            <div class="field" id="name-field">
+              <label class="field-label" for="name">What is your name?</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                autocomplete="name"
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div class="field" id="email-field">
+              <label class="field-label" for="email"
+                >How can we reach you?</label
+              >
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div class="field" id="phone-field">
+              <label class="field-label" for="phone"
+                >Phone (optional)</label
+              >
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                autocomplete="tel"
+                placeholder="(513) 555-0123"
+              />
+            </div>
+
+            <fieldset class="field" id="tier-field">
+              <legend class="field-label">Which tier interests you?</legend>
+              <div class="tier-pills">
+                <label class="tier-pill">
+                  <input type="radio" name="tier" value="not-sure" checked />
+                  <span>Not sure yet</span>
+                </label>
+                <label class="tier-pill">
+                  <input type="radio" name="tier" value="starter" />
+                  <span>Starter</span>
+                </label>
+                <label class="tier-pill">
+                  <input type="radio" name="tier" value="growth" />
+                  <span>Growth</span>
+                </label>
+                <label class="tier-pill">
+                  <input type="radio" name="tier" value="advanced" />
+                  <span>Advanced</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field" id="info-field">
+              <label class="field-label" for="message"
+                >Anything else we should know?</label
+              >
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                placeholder="Scope, timeline, budget — whatever helps."
+                maxlength="500"
+                aria-describedby="message-count"
+              ></textarea>
+              <p class="char-count" id="message-count" aria-live="polite">
+                <span id="char-used">0</span> / 500
+              </p>
+            </div>
+
+            <button type="submit">Send Inquiry</button>
+          </form>
+        </div>
       </section>
     </main>
 

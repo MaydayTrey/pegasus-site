@@ -134,6 +134,211 @@ header {
   padding: var(--padding-size) var(--space-lg);
 }
 
+/* the MENU button, top right */
+#menu-toggle {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: whitesmoke;
+  padding: var(--space-sm) 0;
+  border-bottom: 2px solid whitesmoke;
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+#menu-toggle:hover,
+#menu-toggle:focus-visible {
+  color: hsl(42, 100%, 55%);
+  border-color: hsl(42, 100%, 55%);
+}
+
+/* ---- THE FULL-SCREEN MENU ---- */
+body.menu-locked {
+  overflow: hidden; /* the page holds still behind the menu */
+}
+
+#site-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: center;
+  padding: 14vh clamp(var(--space-lg), 8vw, 8rem);
+  background: linear-gradient(135deg, #ffffff 0%, #eaf6ff 100%);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -2.5%;
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.45s;
+}
+
+#site-menu.open {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+/* vertical MENU label down the left edge */
+.menu-label {
+  position: absolute;
+  top: 14vh;
+  left: clamp(var(--space-md), 3.5vw, 3rem);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: #8b949c;
+  writing-mode: vertical-rl;
+}
+
+/* the dark close circle, top right */
+.menu-close {
+  position: absolute;
+  top: var(--space-lg);
+  right: clamp(var(--space-lg), 6vw, 6rem);
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: #1f1e1d;
+  color: whitesmoke;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    rotate 0.3s ease;
+}
+
+.menu-close:hover,
+.menu-close:focus-visible {
+  background: var(--primary-color);
+  rotate: 90deg;
+}
+
+/* the giant links, staggering in as the menu opens */
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.menu-links a {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+  line-height: 1.15;
+  color: #1f1e1d;
+  text-decoration: none;
+  width: fit-content;
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    padding-left 0.25s ease;
+}
+
+#site-menu.open .menu-links a {
+  opacity: 1;
+  translate: 0 0;
+}
+
+#site-menu.open .menu-links a:nth-child(1) {
+  transition-delay: 0.12s;
+}
+#site-menu.open .menu-links a:nth-child(2) {
+  transition-delay: 0.18s;
+}
+#site-menu.open .menu-links a:nth-child(3) {
+  transition-delay: 0.24s;
+}
+#site-menu.open .menu-links a:nth-child(4) {
+  transition-delay: 0.3s;
+}
+#site-menu.open .menu-links a:nth-child(5) {
+  transition-delay: 0.36s;
+}
+
+.menu-links a:hover,
+.menu-links a:focus-visible {
+  color: var(--primary-color);
+  padding-left: var(--space-md);
+}
+
+/* contact block on the right */
+.menu-contact {
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.menu-contact a {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 2px solid hsl(42, 100%, 55%);
+  width: fit-content;
+  padding-bottom: 2px;
+  transition: color 0.3s ease;
+}
+
+.menu-contact a:hover {
+  color: #0b6bb5;
+}
+
+.menu-contact p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  color: #8b949c;
+}
+
+@media (max-width: 800px) {
+  #site-menu {
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: var(--space-xl);
+  }
+
+  .menu-contact {
+    justify-self: start;
+  }
+}
+
+/* sections FADE IN on arrival from the menu (script.js jumps
+   instantly, then plays this) — instead of the long glide */
+.fade-arrive {
+  animation: section-arrive 0.9s ease both;
+}
+
+@keyframes section-arrive {
+  from {
+    opacity: 0;
+    translate: 0 30px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
 /* HERO */
 
 #hero {
@@ -1884,65 +2089,91 @@ header {
   opacity: 0.6;
 }
 
-/* CONTACT US */
-/* CONTACT US */
+/* CONTACT US — the "let's discuss" panel: deep blue card with a dot
+   grid, intro column left, conversational form right */
 
 #contact-us {
+  padding: 10vh clamp(var(--space-lg), 6vw, 6rem);
+}
+
+.contact-panel {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(10, 1 fr);
+  grid-template-columns: 1fr 1.25fr;
+  gap: clamp(var(--space-lg), 4vw, 4.5rem);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(var(--space-lg), 5vw, 4.5rem);
+  border-radius: 28px;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.16) 1.5px, transparent 1.5px),
+    linear-gradient(160deg, #149dff 0%, #0b6bb5 100%);
+  background-size:
+    26px 26px,
+    auto;
+  box-shadow: 0 30px 70px rgba(0, 30, 60, 0.35);
+  color: whitesmoke;
+}
+
+@media (max-width: 900px) {
+  .contact-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- left column: avatar, heading, note, placeholder photo --- */
+.contact-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid whitesmoke;
+  box-shadow: 0 10px 24px rgba(0, 20, 45, 0.35);
+  margin-bottom: var(--space-lg);
+}
+
+.contact-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 #contact-us h2 {
-  grid-row: 1;
-  grid-column: 2 / 4;
-  font-size: clamp(2rem, 3.5vw + 1rem, 3.5rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 3vw + 1rem, 3.4rem);
   line-height: 1.1;
-  font-weight: 500;
+  color: hsl(42, 100%, 60%); /* the sunlight accent carries the title */
+  margin-bottom: var(--space-md);
 }
 
-#contact-us p {
-  grid-row: 2;
-  grid-column: 2 / 4; /* narrowed so the photo has the right side */
-  font-size: clamp(0.8rem, 1vw + 0.8rem, 1.2rem);
+.contact-note {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #eaf4fb;
+  max-width: 34ch;
+  margin-bottom: var(--space-lg);
 }
 
-/* the photo panel filling the outlined right side */
+/* PLACEHOLDER photo — swap src when the real one exists */
 .contact-photo {
-  grid-column: 4 / 6;
-  grid-row: 1 / 8;
-  align-self: start;
-  margin: var(--space-lg) var(--space-lg) 0 0;
-  max-height: 78vh;
+  max-width: 340px;
 }
 
 .contact-photo img {
   width: 100%;
-  height: 100%;
-  max-height: 78vh;
-  object-fit: cover;
-  border-radius: 18px;
-  border: 5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 22px 48px rgba(0, 30, 60, 0.3);
+  height: auto;
+  border-radius: 20px;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 36px rgba(0, 20, 45, 0.35);
 }
 
-@media (max-width: 700px) {
-  /* small screens: the form needs the width more than the photo */
-  .contact-photo {
-    display: none;
-  }
-
-  #contact-us p {
-    grid-column: 2 / 5;
-  }
-}
-
+/* --- right column: the conversational form --- */
 #contact-form {
   display: flex;
   flex-direction: column;
-  align-items: start;
-  grid-column: 2 / 4;
-  grid-row: 3 / 10;
+  align-items: stretch;
 }
 
 .field {
@@ -1950,41 +2181,53 @@ header {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  margin-bottom: var(--space-md);
-  width: clamp(250px, 30vw, 400px);
+  margin-bottom: var(--space-lg);
+  width: 100%;
+  border: none; /* fieldsets reset */
+  padding: 0;
 }
 
-/* the actual controls — scoped to the form */
+/* the conversational question above each control */
+.field-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: whitesmoke;
+}
+
 .field input,
-.field select,
 .field textarea {
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  border: 2px solid #ccc;
+  padding: 1em 1.2em;
+  border: 2px solid transparent;
+  border-radius: 14px;
   font: inherit;
   background: white;
-  height: 70px;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.8);
+  color: #1f1e1d;
 }
 
-/* focus state — outline removed, replaced with visible styling */
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #9aa7b3;
+}
+
 .field input:focus,
-.field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 10px 5px rgba(20, 157, 255, 0.2);
+  border-color: hsl(42, 100%, 55%);
+  box-shadow: 0 0 0 4px rgba(255, 194, 51, 0.25);
 }
 
-/* sweeping underline on focus */
+/* the sweeping underline, now in sunlight gold */
 .field::after {
   content: "";
   position: absolute;
-  bottom: 0;
+  bottom: -6px;
   left: 0.3%;
   width: 99%;
   height: 2px;
-  background: black;
+  border-radius: 1px;
+  background: hsl(42, 100%, 55%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s ease;
@@ -1992,6 +2235,48 @@ header {
 
 .field:focus-within::after {
   transform: scaleX(1);
+}
+
+/* --- the tier pills --- */
+.tier-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tier-pill input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.tier-pill span {
+  display: inline-block;
+  padding: 0.65em 1.5em;
+  border-radius: 30px;
+  background: white;
+  color: #1f1e1d;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    translate 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tier-pill span:hover {
+  translate: 0 -2px;
+  box-shadow: 0 8px 16px rgba(0, 20, 45, 0.3);
+}
+
+.tier-pill input:checked + span {
+  background: hsl(42, 100%, 55%); /* their green, our sunlight */
+}
+
+.tier-pill input:focus-visible + span {
+  outline: 3px solid whitesmoke;
+  outline-offset: 2px;
 }
 
 /* custom dropdown arrow (native select — the no-JS fallback) */
@@ -2130,25 +2415,25 @@ header {
 
 .field textarea {
   resize: vertical;
-  height: 200px;
+  height: 170px;
 }
 
-/* live character counter under the textarea */
+/* live character counter under the textarea — light on the blue panel */
 .char-count {
   align-self: flex-end;
   font-size: 0.85rem;
-  color: #4a4a4a;
+  color: rgba(245, 245, 245, 0.8);
   font-variant-numeric: tabular-nums; /* digits don't jitter as they change */
   transition: color 0.3s ease;
 }
 
 .char-count.is-near {
-  color: hsl(42, 84%, 35%);
+  color: hsl(42, 100%, 65%);
   font-weight: 700;
 }
 
 .char-count.is-full {
-  color: #e03131;
+  color: #ffb4a8;
   font-weight: 700;
 }
 
