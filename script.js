@@ -129,7 +129,7 @@ if (bentoStage && constCanvas) {
   let W = 0;
   let H = 0;
   let particles = [];
-  const LINK = 110; // px within which two particles get a line
+  const LINK = 120; // px within which two particles get a line
   const mouse = { x: -9999, y: -9999 };
   let scrollImpulse = 0;
   let lastScrollY = window.scrollY;
@@ -146,7 +146,7 @@ if (bentoStage && constCanvas) {
 
   function seedParticles() {
     // density scales with the stage area — a properly populated plexus
-    const count = Math.max(90, Math.min(230, Math.round((W * H) / 9000)));
+    const count = Math.max(140, Math.min(400, Math.round((W * H) / 4800)));
     particles = Array.from({ length: count }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,

@@ -753,51 +753,21 @@ body.menu-locked {
   margin: 0 auto;
 }
 
-/* each rail is its own bento grid, laid out with template areas:
-   left leads with a wide panel, right closes with one */
+/* two clean rails: each column is a single-file stack of cards */
 .bento-col {
   list-style: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-  align-content: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
   will-change: transform; /* JS drives the counter-scroll */
 }
 
-.bento-col--left {
-  grid-template-areas:
-    "a a"
-    "b c";
-}
-
 .bento-col--right {
-  grid-template-areas:
-    "d e"
-    "f f";
-  margin-top: 11rem; /* starts low, then overtakes as it slides faster */
-}
-
-.bento-a {
-  grid-area: a;
-}
-.bento-b {
-  grid-area: b;
-}
-.bento-c {
-  grid-area: c;
-}
-.bento-d {
-  grid-area: d;
-}
-.bento-e {
-  grid-area: e;
-}
-.bento-f {
-  grid-area: f;
+  margin-top: 12rem; /* starts low, then overtakes as it slides faster */
 }
 
 .bento-item {
-  display: grid; /* the button stretches to fill its bento cell */
+  display: grid; /* the button stretches to fill its slot */
 }
 
 /* ---- the glass panels ---- */
@@ -810,7 +780,7 @@ body.menu-locked {
   justify-content: center;
   gap: var(--space-sm);
   width: 100%;
-  min-height: 190px;
+  min-height: 240px; /* single-file rails carry taller panels */
   padding: var(--space-lg) var(--space-md);
   border-radius: 24px;
   /* the frost: milkier wash, heavy blur, brightness lift — the sheet
@@ -927,19 +897,8 @@ body.menu-locked {
   .bento-col,
   .bento-col--left,
   .bento-col--right {
-    grid-template-columns: 1fr;
-    grid-template-areas: none;
     margin-top: 0;
     transform: none !important; /* the JS parallax stands down */
-  }
-
-  .bento-a,
-  .bento-b,
-  .bento-c,
-  .bento-d,
-  .bento-e,
-  .bento-f {
-    grid-area: auto;
   }
 }
 
