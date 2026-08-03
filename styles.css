@@ -718,6 +718,40 @@ body.menu-locked {
   display: grid; /* the button stretches to fill its slot */
 }
 
+/* one subtle light per pane, each from a different direction — two
+   panes get none at all, so the set never reads as cloned lighting */
+.bento-col--left .bento-item:nth-child(1) .about-card {
+  --glass-light: radial-gradient(
+    60% 45% at 80% 4%,
+    rgba(255, 255, 255, 0.26),
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
+.bento-col--left .bento-item:nth-child(2) .about-card {
+  --glass-light: radial-gradient(
+    50% 42% at 88% 96%,
+    rgba(255, 197, 61, 0.16),
+    rgba(255, 197, 61, 0) 70%
+  );
+}
+
+.bento-col--right .bento-item:nth-child(2) .about-card {
+  --glass-light: radial-gradient(
+    55% 45% at 10% 92%,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
+.bento-col--right .bento-item:nth-child(3) .about-card {
+  --glass-light: radial-gradient(
+    50% 48% at 8% 6%,
+    rgba(255, 197, 61, 0.13),
+    rgba(255, 197, 61, 0) 70%
+  );
+}
+
 /* magazine-mix heights: two tall slabs left, four varied right */
 .bento-col--left .bento-item:nth-child(1) .about-card {
   min-height: 380px;
@@ -751,29 +785,23 @@ body.menu-locked {
   min-height: 240px; /* single-file rails carry taller panels */
   padding: var(--space-lg) var(--space-md);
   border-radius: 24px;
-  /* nearly-clear glass: a faint wash so the constellation reads
-     THROUGH the pane, plus two light sources touching the glass —
-     white from the top centre, sunlight at the bottom left */
-  background:
-    radial-gradient(
-      45% 40% at 16% 94%,
-      rgba(255, 197, 61, 0.38),
-      rgba(255, 197, 61, 0) 72%
-    ),
-    radial-gradient(
-      55% 42% at 50% -6%,
-      rgba(255, 255, 255, 0.55),
-      rgba(255, 255, 255, 0) 74%
-    ),
+  /* true clear glass: the heavy blur was what read as "opaque" — it
+     liquefied the fine constellation lines into flat colour. A light
+     5px diffusion keeps the field legible THROUGH the pane. Each card
+     may carry ONE subtle light via --glass-light (varied per card
+     below; none by default so the lighting never looks cloned). */
+  --glass-light: none;
+  background-image:
+    var(--glass-light),
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.14) 0%,
-      rgba(255, 255, 255, 0.05) 60%,
-      rgba(255, 255, 255, 0.02) 100%
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.04) 55%,
+      rgba(255, 255, 255, 0.01) 100%
     );
-  backdrop-filter: blur(14px) saturate(1.35);
-  -webkit-backdrop-filter: blur(14px) saturate(1.35);
-  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(5px) saturate(1.15);
+  -webkit-backdrop-filter: blur(5px) saturate(1.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
   box-shadow:
     0 22px 55px rgba(0, 15, 35, 0.45),
     inset 0 1.5px 1px rgba(255, 255, 255, 0.85),
@@ -794,8 +822,8 @@ body.menu-locked {
   border-radius: inherit;
   background: linear-gradient(
     115deg,
-    rgba(255, 255, 255, 0.26) 0%,
-    rgba(255, 255, 255, 0.07) 30%,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
     rgba(255, 255, 255, 0) 48%
   );
   pointer-events: none;
@@ -814,12 +842,24 @@ body.menu-locked {
 
 .about-card h3 {
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(1rem, 0.7vw + 0.8rem, 1.25rem);
-  color: #ffffff; /* reference-style white on the clear glass */
+  font-weight: 800;
+  font-size: clamp(1rem, 0.7vw + 0.8rem, 1.3rem);
+  letter-spacing: 0.02em;
   text-align: center;
   line-height: 1.25;
-  text-shadow: 0 1px 8px rgba(11, 58, 94, 0.45);
+  /* engraved-in-glass: bright-to-dim gradient fill through the glyphs,
+     with a fine dark cut beneath (drop-shadow follows the letterforms;
+     text-shadow would bleed through the transparent gradient fill) */
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.85) 55%,
+    rgba(214, 236, 255, 0.65) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(11, 58, 94, 0.5));
 }
 
 /* the Explore pill, drawn by CSS so the markup stays a plain button */
@@ -827,13 +867,13 @@ body.menu-locked {
   content: "Explore \2192";
   padding: 0.45em 1.3em;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08); /* etched ring, not a chip */
+  border: 1px solid rgba(255, 255, 255, 0.7);
   color: #ffffff;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.85rem;
-  text-shadow: 0 1px 4px rgba(11, 58, 94, 0.35);
+  text-shadow: 0 1px 3px rgba(11, 58, 94, 0.45);
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
