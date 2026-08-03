@@ -791,6 +791,9 @@ body.menu-locked {
      may carry ONE subtle light via --glass-light (varied per card
      below; none by default so the lighting never looks cloned). */
   --glass-light: none;
+  /* transparent OVERRIDES the browser's default white ButtonFace —
+     without it the pane paints solid white under the gradients */
+  background-color: transparent;
   background-image:
     var(--glass-light),
     linear-gradient(
