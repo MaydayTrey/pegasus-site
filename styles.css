@@ -693,78 +693,6 @@ body.menu-locked {
   height: 100%;
 }
 
-/* soft colour orbs drifting behind the glass — they're what the blur
-   smears, which is what makes the panels read as real frosted glass */
-.bento-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(34px);
-  pointer-events: none;
-  animation: orb-float 18s ease-in-out infinite alternate;
-}
-
-.orb-1 {
-  width: 300px;
-  height: 300px;
-  top: 6%;
-  left: 8%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(11, 58, 94, 0.55),
-    rgba(11, 58, 94, 0) 70%
-  );
-}
-
-.orb-2 {
-  width: 220px;
-  height: 220px;
-  top: 30%;
-  right: 6%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(255, 197, 61, 0.7),
-    rgba(255, 197, 61, 0) 70%
-  );
-  animation-duration: 23s;
-  animation-delay: -8s;
-}
-
-.orb-3 {
-  width: 340px;
-  height: 340px;
-  bottom: 10%;
-  left: 30%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(255, 255, 255, 0.8),
-    rgba(255, 255, 255, 0) 70%
-  );
-  animation-duration: 26s;
-  animation-delay: -13s;
-}
-
-.orb-4 {
-  width: 180px;
-  height: 180px;
-  top: 55%;
-  right: 24%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0) 70%
-  );
-  animation-duration: 15s;
-  animation-delay: -4s;
-}
-
-@keyframes orb-float {
-  from {
-    translate: 0 -30px;
-  }
-  to {
-    translate: 0 34px;
-  }
-}
 
 .bento-cols {
   position: relative; /* rides above the canvas */
@@ -823,16 +751,28 @@ body.menu-locked {
   min-height: 240px; /* single-file rails carry taller panels */
   padding: var(--space-lg) var(--space-md);
   border-radius: 24px;
-  /* the frost: milkier wash, heavy blur, brightness lift — the sheet
-     of glass, not just a tinted box */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.34) 0%,
-    rgba(255, 255, 255, 0.14) 45%,
-    rgba(255, 255, 255, 0.08) 100%
-  );
-  backdrop-filter: blur(24px) saturate(1.5) brightness(1.08);
-  -webkit-backdrop-filter: blur(24px) saturate(1.5) brightness(1.08);
+  /* nearly-clear glass: a faint wash so the constellation reads
+     THROUGH the pane, plus two light sources touching the glass —
+     white from the top centre, sunlight at the bottom left */
+  background:
+    radial-gradient(
+      45% 40% at 16% 94%,
+      rgba(255, 197, 61, 0.38),
+      rgba(255, 197, 61, 0) 72%
+    ),
+    radial-gradient(
+      55% 42% at 50% -6%,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0) 74%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.05) 60%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+  backdrop-filter: blur(14px) saturate(1.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.35);
   border: 1.5px solid rgba(255, 255, 255, 0.55);
   box-shadow:
     0 22px 55px rgba(0, 15, 35, 0.45),
@@ -854,8 +794,8 @@ body.menu-locked {
   border-radius: inherit;
   background: linear-gradient(
     115deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.07) 30%,
     rgba(255, 255, 255, 0) 48%
   );
   pointer-events: none;
@@ -876,10 +816,10 @@ body.menu-locked {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(1rem, 0.7vw + 0.8rem, 1.25rem);
-  color: #0b3a5e; /* deep navy reads through the frost on the light sky */
+  color: #ffffff; /* reference-style white on the clear glass */
   text-align: center;
   line-height: 1.25;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 8px rgba(11, 58, 94, 0.45);
 }
 
 /* the Explore pill, drawn by CSS so the markup stays a plain button */
@@ -887,12 +827,13 @@ body.menu-locked {
   content: "Explore \2192";
   padding: 0.45em 1.3em;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(11, 58, 94, 0.35);
-  color: #0b3a5e;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.85rem;
+  text-shadow: 0 1px 4px rgba(11, 58, 94, 0.35);
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
@@ -906,20 +847,20 @@ body.menu-locked {
   color: #1f1e1d;
 }
 
-/* the topic icon in deep navy through the glass */
+/* the topic icon glowing white through the glass */
 .card-icon {
   width: 40px;
   height: 40px;
-  stroke: #0b3a5e;
+  stroke: #ffffff;
   stroke-width: 2.5;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 1px 3px rgba(255, 255, 255, 0.4));
+  filter: drop-shadow(0 1px 5px rgba(11, 58, 94, 0.4));
 }
 
 .card-icon .icon-fill {
-  fill: #0b3a5e;
+  fill: #ffffff;
   stroke: none;
 }
 

@@ -205,9 +205,9 @@ if (bentoStage && constCanvas) {
         const dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
         if (d2 < LINK * LINK) {
-          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.32;
-          ctx.strokeStyle = `rgba(11, 58, 94, ${alpha.toFixed(3)})`;
-          ctx.lineWidth = 0.7;
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.55;
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 0.8;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -235,7 +235,7 @@ if (bentoStage && constCanvas) {
       const tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * a.twSpeed + a.twPhase));
       ctx.fillStyle = a.gold
         ? `rgba(255, 180, 20, ${(0.95 * tw).toFixed(3)})`
-        : `rgba(11, 58, 94, ${(0.85 * tw).toFixed(3)})`;
+        : `rgba(255, 255, 255, ${(0.95 * tw).toFixed(3)})`;
       ctx.beginPath();
       ctx.arc(a.x, a.y, a.r * (0.85 + 0.3 * tw), 0, Math.PI * 2);
       ctx.fill();
