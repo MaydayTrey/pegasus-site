@@ -58,6 +58,9 @@ body {
   font-family: system-ui, sans-serif;
   background-image: var(--gradient);
   color: #000;
+  /* full-bleed 100vw sections overflow by the scrollbar's width;
+     clip (not hidden) removes that without breaking position:sticky */
+  overflow-x: clip;
 }
 
 /* 5. Remove list styles on ul, ol elements with a list role */
@@ -645,175 +648,202 @@ body.menu-locked {
   }
 }
 
-/* the showcase grid — big flush cards, no gaps between them */
-#about-us-cards {
+/* ---- THE BENTO GLASS STAGE ----
+   Deep-sky band with a live constellation canvas behind two rails of
+   frosted glass panels. The rails counter-scroll: script.js slides the
+   right one up faster so it visibly passes the left. */
+.bento-stage {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* full bleed out of section padding */
+  overflow: hidden;
+  padding: 18vh clamp(var(--space-lg), 6vw, 6rem) 22vh;
+  background: linear-gradient(180deg, #0b3a5e 0%, #0e5a94 55%, #149dff 100%);
+}
+
+#constellation {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bento-cols {
+  position: relative; /* rides above the canvas */
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  list-style: none;
-  padding: 0;
-  max-width: 1400px;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(var(--space-lg), 6vw, 6rem); /* real air between the rails */
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-@media (min-width: 800px) {
-  #about-us-cards {
-    grid-template-columns: 1fr 1fr;
-  }
+/* each rail is its own bento grid, laid out with template areas:
+   left leads with a wide panel, right closes with one */
+.bento-col {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  align-content: start;
+  will-change: transform; /* JS drives the counter-scroll */
 }
 
-/* each card: subject photo under a white scrim that keeps the title
-   and pill readable up top while the image owns the lower half */
+.bento-col--left {
+  grid-template-areas:
+    "a a"
+    "b c";
+}
+
+.bento-col--right {
+  grid-template-areas:
+    "d e"
+    "f f";
+  margin-top: 11rem; /* starts low, then overtakes as it slides faster */
+}
+
+.bento-a {
+  grid-area: a;
+}
+.bento-b {
+  grid-area: b;
+}
+.bento-c {
+  grid-area: c;
+}
+.bento-d {
+  grid-area: d;
+}
+.bento-e {
+  grid-area: e;
+}
+.bento-f {
+  grid-area: f;
+}
+
+.bento-item {
+  display: grid; /* the button stretches to fill its bento cell */
+}
+
+/* ---- the glass panels ---- */
 .about-card {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
   width: 100%;
-  min-height: 420px;
-  padding: var(--space-xl) var(--space-lg) 0;
-  border: none;
-  border-radius: 24px;
-  background-color: #f6fbff;
-  background-size: cover;
-  background-position: center;
-  box-shadow: inset 0 0 0 1px rgba(11, 58, 94, 0.08);
+  min-height: 190px;
+  padding: var(--space-lg) var(--space-md);
+  border-radius: 20px;
+  /* glassmorphism: translucent wash + backdrop blur + light edges */
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.07) 100%
+  );
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 14px 40px rgba(0, 20, 45, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition:
     translate 0.3s ease,
     box-shadow 0.3s ease,
-    z-index 0s;
-}
-
-/* PLACEHOLDER photos (Unsplash) — swap for real project shots later.
-   The scrim is baked into each background stack. */
-.about-card[aria-controls="detail-seo"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-seo.jpg");
-}
-
-.about-card[aria-controls="detail-cta"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-cta.jpg");
-}
-
-.about-card[aria-controls="detail-analytics"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-analytics.jpg");
-}
-
-.about-card[aria-controls="detail-security"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-security.jpg");
-}
-
-.about-card[aria-controls="detail-ux"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-ux.jpg");
-}
-
-.about-card[aria-controls="detail-a11y"] {
-  background-image:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.85) 38%,
-      rgba(255, 255, 255, 0.1) 100%
-    ),
-    url("images/about-a11y.jpg");
+    border-color 0.3s ease;
 }
 
 .about-card:hover,
 .about-card:focus-visible {
   translate: 0 -6px;
+  border-color: rgba(255, 255, 255, 0.85);
   box-shadow:
-    inset 0 0 0 1px rgba(11, 58, 94, 0.08),
-    0 20px 40px rgba(0, 30, 60, 0.25);
-  z-index: 2; /* lifted card's shadow rides over its neighbours */
+    0 22px 50px rgba(0, 20, 45, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* the title, dark and confident like the reference */
 .about-card h3 {
-  order: 1;
   font-family: var(--font-body);
-  font-weight: 800;
-  font-size: clamp(1.4rem, 1.4vw + 0.8rem, 2rem);
-  color: #1f1e1d;
+  font-weight: 700;
+  font-size: clamp(1rem, 0.7vw + 0.8rem, 1.25rem);
+  color: whitesmoke;
   text-align: center;
-  line-height: 1.2;
-  margin-bottom: var(--space-md);
+  line-height: 1.25;
+  text-shadow: 0 1px 8px rgba(0, 20, 45, 0.4);
 }
 
 /* the Explore pill, drawn by CSS so the markup stays a plain button */
 .about-card::after {
   content: "Explore \2192";
-  order: 2;
-  padding: 0.6em 1.6em;
+  padding: 0.45em 1.3em;
   border-radius: 30px;
-  background: rgba(20, 157, 255, 0.12);
-  color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: whitesmoke;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.85rem;
   transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .about-card:hover::after,
 .about-card:focus-visible::after {
-  background: var(--primary-color);
-  color: whitesmoke;
+  background: hsl(42, 100%, 55%);
+  border-color: hsl(42, 100%, 55%);
+  color: #1f1e1d;
 }
 
-/* the topic icon, back to a small badge above the title now that the
-   photo carries the imagery */
+/* the topic icon, glowing softly through the glass */
 .card-icon {
-  order: 0;
-  width: 48px;
-  height: 48px;
-  margin-bottom: var(--space-sm);
-  stroke: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  stroke: whitesmoke;
   stroke-width: 2.5;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
 }
 
 .card-icon .icon-fill {
-  fill: var(--primary-color);
+  fill: whitesmoke;
   stroke: none;
+}
+
+/* mobile: one rail, no counter-scroll, panels in simple flow */
+@media (max-width: 700px) {
+  .bento-stage {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .bento-cols {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .bento-col,
+  .bento-col--left,
+  .bento-col--right {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+    margin-top: 0;
+    transform: none !important; /* the JS parallax stands down */
+  }
+
+  .bento-a,
+  .bento-b,
+  .bento-c,
+  .bento-d,
+  .bento-e,
+  .bento-f {
+    grid-area: auto;
+  }
 }
 
 /*About loading in */

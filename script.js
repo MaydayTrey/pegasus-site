@@ -109,6 +109,187 @@ dialog.addEventListener("click", (e) => {
 closeBtn.addEventListener("click", () => dialog.close());
 
 /* ===================== */
+/* BENTO CONSTELLATION   */
+/* ===================== */
+// A particle network behind the glass rails. It reacts to the mouse
+// (particles shy away, lines reach toward the cursor) and to scrolling
+// (each scroll delta shoves the field, which then settles).
+// updateBentoParallax is reassigned below and called from the shared
+// scroll handler; the default no-op keeps the handler safe regardless.
+let updateBentoParallax = () => {};
+
+const bentoStage = document.getElementById("bento-stage");
+const constCanvas = document.getElementById("constellation");
+
+if (bentoStage && constCanvas) {
+  const ctx = constCanvas.getContext("2d");
+  const colLeft = bentoStage.querySelector(".bento-col--left");
+  const colRight = bentoStage.querySelector(".bento-col--right");
+
+  let W = 0;
+  let H = 0;
+  let particles = [];
+  const COUNT = 70;
+  const LINK = 130; // px within which two particles get a line
+  const mouse = { x: -9999, y: -9999 };
+  let scrollImpulse = 0;
+  let lastScrollY = window.scrollY;
+  let stageVisible = false;
+
+  function sizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = bentoStage.clientWidth;
+    H = bentoStage.clientHeight;
+    constCanvas.width = W * dpr;
+    constCanvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function seedParticles() {
+    particles = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: 1 + Math.random() * 1.8,
+      gold: Math.random() < 0.14, // a few sunlight stars
+    }));
+  }
+
+  function drawFrame() {
+    // self-heal: if the stage was measured before layout settled (or
+    // has since resized), rebuild the field at the true size
+    if (bentoStage.clientWidth !== W || bentoStage.clientHeight !== H) {
+      sizeCanvas();
+      seedParticles();
+    }
+
+    ctx.clearRect(0, 0, W, H);
+
+    particles.forEach((p) => {
+      // drift + the scroll shove (bigger dots feel it more)
+      p.x += p.vx;
+      p.y += p.vy + scrollImpulse * (p.r * 0.5);
+
+      // shy away from the cursor
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 130 * 130 && d2 > 0.01) {
+        const d = Math.sqrt(d2);
+        p.x += (dx / d) * 1.2;
+        p.y += (dy / d) * 1.2;
+      }
+
+      // wrap the edges
+      if (p.x < 0) p.x += W;
+      if (p.x > W) p.x -= W;
+      if (p.y < 0) p.y += H;
+      if (p.y > H) p.y -= H;
+    });
+
+    scrollImpulse *= 0.9; // the shove decays back to calm
+
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+
+      // constellation lines between neighbours
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < LINK * LINK) {
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.4;
+          ctx.strokeStyle = `rgba(245, 245, 245, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+
+      // a golden thread from nearby particles to the cursor
+      const mdx = a.x - mouse.x;
+      const mdy = a.y - mouse.y;
+      const md2 = mdx * mdx + mdy * mdy;
+      if (md2 < LINK * LINK * 1.5) {
+        const alpha = (1 - Math.sqrt(md2) / (LINK * 1.25)) * 0.55;
+        if (alpha > 0) {
+          ctx.strokeStyle = `rgba(255, 197, 61, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      }
+
+      // the star itself
+      ctx.fillStyle = a.gold
+        ? "rgba(255, 197, 61, 0.9)"
+        : "rgba(245, 245, 245, 0.85)";
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  sizeCanvas();
+  seedParticles();
+  drawFrame(); // static field even before any animation
+
+  window.addEventListener("resize", () => {
+    sizeCanvas();
+    seedParticles();
+    drawFrame();
+  });
+
+  bentoStage.addEventListener("pointermove", (e) => {
+    const r = constCanvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  bentoStage.addEventListener("pointerleave", () => {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  // only burn frames while the stage is actually on screen
+  new IntersectionObserver((entries) => {
+    stageVisible = entries[0].isIntersecting;
+  }).observe(bentoStage);
+
+  if (!prefersReducedMotion) {
+    (function constellationLoop() {
+      if (stageVisible && !document.hidden) drawFrame();
+      requestAnimationFrame(constellationLoop);
+    })();
+
+    // called from the shared scroll handler each frame
+    updateBentoParallax = (vh, y) => {
+      // the sliding shoves the star field (clamped so flicks can't blow up)
+      scrollImpulse += (y - lastScrollY) * -0.004;
+      scrollImpulse = Math.max(Math.min(scrollImpulse, 3), -3);
+      lastScrollY = y;
+
+      if (window.innerWidth <= 700) return; // rails stand down on mobile
+
+      const rect = bentoStage.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > vh) return;
+
+      // -0.5 .. 0.5 as the stage crosses the viewport
+      const p = (vh - rect.top) / (vh + rect.height) - 0.5;
+      // both rails ride up, the right one much faster — it passes
+      colLeft.style.transform = `translateY(${(-p * 70).toFixed(1)}px)`;
+      colRight.style.transform = `translateY(${(-p * 280).toFixed(1)}px)`;
+    };
+  }
+}
+
+/* ===================== */
 /* SERVICES TIER EXPAND  */
 /* ===================== */
 // mouseenter commits to a tier; only leaving the whole section resets.
@@ -374,6 +555,7 @@ if (prefersReducedMotion) {
       const vh = window.innerHeight;
       updateFocusedRow(vh);
       updateStackShuffle(vh);
+      updateBentoParallax(vh, y);
 
       // progress is measured against the section's own scroll runway
       // (its height minus one screen), so the tall sticky section gives

@@ -159,8 +159,15 @@
           </div>
         </div>
 
-        <ul id="about-us-cards">
-          <li>
+        <!--BENTO GLASS COLUMNS — two vertical rails of frosted panels
+            sliding over a living constellation; the right rail scrolls
+            faster and passes the left-->
+        <div class="bento-stage" id="bento-stage">
+          <canvas id="constellation" aria-hidden="true"></canvas>
+
+          <div class="bento-cols" id="about-us-cards">
+            <ul class="bento-col bento-col--left">
+              <li class="bento-item bento-a">
             <button
               class="about-card"
               aria-expanded="false"
@@ -185,7 +192,7 @@
             </div>
           </li>
 
-          <li>
+              <li class="bento-item bento-b">
             <button
               class="about-card"
               aria-expanded="false"
@@ -211,7 +218,7 @@
             </div>
           </li>
 
-          <li>
+              <li class="bento-item bento-c">
             <button
               class="about-card"
               aria-expanded="false"
@@ -237,7 +244,10 @@
             </div>
           </li>
 
-          <li>
+            </ul>
+
+            <ul class="bento-col bento-col--right">
+              <li class="bento-item bento-d">
             <button
               class="about-card"
               aria-expanded="false"
@@ -263,7 +273,7 @@
             </div>
           </li>
 
-          <li>
+              <li class="bento-item bento-e">
             <button
               class="about-card"
               aria-expanded="false"
@@ -290,7 +300,7 @@
             </div>
           </li>
 
-          <li>
+              <li class="bento-item bento-f">
             <button
               class="about-card"
               aria-expanded="false"
@@ -315,8 +325,10 @@
                 widens your reach and reduces your legal exposure.
               </p>
             </div>
-          </li>
-        </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         
         <dialog id="about-dialog">
