@@ -205,8 +205,8 @@ if (bentoStage && constCanvas) {
         const dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
         if (d2 < LINK * LINK) {
-          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.35;
-          ctx.strokeStyle = `rgba(220, 238, 255, ${alpha.toFixed(3)})`;
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.32;
+          ctx.strokeStyle = `rgba(11, 58, 94, ${alpha.toFixed(3)})`;
           ctx.lineWidth = 0.7;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -234,8 +234,8 @@ if (bentoStage && constCanvas) {
       // the star itself, actively flickering on its own clock
       const tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * a.twSpeed + a.twPhase));
       ctx.fillStyle = a.gold
-        ? `rgba(255, 197, 61, ${(0.95 * tw).toFixed(3)})`
-        : `rgba(245, 245, 245, ${(0.9 * tw).toFixed(3)})`;
+        ? `rgba(255, 180, 20, ${(0.95 * tw).toFixed(3)})`
+        : `rgba(11, 58, 94, ${(0.85 * tw).toFixed(3)})`;
       ctx.beginPath();
       ctx.arc(a.x, a.y, a.r * (0.85 + 0.3 * tw), 0, Math.PI * 2);
       ctx.fill();
@@ -269,14 +269,22 @@ if (bentoStage && constCanvas) {
   }).observe(bentoStage);
 
   if (!prefersReducedMotion) {
-    (function constellationLoop() {
-      if (stageVisible && !document.hidden) drawFrame();
-      requestAnimationFrame(constellationLoop);
-    })();
+    // ---- THE RAIL ENGINE ----
+    // One scroll value drives everything: scrolling through the tall
+    // wrapper sets targetP (0..1); a rAF loop lerps toward it and each
+    // rail multiplies that single value by its own travel. The stage is
+    // pinned (sticky) meanwhile, so the page can't move on until the
+    // rails finish.
+    const bentoWrap = document.getElementById("bento-wrap");
+    let targetP = 0;
+    let currentP = 0;
 
-    // MEASURED, not assumed: the true resting gap between the two
-    // rails' last cards (the CSS offset minus any difference in the
-    // rails' content heights). The right rail claws back exactly this.
+    const LEFT_TRAVEL = 120; // the slow rail's whole journey
+    const RIGHT_DROP = 300; // right rail starts this far down at p=0
+
+    // MEASURED, not assumed: the resting gap between the two rails'
+    // last cards. The right rail's travel = drop + gap + LEFT_TRAVEL,
+    // so at p=1 both last cards sit exactly parallel.
     let railGap = 0;
 
     function measureRailGap() {
@@ -296,27 +304,37 @@ if (bentoStage && constCanvas) {
     measureRailGap();
     window.addEventListener("resize", measureRailGap);
 
-    // called from the shared scroll handler each frame
+    function applyRails() {
+      if (window.innerWidth <= 700) return; // rails stand down on mobile
+      // glide toward the scroll position instead of snapping to it
+      currentP += (targetP - currentP) * 0.1;
+      const leftY = -currentP * LEFT_TRAVEL;
+      const rightY =
+        RIGHT_DROP - currentP * (RIGHT_DROP + railGap + LEFT_TRAVEL);
+      colLeft.style.transform = `translateY(${leftY.toFixed(1)}px)`;
+      colRight.style.transform = `translateY(${rightY.toFixed(1)}px)`;
+    }
+
+    (function constellationLoop() {
+      if (stageVisible && !document.hidden) {
+        applyRails();
+        drawFrame();
+      }
+      requestAnimationFrame(constellationLoop);
+    })();
+
+    // called from the shared scroll handler: only updates the target
     updateBentoParallax = (vh, y) => {
       // the sliding shoves the star field (clamped so flicks can't blow up)
       scrollImpulse += (y - lastScrollY) * -0.004;
       scrollImpulse = Math.max(Math.min(scrollImpulse, 3), -3);
       lastScrollY = y;
 
-      if (window.innerWidth <= 700) return; // rails stand down on mobile
-
-      const rect = bentoStage.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > vh) return;
-
-      // 0 as the stage enters at the bottom of the viewport, 1 exactly
-      // when its bottom meets the bottom of the viewport
-      const p = Math.min(Math.max((vh - rect.top) / rect.height, 0), 1);
-
-      // right rail closes the measured gap precisely by p = 1, so the
-      // last card on each side sits parallel at the bottom of the scroll
-      const BASE = 60; // both rails drift up this much for depth
-      colLeft.style.transform = `translateY(${(-p * BASE).toFixed(1)}px)`;
-      colRight.style.transform = `translateY(${(-p * (BASE + railGap)).toFixed(1)}px)`;
+      // progress through the pinned runway: 0 when the wrapper's top
+      // hits the viewport top, 1 when its bottom leaves the pin
+      const wrap = bentoWrap.getBoundingClientRect();
+      const runway = Math.max(wrap.height - vh, 1);
+      targetP = Math.min(Math.max(-wrap.top / runway, 0), 1);
     };
   }
 }

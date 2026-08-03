@@ -652,16 +652,38 @@ body.menu-locked {
    Deep-sky band with a live constellation canvas behind two rails of
    frosted glass panels. The rails counter-scroll: script.js slides the
    right one up faster so it visibly passes the left. */
-.bento-stage {
+/* the scroll runway: the page can't move past the rails until their
+   travel completes inside it — same pin trick as the roadmap */
+.bento-wrap {
   position: relative;
+  height: 300vh;
+}
+
+.bento-stage {
+  position: sticky;
+  top: 0;
   width: 100vw;
-  min-height: 150vh; /* a tall night-sky band to scroll through */
+  height: 100vh;
   margin-left: calc(50% - 50vw); /* full bleed out of section padding */
   overflow: hidden;
   display: grid;
-  align-content: center;
-  padding: 10vh clamp(var(--space-lg), 6vw, 6rem);
-  background: linear-gradient(180deg, #071c30 0%, #0b3a5e 55%, #0e5a94 100%);
+  align-content: start;
+  padding: 8vh clamp(var(--space-lg), 6vw, 6rem);
+  /* the same sky as the rest of the page */
+  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 55%, #149dff 100%);
+}
+
+/* reduced motion: no pin, no runway — just the panels in the sky */
+@media (prefers-reduced-motion: reduce) {
+  .bento-wrap {
+    height: auto;
+  }
+
+  .bento-stage {
+    position: static;
+    height: auto;
+    min-height: 100vh;
+  }
 }
 
 #constellation {
@@ -688,8 +710,8 @@ body.menu-locked {
   left: 8%;
   background: radial-gradient(
     circle at 35% 35%,
-    rgba(82, 183, 255, 0.85),
-    rgba(82, 183, 255, 0) 70%
+    rgba(11, 58, 94, 0.55),
+    rgba(11, 58, 94, 0) 70%
   );
 }
 
@@ -714,8 +736,8 @@ body.menu-locked {
   left: 30%;
   background: radial-gradient(
     circle at 35% 35%,
-    rgba(143, 208, 255, 0.75),
-    rgba(143, 208, 255, 0) 70%
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0) 70%
   );
   animation-duration: 26s;
   animation-delay: -13s;
@@ -753,21 +775,39 @@ body.menu-locked {
   margin: 0 auto;
 }
 
-/* two clean rails: each column is a single-file stack of cards */
+/* two clean rails: each column is a single-file stack of cards.
+   No CSS offsets — script.js owns both rails' positions outright
+   (one scroll value, two multipliers, lerped every frame). */
 .bento-col {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  will-change: transform; /* JS drives the counter-scroll */
-}
-
-.bento-col--right {
-  margin-top: 12rem; /* starts low, then overtakes as it slides faster */
+  will-change: transform;
 }
 
 .bento-item {
   display: grid; /* the button stretches to fill its slot */
+}
+
+/* magazine-mix heights: two tall slabs left, four varied right */
+.bento-col--left .bento-item:nth-child(1) .about-card {
+  min-height: 380px;
+}
+.bento-col--left .bento-item:nth-child(2) .about-card {
+  min-height: 320px;
+}
+.bento-col--right .bento-item:nth-child(1) .about-card {
+  min-height: 230px;
+}
+.bento-col--right .bento-item:nth-child(2) .about-card {
+  min-height: 290px;
+}
+.bento-col--right .bento-item:nth-child(3) .about-card {
+  min-height: 200px;
+}
+.bento-col--right .bento-item:nth-child(4) .about-card {
+  min-height: 260px;
 }
 
 /* ---- the glass panels ---- */
@@ -836,10 +876,10 @@ body.menu-locked {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(1rem, 0.7vw + 0.8rem, 1.25rem);
-  color: whitesmoke;
+  color: #0b3a5e; /* deep navy reads through the frost on the light sky */
   text-align: center;
   line-height: 1.25;
-  text-shadow: 0 1px 8px rgba(0, 20, 45, 0.4);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.35);
 }
 
 /* the Explore pill, drawn by CSS so the markup stays a plain button */
@@ -847,9 +887,9 @@ body.menu-locked {
   content: "Explore \2192";
   padding: 0.45em 1.3em;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  color: whitesmoke;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(11, 58, 94, 0.35);
+  color: #0b3a5e;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.85rem;
@@ -866,20 +906,20 @@ body.menu-locked {
   color: #1f1e1d;
 }
 
-/* the topic icon, glowing softly through the glass */
+/* the topic icon in deep navy through the glass */
 .card-icon {
   width: 40px;
   height: 40px;
-  stroke: whitesmoke;
+  stroke: #0b3a5e;
   stroke-width: 2.5;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+  filter: drop-shadow(0 1px 3px rgba(255, 255, 255, 0.4));
 }
 
 .card-icon .icon-fill {
-  fill: whitesmoke;
+  fill: #0b3a5e;
   stroke: none;
 }
 
