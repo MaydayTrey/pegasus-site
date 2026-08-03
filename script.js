@@ -129,8 +129,7 @@ if (bentoStage && constCanvas) {
   let W = 0;
   let H = 0;
   let particles = [];
-  const COUNT = 70;
-  const LINK = 130; // px within which two particles get a line
+  const LINK = 110; // px within which two particles get a line
   const mouse = { x: -9999, y: -9999 };
   let scrollImpulse = 0;
   let lastScrollY = window.scrollY;
@@ -146,13 +145,18 @@ if (bentoStage && constCanvas) {
   }
 
   function seedParticles() {
-    particles = Array.from({ length: COUNT }, () => ({
+    // density scales with the stage area — a properly populated plexus
+    const count = Math.max(90, Math.min(230, Math.round((W * H) / 9000)));
+    particles = Array.from({ length: count }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: 1 + Math.random() * 1.8,
-      gold: Math.random() < 0.14, // a few sunlight stars
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: 0.8 + Math.random() * 1.8,
+      gold: Math.random() < 0.12, // a few sunlight stars
+      // each star flickers on its own clock
+      twPhase: Math.random() * Math.PI * 2,
+      twSpeed: 0.6 + Math.random() * 2.2,
     }));
   }
 
@@ -165,6 +169,7 @@ if (bentoStage && constCanvas) {
     }
 
     ctx.clearRect(0, 0, W, H);
+    const t = performance.now() / 1000;
 
     particles.forEach((p) => {
       // drift + the scroll shove (bigger dots feel it more)
@@ -193,16 +198,16 @@ if (bentoStage && constCanvas) {
     for (let i = 0; i < particles.length; i++) {
       const a = particles[i];
 
-      // constellation lines between neighbours
+      // constellation lines between neighbours — thin and plentiful
       for (let j = i + 1; j < particles.length; j++) {
         const b = particles[j];
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
         if (d2 < LINK * LINK) {
-          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.4;
-          ctx.strokeStyle = `rgba(245, 245, 245, ${alpha.toFixed(3)})`;
-          ctx.lineWidth = 1;
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.35;
+          ctx.strokeStyle = `rgba(220, 238, 255, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 0.7;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -226,12 +231,13 @@ if (bentoStage && constCanvas) {
         }
       }
 
-      // the star itself
+      // the star itself, actively flickering on its own clock
+      const tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * a.twSpeed + a.twPhase));
       ctx.fillStyle = a.gold
-        ? "rgba(255, 197, 61, 0.9)"
-        : "rgba(245, 245, 245, 0.85)";
+        ? `rgba(255, 197, 61, ${(0.95 * tw).toFixed(3)})`
+        : `rgba(245, 245, 245, ${(0.9 * tw).toFixed(3)})`;
       ctx.beginPath();
-      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.arc(a.x, a.y, a.r * (0.85 + 0.3 * tw), 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -268,6 +274,28 @@ if (bentoStage && constCanvas) {
       requestAnimationFrame(constellationLoop);
     })();
 
+    // MEASURED, not assumed: the true resting gap between the two
+    // rails' last cards (the CSS offset minus any difference in the
+    // rails' content heights). The right rail claws back exactly this.
+    let railGap = 0;
+
+    function measureRailGap() {
+      const tL = colLeft.style.transform;
+      const tR = colRight.style.transform;
+      colLeft.style.transform = "";
+      colRight.style.transform = "";
+      const lastL = colLeft.querySelector(".bento-item:last-child");
+      const lastR = colRight.querySelector(".bento-item:last-child");
+      railGap =
+        lastR.getBoundingClientRect().bottom -
+        lastL.getBoundingClientRect().bottom;
+      colLeft.style.transform = tL;
+      colRight.style.transform = tR;
+    }
+
+    measureRailGap();
+    window.addEventListener("resize", measureRailGap);
+
     // called from the shared scroll handler each frame
     updateBentoParallax = (vh, y) => {
       // the sliding shoves the star field (clamped so flicks can't blow up)
@@ -280,11 +308,15 @@ if (bentoStage && constCanvas) {
       const rect = bentoStage.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > vh) return;
 
-      // -0.5 .. 0.5 as the stage crosses the viewport
-      const p = (vh - rect.top) / (vh + rect.height) - 0.5;
-      // both rails ride up, the right one much faster — it passes
-      colLeft.style.transform = `translateY(${(-p * 70).toFixed(1)}px)`;
-      colRight.style.transform = `translateY(${(-p * 280).toFixed(1)}px)`;
+      // 0 as the stage enters at the bottom of the viewport, 1 exactly
+      // when its bottom meets the bottom of the viewport
+      const p = Math.min(Math.max((vh - rect.top) / rect.height, 0), 1);
+
+      // right rail closes the measured gap precisely by p = 1, so the
+      // last card on each side sits parallel at the bottom of the scroll
+      const BASE = 60; // both rails drift up this much for depth
+      colLeft.style.transform = `translateY(${(-p * BASE).toFixed(1)}px)`;
+      colRight.style.transform = `translateY(${(-p * (BASE + railGap)).toFixed(1)}px)`;
     };
   }
 }
