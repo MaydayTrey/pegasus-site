@@ -62,6 +62,16 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
       defer
     ></script>
+    <!--Vanta animated cloudscape for the hero (three.js r134 is the
+        version Vanta targets); defer keeps execution order intact-->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.clouds.min.js"
+      defer
+    ></script>
     <script src="script.js" defer></script>
 
     <!--EXTERNAL RESOURCES-->
@@ -116,6 +126,10 @@
 
     <main id="main" tabindex="-1">
       <section id="hero" aria-labelledby="hero-heading" class="skyband">
+        <!--Vanta paints its animated cloudscape into this layer; if the
+            library fails to load, the section's sky gradient shows-->
+        <div class="hero-vanta" id="hero-vanta" aria-hidden="true"></div>
+
         <!--brand placeholder — swap the img for the real logo-->
         <div class="hero-logo">
           <img src="images/pegasus-placeholder.png" alt="" width="54" height="54" />

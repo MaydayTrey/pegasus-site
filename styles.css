@@ -369,10 +369,26 @@ body.menu-locked {
 /* HERO */
 
 #hero {
+  position: relative; /* hosts the Vanta layer */
+  overflow: hidden;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
   height: 100dvh;
+}
+
+/* the animated cloudscape canvas fills the hero, behind everything */
+.hero-vanta {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* hero content rides above the canvas (positioned elements would
+   otherwise paint under an absolutely-positioned sibling) */
+#hero > :not(.hero-vanta) {
+  position: relative;
+  z-index: 1;
 }
 
 /* brand mark, top left of the hero (the old header's job) */

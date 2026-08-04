@@ -3,6 +3,39 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 /* ===================== */
+/* HERO CLOUDSCAPE       */
+/* ===================== */
+// Vanta CLOUDS (three.js) painting a living sky behind the hero.
+// Guarded so a failed CDN or WebGL leaves the gradient fallback.
+if (
+  typeof VANTA !== "undefined" &&
+  VANTA.CLOUDS &&
+  !prefersReducedMotion &&
+  document.getElementById("hero-vanta")
+) {
+  try {
+    VANTA.CLOUDS({
+      el: "#hero-vanta",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200,
+      minWidth: 200,
+      skyColor: 0x5eb7d9,
+      cloudColor: 0xb1c2dc,
+      cloudShadowColor: 0x1b3a57,
+      sunColor: 0xff9c21,
+      sunGlareColor: 0xfa6331,
+      sunlightColor: 0xfa9531,
+      speed: 1.0,
+    });
+  } catch (err) {
+    // WebGL unavailable — the CSS sky stays
+    console.warn("Vanta clouds skipped:", err);
+  }
+}
+
+/* ===================== */
 /* FULL-SCREEN MENU      */
 /* ===================== */
 const menuToggle = document.getElementById("menu-toggle");
