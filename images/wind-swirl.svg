@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <!-- little wind curl, from the cloud set -->
+  <path d="M 12 52 Q 62 24 112 38 Q 152 49 164 32 Q 172 18 156 15 Q 143 13 146 27"
+        stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M 30 64 Q 60 52 92 56" stroke="#ffffff" stroke-width="6" fill="none"
+        stroke-linecap="round" opacity="0.8"/>
+</svg>
