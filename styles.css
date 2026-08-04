@@ -10,20 +10,21 @@
   --space-md: 1rem; /* 16px */
   --space-lg: 2rem; /* 32px */
   --space-xl: 4rem; /* 64px */
+  /* light sky up top (hero / about run their own backgrounds), then
+     from the services region down it deepens into rich blues that
+     hold AA contrast for white text (#1274c4 is ~4.9:1, and every
+     stop below it is darker) all the way to the footer */
+  /* rich but still SKY: the run holds between #1274c4 (~4.9:1 vs
+     white) and #0e63ab (~6:1) — AA-compliant without turning navy */
   --gradient: linear-gradient(
     180deg,
     #e5f4ff 0%,
-    #c2e6ff 1%,
-    #aadcff 2%,
-    #95d3ff 3%,
-    #91cffc 5%,
-    #82c7f9 8%,
-    #a3d7fc 12.5%,
-    #8fd0ff 25%,
-    #52b7ff 37.5%,
-    #149dff 50%,
-    #52b7ff 62.5%,
-    #8fd0ff 85%
+    #a3d7fc 5%,
+    #8fd0ff 12%,
+    #52b7ff 19%,
+    #1274c4 26%,
+    #116cb8 55%,
+    #0e63ab 100%
   );
 }
 
@@ -600,6 +601,9 @@ body.menu-locked {
   overflow: hidden; /* hides the panel while it waits off to the left */
 }
 
+/* styled to MATCH THE MENU: the same white-to-ice wash, the same
+   heavy dark Arimo, grey label, gold accents. Lazy reveal — hidden
+   until scrolled to, then a clean fade-up instead of the old sweep. */
 .who-panel {
   position: relative;
   display: flex;
@@ -608,27 +612,14 @@ body.menu-locked {
   width: 100%;
   min-height: 108vh;
   padding: var(--space-xl) clamp(var(--space-lg), 8vw, 10rem);
-  background: linear-gradient(
-    115deg,
-    #0b6bb5 0%,
-    #149dff 45%,
-    #52b7ff 100%
-  );
-  box-shadow: 0 24px 60px rgba(0, 30, 60, 0.35);
+  background: linear-gradient(135deg, #ffffff 0%, #eaf6ff 100%);
+  box-shadow: 0 24px 60px rgba(0, 30, 60, 0.18);
   overflow: hidden;
-  /* bottom edge dissolves into the page instead of cutting off sharp */
-  mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    #000 86%,
-    transparent 100%
-  );
-  /* off to the left until it scrolls into view — a long unhurried glide */
-  translate: -100% 0;
   opacity: 0;
+  translate: 0 60px;
   transition:
-    translate 1.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.7s ease;
+    opacity 0.9s ease,
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .who-wrap.in-view .who-panel {
@@ -636,13 +627,7 @@ body.menu-locked {
   opacity: 1;
 }
 
-/* THE SEQUENCE: the panel glides in over 1.6s, then ~0.6s after it
-   settles the eyebrow appears first, then the statement's three lines
-   land top to bottom. Delays count from the moment .in-view is added,
-   so they're timed against the panel's arrival (~1s of visible travel):
-   eyebrow 1.6s, lines 1.95s / 2.25s / 2.55s. */
-
-/* the widely-tracked label in the top left — first text on stage */
+/* the widely-tracked label in the top left, menu-label grey */
 .who-eyebrow {
   position: absolute;
   top: clamp(var(--space-lg), 6vh, 4rem);
@@ -653,12 +638,12 @@ body.menu-locked {
   text-transform: uppercase;
   letter-spacing: 0.55em; /* the W H O  W E  A R E spacing */
   word-spacing: 0.5em;
-  color: rgba(255, 255, 255, 0.85);
+  color: #8b949c;
   opacity: 0;
   translate: 0 -14px;
   transition:
-    opacity 0.7s ease 1.6s,
-    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1.6s;
+    opacity 0.7s ease 0.35s,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
 }
 
 .who-wrap.in-view .who-eyebrow {
@@ -677,14 +662,14 @@ body.menu-locked {
   background: hsl(42, 100%, 60%);
 }
 
+/* the statement in the menu's voice: giant bold Arimo, dark ink */
 .who-statement {
-  max-width: 22ch;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.75rem, 4.2vw + 0.5rem, 4.5rem);
-  line-height: 1.15;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 20, 45, 0.3);
+  max-width: 26ch;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.6vw + 0.5rem, 3.8rem);
+  line-height: 1.2;
+  color: #1f1e1d;
 }
 
 /* each line fades up in turn, top first */
@@ -693,18 +678,18 @@ body.menu-locked {
   opacity: 0;
   translate: 0 22px;
   transition:
-    opacity 0.75s ease,
-    translate 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.7s ease,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .who-line:nth-child(1) {
-  transition-delay: 1.95s;
+  transition-delay: 0.55s;
 }
 .who-line:nth-child(2) {
-  transition-delay: 2.25s;
+  transition-delay: 0.75s;
 }
 .who-line:nth-child(3) {
-  transition-delay: 2.55s;
+  transition-delay: 0.95s;
 }
 
 .who-wrap.in-view .who-line {
@@ -739,8 +724,15 @@ body.menu-locked {
   display: grid;
   align-content: start;
   padding: 8vh clamp(var(--space-lg), 6vw, 6rem);
-  /* the same sky as the rest of the page */
-  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 55%, #149dff 100%);
+  /* sky deepening through the stage so its bottom edge hands off
+     seamlessly into the page's rich-blue run below */
+  background: linear-gradient(
+    180deg,
+    #8fd0ff 0%,
+    #52b7ff 40%,
+    #149dff 72%,
+    #1173c2 100%
+  );
 }
 
 /* reduced motion: no pin, no runway — just the panels in the sky */
@@ -3178,8 +3170,9 @@ body.menu-locked {
   min-height: 100vh;
   display: flex;
   align-items: stretch;
-  /* the same sky blues as the rest of the site */
-  background: linear-gradient(180deg, #8fd0ff 0%, #52b7ff 45%, #149dff 100%);
+  /* one gentle step deeper than the page above it — enough dusk for
+     the sun to glow against, without dropping into navy */
+  background: linear-gradient(180deg, #0e63ab 0%, #0b5694 60%, #0a4c85 100%);
   color: whitesmoke;
   overflow: hidden;
   padding: 14vh clamp(var(--space-lg), 6vw, 6rem) 5vh;
