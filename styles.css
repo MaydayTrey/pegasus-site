@@ -14,17 +14,17 @@
      from the services region down it deepens into rich blues that
      hold AA contrast for white text (#1274c4 is ~4.9:1, and every
      stop below it is darker) all the way to the footer */
-  /* rich but still SKY: the run holds between #1274c4 (~4.9:1 vs
-     white) and #0e63ab (~6:1) — AA-compliant without turning navy */
+  /* a real-sky drift: #61A0F7 easing to #5B8CF9 through close
+     intermediate steps, the way an actual sky shifts — no hard bands */
   --gradient: linear-gradient(
     180deg,
-    #e5f4ff 0%,
-    #a3d7fc 5%,
-    #8fd0ff 12%,
-    #52b7ff 19%,
-    #1274c4 26%,
-    #116cb8 55%,
-    #0e63ab 100%
+    #61a0f7 0%,
+    #609cf7 16%,
+    #5f98f8 32%,
+    #5e94f8 48%,
+    #5d91f8 64%,
+    #5c8ef9 80%,
+    #5b8cf9 100%
   );
 }
 
@@ -724,14 +724,14 @@ body.menu-locked {
   display: grid;
   align-content: start;
   padding: 8vh clamp(var(--space-lg), 6vw, 6rem);
-  /* sky deepening through the stage so its bottom edge hands off
-     seamlessly into the page's rich-blue run below */
+  /* dips slightly deeper mid-stage so the white constellation reads,
+     then returns to the page's periwinkle at both edges — seamless */
   background: linear-gradient(
     180deg,
-    #8fd0ff 0%,
-    #52b7ff 40%,
-    #149dff 72%,
-    #1173c2 100%
+    #61a0f7 0%,
+    #4f83e4 45%,
+    #4a7cdd 70%,
+    #5f98f8 100%
   );
 }
 
@@ -3170,9 +3170,9 @@ body.menu-locked {
   min-height: 100vh;
   display: flex;
   align-items: stretch;
-  /* one gentle step deeper than the page above it — enough dusk for
-     the sun to glow against, without dropping into navy */
-  background: linear-gradient(180deg, #0e63ab 0%, #0b5694 60%, #0a4c85 100%);
+  /* picks up the page's bottom periwinkle and settles one gentle
+     step deeper — enough dusk for the sun to glow against */
+  background: linear-gradient(180deg, #5b8cf9 0%, #4d7ae6 55%, #446ed6 100%);
   color: whitesmoke;
   overflow: hidden;
   padding: 14vh clamp(var(--space-lg), 6vw, 6rem) 5vh;
