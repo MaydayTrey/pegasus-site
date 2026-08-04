@@ -1146,6 +1146,74 @@ body.menu-locked {
   translate: 0 0;
 }
 
+/* ---- SHARED EDITORIAL FURNITURE ----
+   The rules, kickers and dividers from the services spread, reusable
+   anywhere text needs segmenting. Light variants for the blue sky,
+   --dark modifiers for white surfaces (the expanded tier cards). */
+.edit-rule {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto var(--space-lg);
+}
+
+.section-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.75rem;
+  color: whitesmoke;
+  margin-bottom: var(--space-sm);
+}
+
+.section-kicker span {
+  color: hsl(42, 100%, 55%);
+  font-size: 0.8rem;
+}
+
+/* left-aligned variant for intros that aren't centred */
+.section-kicker--start,
+.care-copy .section-kicker {
+  justify-content: flex-start;
+}
+
+/* the aesthetic divider: hairlines meeting a small gold star */
+.edit-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 1050px;
+  margin: var(--space-lg) auto;
+  color: hsl(42, 100%, 60%);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.edit-divider::before,
+.edit-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* dark variants for white surfaces */
+.edit-divider--dark {
+  color: hsl(42, 84%, 45%);
+}
+
+.edit-divider--dark::before,
+.edit-divider--dark::after {
+  background: rgba(11, 58, 94, 0.25);
+}
+
 /* --- the editorial spread beneath the title --- */
 .services-editorial {
   display: grid;
@@ -1470,12 +1538,18 @@ body.menu-locked {
 /* Collapsed type is sized to FIT the third-of-a-screen tile so nothing
    is clipped before you open it; each step scales up when expanded. */
 .tier-tag {
-  font-style: italic;
   font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #7a7a7a;
   transition: font-size 0.8s ease;
+}
+
+/* the editorial numeral, same gold as the services spread */
+.tag-no {
+  color: hsl(42, 84%, 45%);
+  margin-right: 0.5em;
 }
 
 .tier-stair h3 {
@@ -1508,9 +1582,29 @@ body.menu-locked {
   font-weight: 700;
 }
 
-/* expanded: everything grows into the bigger box */
+/* expanded: everything grows into the bigger box, and the detail
+   takes the editorial format — hairline rules segmenting the copy,
+   the description set as an italic serif deck */
 .tier-grid.stack-expanded .tier-stair.is-open .tier-tag {
   font-size: 0.9rem;
+}
+
+.tier-grid.stack-expanded .tier-stair.is-open .tier-more-inner {
+  border-top: 1px solid rgba(11, 58, 94, 0.2);
+  padding-top: var(--space-md);
+}
+
+.tier-grid.stack-expanded .tier-stair.is-open .tier-more p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.tier-grid.stack-expanded .tier-stair.is-open .tier-perks {
+  border-top: 1px solid rgba(11, 58, 94, 0.15);
+  padding-top: var(--space-md);
 }
 .tier-grid.stack-expanded .tier-stair.is-open h3 {
   font-size: 2.2rem;
@@ -1776,6 +1870,15 @@ body.menu-locked {
 #examples {
   padding: var(--space-xl) var(--space-lg);
   overflow: hidden;
+}
+
+/* joins the house style: Playfair, white, centred under its kicker */
+#examples-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: center;
+  color: whitesmoke;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
 }
 
 .examples-grid {
