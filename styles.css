@@ -1742,9 +1742,12 @@ body.menu-locked {
   }
 }
 
-/* TIER COMPARISON */
+/* TIER COMPARISON — a clear glass sheet floating over two glowing
+   orbs, reference-style: the glass blurs whatever passes behind it */
 #tier-comparison {
+  position: relative;
   padding: var(--space-xl) var(--space-lg);
+  overflow: hidden; /* keeps the orbs inside the section */
 }
 
 #comparison-heading {
@@ -1756,16 +1759,59 @@ body.menu-locked {
   margin-bottom: var(--space-lg);
 }
 
-/* frosted glass card holding the table */
+/* the spheres behind the glass — solid, saturated objects (not faint
+   smudges), lit from the top-left so they read as balls of light */
+.table-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.table-orb--blue {
+  width: clamp(260px, 32vw, 420px);
+  height: clamp(260px, 32vw, 420px);
+  top: 10%;
+  left: 8%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    #cfeaff 0%,
+    #52b7ff 45%,
+    #0b6bb5 100%
+  );
+}
+
+.table-orb--gold {
+  width: clamp(200px, 24vw, 330px);
+  height: clamp(200px, 24vw, 330px);
+  bottom: 6%;
+  right: 10%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    hsl(45, 100%, 84%) 0%,
+    hsl(42, 100%, 55%) 50%,
+    hsl(36, 90%, 40%) 100%
+  );
+}
+
+/* the glass sheet */
 .table-wrap {
+  position: relative; /* floats above the orbs */
   overflow-x: auto;
   max-width: 960px;
   margin: 0 auto;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 24px 60px rgba(0, 30, 60, 0.28);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.05) 55%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(9px) saturate(1.2);
+  -webkit-backdrop-filter: blur(9px) saturate(1.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 24px 60px rgba(0, 20, 45, 0.35),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.8);
 }
 
 .comparison-table {
@@ -1777,23 +1823,36 @@ body.menu-locked {
   font-family: var(--font-display);
   font-style: italic;
   padding: var(--space-md);
-  color: #333;
+  color: whitesmoke;
+  text-shadow: 0 1px 4px rgba(11, 58, 94, 0.4);
 }
 
+/* the header: etched into the glass, not a solid band */
 .comparison-table thead th {
-  background: #1f1e1d;
-  color: whitesmoke;
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
+  background: none;
+  color: #ffffff;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: var(--space-md);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 3px rgba(11, 58, 94, 0.45);
 }
 
 .comparison-table th,
 .comparison-table td {
   padding: var(--space-md);
   text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  color: whitesmoke;
+  text-shadow: 0 1px 3px rgba(11, 58, 94, 0.4);
+}
+
+/* fine vertical hairlines between columns, reference-style */
+.comparison-table th + th,
+.comparison-table td + td,
+.comparison-table th[scope="row"] + td {
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .comparison-table th[scope="row"] {
@@ -1821,13 +1880,14 @@ body.menu-locked {
    and its marks glow; as the scroll moves on it drifts back down */
 .comparison-table tbody tr.row-active {
   translate: 0 -6px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 /* the marks: green checks, red exes (classes added by script.js).
-   Muted at rest so the focused row's full color visibly pops. */
+   Muted at rest so the focused row's full colour visibly pops;
+   brightened a step to carry on the glass. */
 .mark-yes {
-  color: rgba(47, 158, 68, 0.55);
+  color: rgba(105, 219, 124, 0.6);
   font-weight: 700;
   font-size: 1.15rem;
   transition:
@@ -1836,7 +1896,7 @@ body.menu-locked {
 }
 
 .mark-no {
-  color: rgba(224, 49, 49, 0.55);
+  color: rgba(255, 135, 135, 0.6);
   font-weight: 700;
   font-size: 1.15rem;
   transition:
@@ -1845,22 +1905,22 @@ body.menu-locked {
 }
 
 .comparison-table tbody tr.row-active .mark-yes {
-  color: #2f9e44;
-  text-shadow: 0 0 12px rgba(47, 158, 68, 0.85);
+  color: #69db7c;
+  text-shadow: 0 0 12px rgba(105, 219, 124, 0.9);
 }
 
 .comparison-table tbody tr.row-active .mark-no {
-  color: #e03131;
-  text-shadow: 0 0 12px rgba(224, 49, 49, 0.85);
+  color: #ff8787;
+  text-shadow: 0 0 12px rgba(255, 135, 135, 0.9);
 }
 
 /* reduced motion: no focus choreography, so marks stay full-strength */
 @media (prefers-reduced-motion: reduce) {
   .mark-yes {
-    color: #2f9e44;
+    color: #69db7c;
   }
   .mark-no {
-    color: #e03131;
+    color: #ff8787;
   }
 }
 
