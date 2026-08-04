@@ -470,16 +470,7 @@ dealStack();
 /* ===================== */
 /* COMPARISON TABLE      */
 /* ===================== */
-const tableRows = document.querySelectorAll(".comparison-table tbody tr");
-
-// tag every ✓ / ✕ span so CSS can color them
-document
-  .querySelectorAll(".comparison-table td span[aria-hidden]")
-  .forEach((mark) => {
-    const glyph = mark.textContent.trim();
-    if (glyph === "✓") mark.classList.add("mark-yes");
-    if (glyph === "✕") mark.classList.add("mark-no");
-  });
+const tableRows = document.querySelectorAll(".matrix-row");
 
 if (prefersReducedMotion || !("IntersectionObserver" in window)) {
   tableRows.forEach((row) => row.classList.add("row-in"));

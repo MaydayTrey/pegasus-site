@@ -1843,55 +1843,45 @@ body.menu-locked {
     inset 0 1.5px 1px rgba(255, 255, 255, 0.35);
 }
 
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse; /* merges double borders into single lines */
+/* ---- THE FEATURE MATRIX ----
+   A CSS grid instead of an HTML table: same semantics via ARIA table
+   roles, but the layout compresses to phone width with no horizontal
+   scrolling. Icon-led feature rows, boxed checks, quiet dashes. */
+.matrix {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
 }
 
-.comparison-table caption {
-  font-family: var(--font-display);
-  font-style: italic;
-  padding: var(--space-md);
-  color: whitesmoke;
-  text-shadow: 0 1px 4px rgba(11, 58, 94, 0.4);
+.matrix-header,
+.matrix-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) repeat(3, minmax(56px, 1fr));
+  align-items: center;
 }
 
 /* the header: etched into the glass, not a solid band */
-.comparison-table thead th {
-  background: none;
+.matrix-header {
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
+}
+
+.matrix-header span {
+  padding: var(--space-md) var(--space-sm);
   color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: var(--space-md);
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
+  text-align: center;
   text-shadow: 0 1px 3px rgba(11, 58, 94, 0.45);
 }
 
-.comparison-table th,
-.comparison-table td {
-  padding: var(--space-md);
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  color: whitesmoke;
-  text-shadow: 0 1px 3px rgba(11, 58, 94, 0.4);
+.matrix-header .mh-feature {
+  text-align: left;
 }
 
-/* fine vertical hairlines between columns, reference-style */
-.comparison-table th + th,
-.comparison-table td + td,
-.comparison-table th[scope="row"] + td {
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.comparison-table th[scope="row"] {
-  text-align: left; /* feature names read better left-aligned */
-  font-family: var(--font-body);
-}
-
-/* SCROLL REVEAL — rows start low + invisible, glide up when the
-   IntersectionObserver in script.js marks them in */
-.comparison-table tbody tr {
+/* feature rows: hairline separated, revealed on scroll */
+.matrix-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   opacity: 0;
   translate: 0 26px;
   transition:
@@ -1900,56 +1890,131 @@ body.menu-locked {
     background-color 0.4s ease;
 }
 
-.comparison-table tbody tr.row-in {
+.matrix-row:last-child {
+  border-bottom: none;
+}
+
+.matrix-row.row-in {
   opacity: 1;
   translate: 0 0;
 }
 
 /* THE FOCUSED ROW — the row in line with the scroll rises, brightens,
-   and its marks glow; as the scroll moves on it drifts back down */
-.comparison-table tbody tr.row-active {
-  translate: 0 -6px;
-  background: rgba(255, 255, 255, 0.14);
+   and its checks glow; as the scroll moves on it drifts back down */
+.matrix-row.row-active {
+  translate: 0 -4px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* the marks: green checks, red exes (classes added by script.js).
-   Muted at rest so the focused row's full colour visibly pops;
-   brightened a step to carry on the glass. */
-.mark-yes {
-  color: rgba(105, 219, 124, 0.78);
+/* the icon-led feature cell */
+.mx-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-sm);
+  min-width: 0;
+}
+
+.mx-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mx-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mx-name {
+  font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.15rem;
-  transition:
-    color 0.4s ease,
-    text-shadow 0.4s ease;
+  font-size: 0.95rem;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(11, 58, 94, 0.4);
 }
 
-.mark-no {
-  color: rgba(255, 135, 135, 0.78);
+.mx-desc {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(245, 245, 245, 0.75);
+}
+
+/* mark cells with the reference's fine column hairlines */
+.mx-cell {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* the boxed check, reference-style */
+.mark-box {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgba(105, 219, 124, 0.8);
+  border-radius: 6px;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.mark-box svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: rgba(105, 219, 124, 0.9);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.4s ease;
+}
+
+/* absent: a quiet dash, not an alarm */
+.mark-none {
+  color: rgba(245, 245, 245, 0.45);
   font-weight: 700;
-  font-size: 1.15rem;
-  transition:
-    color 0.4s ease,
-    text-shadow 0.4s ease;
+  font-size: 1.1rem;
 }
 
-.comparison-table tbody tr.row-active .mark-yes {
-  color: #69db7c;
-  text-shadow: 0 0 12px rgba(105, 219, 124, 0.9);
+/* numeric values (pages, revisions) as small chips */
+.mark-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #ffffff;
+  padding: 0.15em 0.7em;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.comparison-table tbody tr.row-active .mark-no {
-  color: #ff8787;
-  text-shadow: 0 0 12px rgba(255, 135, 135, 0.9);
+/* the focused row's checks light up */
+.matrix-row.row-active .mark-box {
+  border-color: #69db7c;
+  box-shadow: 0 0 12px rgba(105, 219, 124, 0.7);
 }
 
-/* reduced motion: no focus choreography, so marks stay full-strength */
+.matrix-row.row-active .mark-box svg {
+  stroke: #69db7c;
+}
+
+/* reduced motion: no focus choreography, checks stay full-strength */
 @media (prefers-reduced-motion: reduce) {
-  .mark-yes {
-    color: #69db7c;
+  .mark-box {
+    border-color: #69db7c;
   }
-  .mark-no {
-    color: #ff8787;
+  .mark-box svg {
+    stroke: #69db7c;
   }
 }
 
@@ -3516,16 +3581,48 @@ body.menu-locked {
     right: var(--space-md);
   }
 
-  /* --- COMPARISON TABLE: denser cells keep the scroll workable --- */
-  .comparison-table th,
-  .comparison-table td {
-    padding: 0.6rem 0.55rem;
+  /* --- FEATURE MATRIX: compresses to phone width, no side-scroll --- */
+  .matrix-header,
+  .matrix-row {
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(44px, 1fr));
+  }
+
+  .matrix-header span {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    padding: var(--space-sm) 2px;
+  }
+
+  .mx-feature {
+    gap: var(--space-sm);
+    padding: var(--space-sm) 4px;
+  }
+
+  .mx-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .mx-name {
     font-size: 0.85rem;
   }
 
-  .comparison-table thead th {
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
+  .mx-desc {
+    font-size: 0.72rem;
+  }
+
+  .mark-box {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mark-box svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .mark-num {
+    font-size: 0.9rem;
   }
 
   /* --- CARE PLAN: the cross scene shrinks to share the width --- */
@@ -3597,10 +3694,8 @@ body.menu-locked {
 
 /* the narrowest phones: one more density step */
 @media (max-width: 420px) {
-  .comparison-table th,
-  .comparison-table td {
-    padding: 0.5rem 0.4rem;
-    font-size: 0.78rem;
+  .mx-desc {
+    display: none; /* names + icons carry the row */
   }
 
   .who-eyebrow {
