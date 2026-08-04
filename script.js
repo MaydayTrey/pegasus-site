@@ -427,6 +427,9 @@ tiers.forEach((tier, i) => {
   tier.setAttribute("aria-expanded", "false");
 
   tier.addEventListener("click", () => {
+    // phones show the flat list with every detail visible — the
+    // stack choreography (and its 100vw expansion) stands down
+    if (window.innerWidth <= 700) return;
     if (tier.classList.contains("is-open")) return; // open card stays put
     // back cards come to the forefront first; the front card expands
     if (i !== frontIdx && !stackExpanded) setFront(i);

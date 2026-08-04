@@ -385,9 +385,16 @@ body.menu-locked {
 }
 
 /* hero content rides above the canvas (positioned elements would
-   otherwise paint under an absolutely-positioned sibling) */
-#hero > :not(.hero-vanta) {
+   otherwise paint under an absolutely-positioned sibling). The scroll
+   cue is excluded — the ID weight here would override the mobile
+   layer's position: absolute on it; grid items honour z-index
+   without needing a position anyway. */
+#hero > :not(.hero-vanta):not(.hero-scroll) {
   position: relative;
+  z-index: 1;
+}
+
+.hero-scroll {
   z-index: 1;
 }
 
@@ -2145,7 +2152,9 @@ body.menu-locked {
 /* --- the six reasons --- */
 .gi-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0,…): a bare 1fr inherits the widest item's min-content as
+     a floor, which inflated the whole page on phones */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-md);
   max-width: 1100px;
   margin: 0 auto var(--space-lg);
@@ -2154,7 +2163,7 @@ body.menu-locked {
 
 @media (min-width: 800px) {
   .gi-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -2199,6 +2208,13 @@ body.menu-locked {
 .gi-icon .icon-dot {
   fill: whitesmoke;
   stroke: none;
+}
+
+.gi-text {
+  /* flex items refuse to shrink below their content's min-width by
+     default — the search mock's nowrap text was inflating the page */
+  min-width: 0;
+  flex: 1;
 }
 
 .gi-text h3 {
@@ -2296,7 +2312,7 @@ body.menu-locked {
 /* --- lazy-loaded illustrations that scale up as they scroll in --- */
 .gi-gallery {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
   max-width: 1100px;
   margin: 0 auto;
@@ -2304,7 +2320,7 @@ body.menu-locked {
 
 @media (min-width: 800px) {
   .gi-gallery {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -3405,5 +3421,205 @@ body.menu-locked {
 
   .footer-wordmark {
     letter-spacing: 0.02em;
+  }
+}
+
+/* ============================================= */
+/* MOBILE LAYER — consolidated small-screen pass */
+/* (last in the sheet so it wins the cascade)    */
+/* ============================================= */
+/* --- HERO: the 12x12 grid only works when the headline holds two
+   lines; below 900px it wraps deeper and overflows its fixed row,
+   so the masthead flows as a column instead --- */
+@media (max-width: 900px) {
+  #hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-md);
+    height: 100svh; /* stable against mobile browser chrome */
+    padding: calc(var(--space-xl) + 48px) var(--space-lg) var(--space-xl);
+  }
+
+  .hero-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: var(--space-md);
+  }
+
+  .hero-kicker {
+    margin: 0;
+  }
+
+  #hero h1 {
+    font-size: clamp(2rem, 6.5vw, 3.6rem);
+  }
+
+  .hero-cta {
+    align-self: flex-start;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: var(--space-md);
+    left: 50%;
+    translate: -50% 0;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  /* --- HERO type at phone scale --- */
+  .hero-logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hero-logo span {
+    font-size: 1.05rem;
+  }
+
+  #hero h1 {
+    font-size: clamp(2rem, 9.5vw, 2.9rem);
+  }
+
+  #hero-description {
+    font-size: 1rem;
+  }
+
+  /* --- WHO WE ARE: svh instead of vh for mobile browser bars --- */
+  .who-wrap,
+  .who-panel {
+    min-height: 100svh;
+  }
+
+  /* --- BENTO: unpin. The sticky 300vh runway would strand phone
+     users on two screens of frozen stage --- */
+  .bento-wrap {
+    height: auto;
+  }
+
+  .bento-stage {
+    position: static;
+    height: auto;
+    min-height: 0;
+    align-content: start;
+  }
+
+  /* variable rail heights flatten into a uniform stack; nth-child(n)
+     keeps specificity level with the desktop height rules */
+  .bento-col--left .bento-item:nth-child(n) .about-card,
+  .bento-col--right .bento-item:nth-child(n) .about-card {
+    min-height: 180px;
+  }
+
+  /* --- ABOUT DIALOG: tighter padding, reachable close --- */
+  #dialog-content {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .dialog-close {
+    right: var(--space-md);
+  }
+
+  /* --- COMPARISON TABLE: denser cells keep the scroll workable --- */
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.6rem 0.55rem;
+    font-size: 0.85rem;
+  }
+
+  .comparison-table thead th {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* --- CARE PLAN: the cross scene shrinks to share the width --- */
+  .care-scene {
+    width: 190px;
+    height: 210px;
+  }
+
+  .care-cross {
+    width: 140px;
+    height: 140px;
+  }
+
+  .care-price-amount {
+    font-size: 2rem;
+  }
+
+  /* --- WEB PRESENCE: no need for the tall stage on phones --- */
+  #general-info {
+    min-height: 0;
+  }
+
+  .globe-stage {
+    width: 210px;
+  }
+
+  /* --- ROADMAP: labels legible at phone scale (SVG text shrinks
+     with the viewBox, so the units go up) --- */
+  .map-stage text {
+    font-size: 2.6rem;
+  }
+
+  #map-status {
+    font-size: 0.9rem;
+  }
+
+  /* --- CONTACT: panel breathes at phone width --- */
+  .contact-panel {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .contact-avatar {
+    width: 90px;
+    height: 90px;
+  }
+
+  .contact-photo {
+    max-width: 100%;
+  }
+
+  /* --- FOOTER: the nowrap wordmark overflowed narrow screens --- */
+  .footer-wordmark {
+    font-size: clamp(1.5rem, 11vw, 3rem);
+  }
+
+  .footer-kicker {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+
+  /* --- MENU: giant links sized for a phone column --- */
+  .menu-links a {
+    font-size: clamp(2rem, 9.5vw, 2.6rem);
+  }
+
+  .menu-close {
+    right: var(--space-lg);
+  }
+}
+
+/* the narrowest phones: one more density step */
+@media (max-width: 420px) {
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.78rem;
+  }
+
+  .who-eyebrow {
+    letter-spacing: 0.35em;
+  }
+
+  .tier-pills {
+    gap: var(--space-xs);
+  }
+
+  .tier-pill span {
+    padding: 0.55em 1.1em;
+    font-size: 0.9rem;
   }
 }
