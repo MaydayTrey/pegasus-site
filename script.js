@@ -78,22 +78,40 @@ if (menuToggle && siteMenu) {
       if (!target) return; // let the browser handle a bad href
       e.preventDefault();
       closeMenu();
-
-      target.scrollIntoView({ behavior: "instant", block: "start" });
-
-      if (!prefersReducedMotion) {
-        target.classList.remove("fade-arrive");
-        void target.offsetWidth; // restart the animation if re-visited
-        target.classList.add("fade-arrive");
-        target.addEventListener(
-          "animationend",
-          () => target.classList.remove("fade-arrive"),
-          { once: true },
-        );
-      }
+      arriveAt(target);
     });
   });
 }
+
+// jump instantly and fade the section in — shared by the menu links
+// and every in-page CTA
+function arriveAt(target) {
+  target.scrollIntoView({ behavior: "instant", block: "start" });
+  if (prefersReducedMotion) return;
+  target.classList.remove("fade-arrive");
+  void target.offsetWidth; // restart the animation if re-visited
+  target.classList.add("fade-arrive");
+  target.addEventListener(
+    "animationend",
+    () => target.classList.remove("fade-arrive"),
+    { once: true },
+  );
+}
+
+// every CTA inside the page (Start your climb, the tier buttons, …)
+// arrives the same way the menu does, instead of the long fast glide
+document.querySelectorAll('main a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (e) => {
+    const target = document.querySelector(link.getAttribute("href"));
+    if (!target) return;
+    e.preventDefault();
+    // don't let the click bubble to a tier card's own handler,
+    // which would re-expand the stack we're about to leave
+    e.stopPropagation();
+    if (typeof collapseTiers === "function") collapseTiers();
+    arriveAt(target);
+  });
+});
 
 /* ===================== */
 /* ABOUT CARDS + DIALOG  */
