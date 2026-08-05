@@ -161,9 +161,31 @@
             the panel itself starts off-screen and would never intersect.-->
         <div class="who-wrap" id="who-wrap">
           <div class="who-panel">
+            <!--annotation furniture: cog off the left edge, vertical
+                caption and crosshair on the right — they load first,
+                while the arrow stretches in-->
+            <svg class="who-cog" viewBox="0 0 100 100" aria-hidden="true">
+              <g class="cog-body">
+                <rect x="44" y="2" width="12" height="18" rx="2" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(45 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(90 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(135 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(180 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(225 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(270 50 50)" />
+                <rect x="44" y="2" width="12" height="18" rx="2" transform="rotate(315 50 50)" />
+                <circle cx="50" cy="50" r="28" />
+              </g>
+              <circle class="cog-hole" cx="50" cy="50" r="11" />
+            </svg>
+            <span class="who-vertical" aria-hidden="true">Web Development</span>
+            <span class="who-cross" aria-hidden="true"></span>
+
             <h2 id="about-us-heading" class="who-eyebrow">Who We Are</h2>
-            <!--three lines revealed top to bottom after the panel lands-->
             <p class="who-statement">
+              <!--the arrow stretches in from the right to point at the
+                  opening line; the bar rules the first lines-->
+              <span class="who-arrow" aria-hidden="true"></span>
               <span class="who-line">
                 We are a web development agency building websites with
                 personality and creativity,
@@ -171,6 +193,7 @@
               <span class="who-line">
                 that represents your business, driving sales and engagement.
               </span>
+              <span class="who-dots" aria-hidden="true"></span>
               <span class="who-line">Complex things made simple, for you.</span>
             </p>
           </div>

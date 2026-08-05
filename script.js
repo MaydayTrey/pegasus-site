@@ -142,6 +142,33 @@ dialog.addEventListener("click", (e) => {
 closeBtn.addEventListener("click", () => dialog.close());
 
 /* ===================== */
+/* WHO WE ARE — WORDS    */
+/* ===================== */
+// The statement's opening lines fill in a few words at a time once
+// the arrow lands (1.2s into the reveal). Each word gets its own
+// transition delay; the CSS wordless fallback is simply visible text.
+const whoStatement = document.querySelector(".who-statement");
+
+if (whoStatement) {
+  const lines = [...whoStatement.querySelectorAll(".who-line")];
+  let wordIndex = 0;
+  lines.forEach((line, i) => {
+    if (i >= lines.length - 1) return; // the closer arrives whole
+    const words = line.textContent.trim().split(/\s+/);
+    line.textContent = "";
+    words.forEach((word) => {
+      const s = document.createElement("span");
+      s.className = "who-word";
+      s.textContent = word;
+      s.style.transitionDelay = (1.2 + wordIndex * 0.055).toFixed(3) + "s";
+      line.appendChild(s);
+      line.appendChild(document.createTextNode(" "));
+      wordIndex++;
+    });
+  });
+}
+
+/* ===================== */
 /* BENTO CONSTELLATION   */
 /* ===================== */
 // A particle network behind the glass rails. It reacts to the mouse
