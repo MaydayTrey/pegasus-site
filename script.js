@@ -570,7 +570,9 @@ if (
   window.matchMedia("(hover: hover)").matches
 ) {
   document.querySelectorAll(".example figure").forEach((fig) => {
-    const img = fig.querySelector("img");
+    // tilt the media wrapper when the card has one (poster + hover video
+    // pitch together); cards without a wrapper still tilt their img
+    const img = fig.querySelector(".example-media") || fig.querySelector("img");
     gsap.set(img, {
       transformPerspective: 900,
       transformOrigin: "right center",
@@ -599,6 +601,36 @@ if (
     fig.addEventListener("mouseleave", () => {
       rotY(0);
       rotX(0);
+    });
+  });
+}
+
+/* ============================== */
+/* EXAMPLES — HOVER VIDEO PREVIEW */
+/* ============================== */
+// Poster at rest; hovering the card fades in the site-traversal video
+// and plays it. Leaving pauses mid-frame (not reset), so a returning
+// hover resumes the tour instead of restarting it. Hover-only devices
+// and reduced-motion users keep the still poster.
+if (
+  !prefersReducedMotion &&
+  window.matchMedia("(hover: hover)").matches
+) {
+  document.querySelectorAll(".example figure").forEach((fig) => {
+    const media = fig.querySelector(".example-media");
+    const video = fig.querySelector(".example-video");
+    if (!media || !video) return; // cards still on placeholders
+
+    fig.addEventListener("mouseenter", () => {
+      media.classList.add("is-playing");
+      // play() returns a promise; a rejected autoplay (rare when muted)
+      // must not surface as an unhandled error
+      video.play().catch(() => {});
+    });
+
+    fig.addEventListener("mouseleave", () => {
+      media.classList.remove("is-playing");
+      video.pause();
     });
   });
 }
@@ -1139,3 +1171,173 @@ function enhanceSelect(select) {
 
 document.querySelectorAll("#contact-form select").forEach(enhanceSelect);
 
+
+/* ===================== */
+/* BURGER TONE PROBE     */
+/* ===================== */
+// The hamburger is fixed over whatever scrolls beneath it. White bars
+// vanish on the near-white panels (WHO WE ARE), so: probe the element
+// stack under the button, find the first opaque background, and flip
+// to the brand blue when it's light. Same probe the HF home button
+// uses - measure reality, never hardcode section names.
+{
+  const toggle = document.getElementById("menu-toggle");
+  const overlay = document.getElementById("site-menu");
+
+  const lum = (r, g, b) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+  // How bright does this element's own paint read? Solid colors are
+  // easy; gradient surfaces (the who-panel, the menu) expose only a
+  // background-IMAGE, so we average the gradient's opaque color stops.
+  // null = this element paints nothing; keep probing down the stack.
+  function surfaceLuminance(el) {
+    const cs = getComputedStyle(el);
+    const solid = cs.backgroundColor.match(
+      /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/
+    );
+    if (solid && (solid[4] === undefined || parseFloat(solid[4]) >= 0.5)) {
+      return lum(+solid[1], +solid[2], +solid[3]);
+    }
+    const img = cs.backgroundImage;
+    if (img && img.includes("gradient")) {
+      const stops = [
+        ...img.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/g),
+      ].filter((s) => s[4] === undefined || parseFloat(s[4]) >= 0.5);
+      if (stops.length) {
+        return (
+          stops.reduce((a, s) => a + lum(+s[1], +s[2], +s[3]), 0) /
+          stops.length
+        );
+      }
+    }
+    return null;
+  }
+
+  function burgerTone() {
+    const r = toggle.getBoundingClientRect();
+    const stack = document.elementsFromPoint(
+      r.left + r.width / 2,
+      r.top + r.height / 2
+    );
+    let light = false;
+    for (const el of stack) {
+      // ignore the button itself and the (closed) menu overlay
+      if (el === toggle || toggle.contains(el)) continue;
+      if (el === overlay || overlay.contains(el)) continue;
+      const l = surfaceLuminance(el);
+      if (l === null) continue; // paints nothing - keep looking beneath
+      light = l > 0.65;
+      break; // first painted surface is the one we're actually on
+    }
+    toggle.classList.toggle("on-light", light);
+  }
+
+  addEventListener("scroll", burgerTone, { passive: true });
+  addEventListener("resize", burgerTone);
+  burgerTone();
+}
+
+/* ===================== */
+/* MAP GEOMETRY SWAP     */
+/* ===================== */
+// The desktop route lives in a wide 1000x620 space - on a portrait
+// phone that renders as a short letterbox with a sea of empty section
+// below. Phones get their own TALL serpentine (420x780) instead.
+// Everything else survives untouched: pathLength="1" normalizes any
+// path for the dashoffset reveal, and stages light by fraction.
+{
+  const svgMap = document.getElementById("treasure-map");
+  const paths = [
+    document.getElementById("map-progress"),
+    document.querySelector(".map-trail"),
+  ];
+  const xArms = document.querySelectorAll(".map-x path");
+  const stages = [...document.querySelectorAll(".map-stage")];
+
+  // per stage: circle anchor + strike half-width; label offsets are
+  // shared (+52 text, +43 strike) so both geometries read identically
+  const GEO = {
+    desktop: {
+      viewBox: "0 0 1000 620",
+      d: "M 90 100 C 300 20, 620 50, 770 150 C 920 250, 480 250, 240 310 C 40 362, 420 430, 690 440 C 850 446, 880 480, 880 540",
+      x: ["M 856 516 L 904 564", "M 904 516 L 856 564"],
+      anchors: [
+        { cx: 90, cy: 100, half: 75 },
+        { cx: 770, cy: 150, half: 55 },
+        { cx: 240, cy: 310, half: 45 },
+        { cx: 690, cy: 440, half: 55 },
+      ],
+      launch: { x: 880, y: 602 },
+    },
+    mobile: {
+      viewBox: "0 0 420 780",
+      d: "M 80 70 C 180 20, 320 40, 350 150 C 375 245, 160 215, 95 310 C 35 400, 300 390, 340 480 C 370 560, 320 610, 340 680",
+      x: ["M 316 656 L 364 704", "M 364 656 L 316 704"],
+      anchors: [
+        { cx: 80, cy: 70, half: 75 },
+        { cx: 350, cy: 150, half: 55 },
+        { cx: 95, cy: 310, half: 45 },
+        { cx: 340, cy: 480, half: 55 },
+      ],
+      launch: { x: 340, y: 742 },
+    },
+  };
+
+  function applyGeo(g) {
+    svgMap.setAttribute("viewBox", g.viewBox);
+    paths.forEach((p) => p.setAttribute("d", g.d));
+    xArms.forEach((arm, i) => arm.setAttribute("d", g.x[i]));
+    stages.forEach((stage, i) => {
+      const text = stage.querySelector("text");
+      if (i < g.anchors.length) {
+        const a = g.anchors[i];
+        const c = stage.querySelector("circle");
+        const line = stage.querySelector("line");
+        c.setAttribute("cx", a.cx);
+        c.setAttribute("cy", a.cy);
+        text.setAttribute("x", a.cx);
+        text.setAttribute("y", a.cy + 52);
+        line.setAttribute("x1", a.cx - a.half);
+        line.setAttribute("x2", a.cx + a.half);
+        line.setAttribute("y1", a.cy + 43);
+        line.setAttribute("y2", a.cy + 43);
+      } else {
+        // the Launch label under the X
+        text.setAttribute("x", g.launch.x);
+        text.setAttribute("y", g.launch.y);
+      }
+    });
+  }
+
+  const mapMq = matchMedia("(max-width: 700px)");
+  const applyMapGeo = () => applyGeo(mapMq.matches ? GEO.mobile : GEO.desktop);
+  mapMq.addEventListener("change", applyMapGeo);
+  applyMapGeo();
+}
+
+/* ===================== */
+/* HAMBURGER VV PIN      */
+/* ===================== */
+// On phones, collapsing browser chrome slides the LAYOUT viewport
+// (which position:fixed tracks) above the VISUAL viewport (what you
+// see) - the button rides up and its top bar clips. The
+// VisualViewport API reports that slip as offsetTop; adding it to the
+// resting offset keeps the button glued to the visible corner. On
+// desktop offsetTop is 0 and this is a no-op.
+{
+  const toggle = document.getElementById("menu-toggle");
+  const vv = window.visualViewport;
+  if (toggle && vv) {
+    const restingTop = parseFloat(getComputedStyle(toggle).top) || 16;
+    let raf = 0;
+    const pin = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        toggle.style.top = vv.offsetTop + restingTop + "px";
+      });
+    };
+    vv.addEventListener("resize", pin);
+    vv.addEventListener("scroll", pin);
+    pin();
+  }
+}
