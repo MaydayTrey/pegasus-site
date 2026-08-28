@@ -1,0 +1,11 @@
+# Pegasus Labs
+User-agent: *
+Allow: /
+# dev tooling that ships with the repo - nothing in here is a page
+Disallow: /node_modules/
+
+# NOTE: /thanks.html is deliberately NOT disallowed - it carries a
+# noindex meta, and crawlers can only honor noindex on pages they are
+# allowed to fetch.
+
+Sitemap: https://getpegasuslabs.com/sitemap.xml

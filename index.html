@@ -5,20 +5,21 @@
     The hero is immersive design, logo -->
   <head>
     <!--META SECTION-->
-    <title>Pegasus Labs</title>
+    <title>Pegasus Labs &mdash; Web Development in Cincinnati, Dayton &amp; Northern Kentucky</title>
     <meta charset="UTF-8" />
     <!--PRIMARY SEO-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business. "
+      content="Pegasus Labs serves Web Development services to the Cincinnati, Dayton, and Northern Kentucky region, elevating your online presence and boosting conversion to sales to generate greater revenue for your growing business."
     />
     <meta name="author" content="Pegasus Labs" />
     <meta name="theme-color" content="#149dff" />
-    <meta name="geo.region" content="US" />
-    <!--CANONICAL URL (SEO)-->
-    <link rel="canonical" href="https://getpegasuslabs.com" />
-    <!--TODO:  Make sitemap.xml.-->
+    <meta name="geo.region" content="US-OH" />
+    <meta name="geo.placename" content="Franklin, Ohio" />
+    <!--CANONICAL URL (SEO) - trailing slash everywhere: canonical, og:url,
+        sitemap, and schema must agree byte-for-byte-->
+    <link rel="canonical" href="https://getpegasuslabs.com/" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <!--OPEN GRAPH (SEO)-->
     <meta property="og:title" content="Pegasus Labs - Web Development" />
@@ -27,9 +28,19 @@
       content="Pegasus Labs assists you in creating an online presence, establishing your website or renovating your current, making secure, and mobile responsive website designs."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://getpegasuslabs.com" />
-    <!--TODO: Make Image which will show on OG link-->
-    <meta property="og:image" content="IMAGE TO SHOW" />
+    <meta property="og:site_name" content="Pegasus Labs" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://getpegasuslabs.com/" />
+    <meta property="og:image" content="https://getpegasuslabs.com/images/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pegasus Labs - Web Development" />
+    <meta
+      name="twitter:description"
+      content="Web development studio serving Cincinnati, Dayton & Northern Kentucky."
+    />
+    <meta name="twitter:image" content="https://getpegasuslabs.com/images/og-card.png" />
     <!--INDEXING/CRAWLERS (SEO)-->
     <meta name="robots" content="index, follow" />
     <!--JSON SEO-->
@@ -38,12 +49,15 @@
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "Pegasus Labs",
-        "url": "https://getpegasuslabs.com",
+        "description": "Web development studio building fast, secure, mobile-responsive websites for growing businesses.",
+        "url": "https://getpegasuslabs.com/",
+        "image": "https://getpegasuslabs.com/images/og-card.png",
         "telephone": "+1-513-399-4566",
-        "email": "hello@getpegasuslabs.com",
+        "email": "info@getpegasuslabs.com",
         "areaServed": [
           { "@type": "City", "name": "Cincinnati" },
-          { "@type": "City", "name": "Dayton" }
+          { "@type": "City", "name": "Dayton" },
+          { "@type": "AdministrativeArea", "name": "Northern Kentucky" }
         ],
         "address": {
           "@type": "PostalAddress",
@@ -55,7 +69,9 @@
     </script>
 
     <!--FAVICONS-->
-    <!--TODO: Create FavIcon-->
+    <link rel="icon" href="images/favicon-32.png" sizes="32x32" />
+    <link rel="icon" href="images/favicon-192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="images/favicon-180.png" />
     <!--EXTERNAL FILES-->
     <link rel="stylesheet" href="styles.css" />
     <script

@@ -47,6 +47,11 @@
 html {
   -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
   text-size-adjust: 100%;
+  /* clip on BODY alone doesn't reliably reach the viewport - with it
+     only there, the page could still pan ~8px sideways at widths with
+     a scrollbar (the 100vw full-bleed sections). Clip on html closes
+     the viewport itself. */
+  overflow-x: clip;
   /* nav links glide to their section instead of jump-cutting
      (the reduced-motion reset below overrides this to auto) */
   scroll-behavior: smooth;
