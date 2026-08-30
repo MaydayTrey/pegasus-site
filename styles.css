@@ -2269,6 +2269,49 @@ body.menu-locked {
   cursor: pointer;
 }
 
+/* client testimonial under the card: rides in from the left the first
+   time it enters the viewport (shared in-view observer) */
+.example-detail {
+  margin-top: var(--space-lg);
+  max-width: 58ch;
+  opacity: 0;
+  translate: -56px 0;
+  transition:
+    opacity 0.7s ease,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.example-detail.in-view {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .example-detail {
+    opacity: 1;
+    translate: 0 0;
+    transition: none;
+  }
+}
+
+.testimonial-stars {
+  color: hsl(42, 100%, 55%);
+  font-size: 1.15rem;
+  letter-spacing: 6px;
+}
+
+.testimonial {
+  border-left: 3px solid hsl(42, 100%, 55%);
+  padding-left: var(--space-md);
+  margin: var(--space-sm) 0;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.testimonial-source {
+  font-weight: 700;
+}
+
 /* live-site link in the card title: inherits the heading's look, gold
    underline as the affordance (the house link treatment) */
 .example figcaption h3 a {

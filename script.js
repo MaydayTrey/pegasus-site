@@ -739,7 +739,7 @@ if (prefersReducedMotion) {
 /* ===================== */
 // reason cards and illustrations fade/scale in as they arrive
 const revealTargets = document.querySelectorAll(
-  ".gi-item, .gi-shot, .services-intro, .tier-grid, .who-wrap",
+  ".gi-item, .gi-shot, .services-intro, .tier-grid, .who-wrap, .example-detail:not([hidden])",
 );
 
 if (prefersReducedMotion || !("IntersectionObserver" in window)) {
