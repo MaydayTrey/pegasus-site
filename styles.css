@@ -2230,9 +2230,67 @@ body.menu-locked {
 /*======================*/
 /* EXAMPLES OF OUR WORK */
 /*======================*/
+/* Split background: each client's half wears their own brand. Tokens
+   come straight from the two project handoffs. The Integrity surface
+   is NOT raw logo grey #88888A: their own contrast table forbids body
+   text on grey-900 (white would sit at ~3.5:1), so we borrow their
+   own overlay recipe (ink #231F20 at 55% over the grey), precomputed
+   to #504E50, where white body text clears AA at ~7:1. Red is an
+   accent color only, never text on the dark surface. */
 #examples {
+  --hf-deep-teal: #143f3a;
+  --int-surface: #504e50; /* ink 55% over logo grey #88888A */
+  --int-red: #ed1c24;
   padding: var(--space-xl) var(--space-lg);
   overflow: hidden;
+  position: relative; /* anchors the ghosted brand marks */
+  background: linear-gradient(
+    to right,
+    var(--hf-deep-teal) 0 50%,
+    var(--int-surface) 50% 100%
+  );
+  color: #fff;
+}
+
+/* ghosted brand marks, one per half, floating above the cards.
+   Positioned elements paint over static content, so the marks get
+   z-index 0 and the section's real content is lifted to 1 below. */
+.half-mark {
+  position: absolute;
+  top: clamp(60px, 8vw, 120px);
+  height: auto;
+  opacity: 0.14;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.half-mark--hf {
+  left: 25%;
+  translate: -50% 0;
+  width: clamp(180px, 20vw, 320px);
+}
+
+.half-mark--int {
+  left: 75%;
+  translate: -50% 0;
+  width: clamp(150px, 16vw, 260px);
+}
+
+/* content rides above the marks */
+#examples .section-kicker,
+#examples-heading,
+#examples .examples-grid {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 700px) {
+  /* the halves become stacked card panels on phones - the 25%/75%
+     anchors stop meaning anything, so the ghosts sit this one out */
+  .half-mark {
+    display: none;
+  }
 }
 
 /* joins the house style: Playfair, white, centred under its kicker */
@@ -2327,6 +2385,30 @@ body.menu-locked {
   color: hsl(42, 100%, 55%);
 }
 
+/* Integrity half: highlighted information wears THEIR red instead of
+   the pegasus gold - accents and glyphs only, text stays white.
+   These sit AFTER the base link rules on purpose: equal specificity
+   means file order decides, and the override must come last. */
+.example--down .testimonial-stars {
+  color: var(--int-red);
+}
+
+.example--down .testimonial {
+  border-left-color: var(--int-red);
+}
+
+.example--down figcaption h3 a {
+  border-bottom-color: var(--int-red);
+}
+
+.example--down figcaption h3 a:hover,
+.example--down figcaption h3 a:focus-visible {
+  /* red TEXT on the dark grey fails contrast (~2.6:1), so the hover
+     signal is the underline thickening, not a color swap */
+  color: #fff;
+  border-bottom-width: 4px;
+}
+
 /* The media wrapper is now the tilt target, so poster and hover video
    pitch together as one held-up panel. It has no size of its own - the
    img inside still defines the card's footprint. */
@@ -2414,18 +2496,24 @@ body.menu-locked {
   }
   .example {
     margin-bottom: var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
   }
   .example--up {
     grid-column: 1 / 5;
     grid-row: auto;
+    background: var(--hf-deep-teal);
   }
   .example--down {
     grid-column: 1 / 5;
     grid-row: auto;
+    background: var(--int-surface);
   }
 
   #examples {
     padding: 0;
+    /* stacked cards: a left/right split would cut through both cards,
+       so each card carries its own client's panel instead */
+    background: none;
   }
   .example figure {
     position: relative; /* anchor for the caption */
