@@ -1362,20 +1362,23 @@ if (
   gsap.matchMedia().add("(min-width: 701px)", () => {
     const shared = {
       trigger: "#examples",
-      start: "top 80%",
-      end: "center 45%",
+      // long runway: the climb plays from first sight of the section
+      // until its top nears the viewport top, so the two speeds are
+      // felt, not glimpsed
+      start: "top 90%",
+      end: "top 25%",
       scrub: 1, // slight smoothing so the columns glide, not snap
       invalidateOnRefresh: true,
     };
 
     gsap.fromTo(
       ".example--up",
-      { y: 90 },
+      { y: 160 },
       { y: 0, ease: "none", scrollTrigger: { ...shared } },
     );
     gsap.fromTo(
       ".example--down",
-      { y: 260 },
+      { y: 380 },
       { y: 0, ease: "none", scrollTrigger: { ...shared } },
     );
   });
