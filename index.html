@@ -1153,25 +1153,57 @@
 
           <li class="example example--down">
             <figure>
-              <picture>
-                <!-- <source srcset="PRIMARY.webp" type="image/webp" />
-                <source srcset="BACKUP.jpg" type="image/jpeg" /> ADD THESE WHEN DONE PLACEHOLDING -->
-                <img
-                  id="img2"
-                  src="images/clouds-background.jpg"
-                  alt="TODO: project screenshot"
-                />
-              </picture>
+              <div class="example-media">
+                <picture>
+                  <img
+                    id="img2"
+                    src="images/integrity-poster.jpg"
+                    alt="Integrity Restorations and Remodeling website landing page"
+                  />
+                </picture>
+                <!-- preload=none: the 9MB tour costs zero bytes until
+                     someone actually hovers - play() triggers the load -->
+                <video
+                  class="example-video"
+                  src="videos/integrity-passthrough.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  aria-hidden="true"
+                ></video>
+                <span class="hover-hint" aria-hidden="true">Hover over me</span>
+              </div>
               <figcaption>
-                <h3>Client Two</h3>
-                <p>What we built for them, one line.</p>
+                <h3>
+                  <a
+                    href="https://integrityrnr.com/"
+                    target="_blank"
+                    rel="noopener"
+                    >IntegrityRnR.com</a
+                  >
+                </h3>
+                <p>We brought craftsmanship and credibility to home remodeling with IntegrityRnR.com</p>
               </figcaption>
             </figure>
-            <!--Detail panel gets done on JS day.-->
-            <div class="example-detail" hidden>
-              <p class="testimonial">"Their review goes here."</p>
-              <p class="work-summary">What we did, in a paragraph.</p>
-            </div>
+            <figure class="example-detail">
+              <p class="testimonial-stars" role="img" aria-label="Five out of five stars">
+                &#9733;&#9733;&#9733;&#9733;&#9733;
+              </p>
+              <blockquote class="testimonial">
+                <p>
+                  Trey was fantastic to work with! I am extremely happy with
+                  the website he built! From beginning to the launch &#128640;
+                  of my website Trey was considerate, communication was great
+                  throughout, and his attention to detail is outstanding.
+                  Everyone I&rsquo;ve shown the website has been very
+                  impressed. Highly recommend!
+                </p>
+              </blockquote>
+              <figcaption class="testimonial-source">
+                Phil, Owner of Integrity Restorations and Remodeling LLC
+              </figcaption>
+            </figure>
           </li>
         </ul>
       </section>
