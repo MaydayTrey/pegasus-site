@@ -1341,3 +1341,42 @@ document.querySelectorAll("#contact-form select").forEach(enhanceSelect);
     pin();
   }
 }
+
+/* ===================== */
+/* PORTFOLIO PARALLAX    */
+/* ===================== */
+// The two client columns drift into their staggered resting places as
+// the section scrolls in: they START pulled toward each other (up
+// column low, down column high, visually near-level) and the scroll
+// scrubs them apart into the baked-in grid stagger. scrub ties
+// progress to the scrollbar, so it reads as parallax, not a played
+// animation. Desktop only (phones stack the cards), motion-safe only,
+// and only if both GSAP pieces actually loaded from the CDN.
+if (
+  typeof gsap !== "undefined" &&
+  typeof ScrollTrigger !== "undefined" &&
+  !prefersReducedMotion
+) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.matchMedia().add("(min-width: 701px)", () => {
+    const shared = {
+      trigger: "#examples",
+      start: "top 80%",
+      end: "center 45%",
+      scrub: 1, // slight smoothing so the columns glide, not snap
+      invalidateOnRefresh: true,
+    };
+
+    gsap.fromTo(
+      ".example--up",
+      { y: 110 },
+      { y: 0, ease: "none", scrollTrigger: { ...shared } },
+    );
+    gsap.fromTo(
+      ".example--down",
+      { y: -130 },
+      { y: 0, ease: "none", scrollTrigger: { ...shared } },
+    );
+  });
+}

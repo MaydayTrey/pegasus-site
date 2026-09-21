@@ -78,6 +78,10 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
       defer
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+      defer
+    ></script>
     <!--Vanta animated cloudscape for the hero (three.js r134 is the
         version Vanta targets); defer keeps execution order intact-->
     <script
@@ -1084,26 +1088,6 @@
       </section>
 
       <section id="examples" aria-labelledby="examples-heading" class="skyband">
-        <!-- each half's brand mark, ghosted into the background above
-             the cards - decorative, behind all content -->
-        <img
-          class="half-mark half-mark--hf"
-          src="images/hf-crest-white.png"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          width="1200"
-          height="889"
-        />
-        <img
-          class="half-mark half-mark--int"
-          src="images/integrity-shield.svg"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          width="219"
-          height="231"
-        />
         <p class="section-kicker">
           <span aria-hidden="true">&#10022;</span> The Portfolio
         </p>
@@ -1111,6 +1095,18 @@
 
         <ul class="examples-grid">
           <li class="example example--up">
+            <!-- brand ghost, anchored to THIS card: bottom = card top
+                 plus a fixed gap, so both halves' clearances are equal
+                 by construction -->
+            <img
+              class="half-mark half-mark--hf"
+              src="images/hf-crest-white.png"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width="1200"
+              height="889"
+            />
             <figure>
               <!-- media wrapper: the tilt target, and the anchor the
                    hover video stretches over. Poster <img> stays the
@@ -1172,6 +1168,15 @@
           </li>
 
           <li class="example example--down">
+            <img
+              class="half-mark half-mark--int"
+              src="images/integrity-shield.svg"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width="219"
+              height="231"
+            />
             <figure>
               <div class="example-media">
                 <picture>

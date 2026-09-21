@@ -2252,28 +2252,29 @@ body.menu-locked {
   color: #fff;
 }
 
-/* ghosted brand marks, one per half, floating above the cards.
-   Positioned elements paint over static content, so the marks get
-   z-index 0 and the section's real content is lifted to 1 below. */
+/* ghosted brand marks, anchored to their own card: bottom sits a
+   fixed gap above the card top, so both halves' clearances are equal
+   by construction, and the ghosts ride along with the parallax. */
+.example {
+  position: relative;
+}
+
 .half-mark {
   position: absolute;
-  top: clamp(60px, 8vw, 120px);
+  bottom: calc(100% + 48px); /* the equal-clearance knob */
+  left: 50%;
+  translate: -50% 0;
   height: auto;
   opacity: 0.14;
-  z-index: 0;
   pointer-events: none;
   user-select: none;
 }
 
 .half-mark--hf {
-  left: 25%;
-  translate: -50% 0;
   width: clamp(180px, 20vw, 320px);
 }
 
 .half-mark--int {
-  left: 75%;
-  translate: -50% 0;
   width: clamp(150px, 16vw, 260px);
 }
 
@@ -2286,8 +2287,8 @@ body.menu-locked {
 }
 
 @media (max-width: 700px) {
-  /* the halves become stacked card panels on phones - the 25%/75%
-     anchors stop meaning anything, so the ghosts sit this one out */
+  /* the halves become stacked card panels on phones; the ghosts and
+     the desktop headroom sit this one out */
   .half-mark {
     display: none;
   }
@@ -2310,7 +2311,16 @@ body.menu-locked {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-xl) var(--space-lg);
+  /* headroom for the brand ghosts: tallest mark (~274px) + the 48px
+     clearance must fit between the heading and the first card */
+  padding-top: clamp(260px, 24vw, 340px);
   align-items: start; /* generally centered, per your read of the reference */
+}
+
+@media (max-width: 700px) {
+  .examples-grid {
+    padding-top: var(--space-xl); /* no ghosts, no headroom needed */
+  }
 }
 
 /* the subtle stagger — one slightly up, one slightly down */
