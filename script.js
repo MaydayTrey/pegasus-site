@@ -1404,19 +1404,19 @@ if (
             immediateRender: true,
           },
         );
-        // onToggle covers every way in: the first scroll down, a
-        // reload that lands between start and end, and a scroll back
-        // UP into the section after a reload below it (plain onEnter
-        // would leave those pieces hidden). Leaving upward hides it
-        // again; leaving downward keeps it.
+        // the state follows the SCROLL, not the event: past the start
+        // the piece is up, before it the piece is down. Run on every
+        // toggle AND every refresh, so a reload that lands anywhere, a
+        // scroll back up after one, or a refresh after late layout
+        // always settles it right and never leaves a piece hidden.
+        const settle = (self) =>
+          self.scroll() >= self.start ? rise.play() : rise.reverse();
         ScrollTrigger.create({
           trigger: piece,
           start: gate(piece),
           invalidateOnRefresh: true,
-          onToggle: (self) => {
-            if (self.isActive) rise.play();
-            else if (self.direction < 0) rise.reverse();
-          },
+          onToggle: settle,
+          onRefresh: settle,
         });
       });
     });
@@ -1472,13 +1472,22 @@ if (
     // a sticky element measured mid-page reports wherever it is stuck,
     // not where it lives. Active from the stage top reaching 60% until
     // the card has fully covered it, 1.6 viewports of scroll later.
+    const settleWave = (self) => self.scroll() >= self.start && wave.play();
     ScrollTrigger.create({
       trigger: stage.parentElement,
       start: "top 60%",
       end: () => "+=" + window.innerHeight * 1.6,
       invalidateOnRefresh: true,
-      onToggle: (self) => self.isActive && wave.play(),
+      onToggle: settleWave,
+      onRefresh: settleWave,
     });
+
+    // late layout moves everything below it: the fonts swap in after
+    // first paint and re-wrap the sections above, so measure again
+    // once they have landed
+    if (document.fonts) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
 
     gsap.matchMedia().add("(min-width: 701px)", () => {
       // the cover runs from the card's top entering at the bottom of
