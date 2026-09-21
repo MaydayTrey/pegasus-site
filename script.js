@@ -569,10 +569,10 @@ if (
   !prefersReducedMotion &&
   window.matchMedia("(hover: hover)").matches
 ) {
-  document.querySelectorAll(".example figure").forEach((fig) => {
-    // tilt the media wrapper when the card has one (poster + hover video
-    // pitch together); cards without a wrapper still tilt their img
-    const img = fig.querySelector(".example-media") || fig.querySelector("img");
+  document.querySelectorAll(".example-media").forEach((img) => {
+    // the media wrapper is the hover zone AND the tilt target: poster
+    // and hover video pitch together, and the caption under it is
+    // plain text, not part of the card
     gsap.set(img, {
       transformPerspective: 900,
       transformOrigin: "right center",
@@ -588,8 +588,8 @@ if (
       ease: "power3.out",
     });
 
-    fig.addEventListener("mousemove", (e) => {
-      const r = fig.getBoundingClientRect();
+    img.addEventListener("mousemove", (e) => {
+      const r = img.getBoundingClientRect();
       const nx = (e.clientX - r.left) / r.width; // 0 (left) .. 1 (right)
       const ny = (e.clientY - r.top) / r.height; // 0 (top)  .. 1 (bottom)
       // negative rotationY recedes the left edge (top-left shrinks);
@@ -598,7 +598,7 @@ if (
       rotX((0.5 - ny) * 8);
     });
 
-    fig.addEventListener("mouseleave", () => {
+    img.addEventListener("mouseleave", () => {
       rotY(0);
       rotX(0);
     });
@@ -616,19 +616,18 @@ if (
   !prefersReducedMotion &&
   window.matchMedia("(hover: hover)").matches
 ) {
-  document.querySelectorAll(".example figure").forEach((fig) => {
-    const media = fig.querySelector(".example-media");
-    const video = fig.querySelector(".example-video");
-    if (!media || !video) return; // cards still on placeholders
+  document.querySelectorAll(".example-media").forEach((media) => {
+    const video = media.querySelector(".example-video");
+    if (!video) return; // cards still on placeholders
 
-    fig.addEventListener("mouseenter", () => {
+    media.addEventListener("mouseenter", () => {
       media.classList.add("is-playing");
       // play() returns a promise; a rejected autoplay (rare when muted)
       // must not surface as an unhandled error
       video.play().catch(() => {});
     });
 
-    fig.addEventListener("mouseleave", () => {
+    media.addEventListener("mouseleave", () => {
       media.classList.remove("is-playing");
       video.pause();
     });
@@ -739,7 +738,7 @@ if (prefersReducedMotion) {
 /* ===================== */
 // reason cards and illustrations fade/scale in as they arrive
 const revealTargets = document.querySelectorAll(
-  ".gi-item, .gi-shot, .services-intro, .tier-grid, .who-wrap, .example-detail:not([hidden])",
+  ".gi-item, .gi-shot, .services-intro, .tier-grid, .who-wrap, .example-detail:not([hidden]), .addon",
 );
 
 if (prefersReducedMotion || !("IntersectionObserver" in window)) {
@@ -1343,15 +1342,17 @@ document.querySelectorAll("#contact-form select").forEach(enhanceSelect);
 }
 
 /* ===================== */
-/* PORTFOLIO PARALLAX    */
+/* PORTFOLIO PIECES      */
 /* ===================== */
-// Both client columns RISE into their staggered resting places as the
-// section scrolls in: each starts pushed below its home, the right
-// column from deeper, so it trails the left on the way up - two
-// speeds, one direction, locking into the grid's baked-in stagger.
-// scrub ties progress to the scrollbar, so it reads as parallax, not
-// a played animation. Desktop only (phones stack the cards),
-// motion-safe only, and guarded against a failed CDN load.
+// The card slides up with its background, heading and ghost marks
+// already on it. What animates in afterwards, per column, is the
+// framed site and then the owner's words: each rises and fades in
+// when it enters the viewport, but never before the card has (nearly)
+// landed, so nothing moves while the card itself is still sliding.
+// Played, not scrubbed, so a piece is never left half-risen when the
+// reader pauses. Desktop only (phones stack the cards and slide the
+// testimonials in via the observer), motion-safe only, and guarded
+// against a failed CDN load.
 if (
   typeof gsap !== "undefined" &&
   typeof ScrollTrigger !== "undefined" &&
@@ -1360,26 +1361,157 @@ if (
   gsap.registerPlugin(ScrollTrigger);
 
   gsap.matchMedia().add("(min-width: 701px)", () => {
-    const shared = {
-      trigger: "#examples",
-      // long runway: the climb plays from first sight of the section
-      // until its top nears the viewport top, so the two speeds are
-      // felt, not glimpsed
-      start: "top 90%",
-      end: "top 25%",
-      scrub: 1, // slight smoothing so the columns glide, not snap
-      invalidateOnRefresh: true,
+    const card = document.querySelector("#examples");
+    if (!card) return;
+
+    // a piece's trigger point is the LATER of "piece enters at 85%"
+    // and "card top reaches 15%": the gate that holds everything until
+    // the cover is all but done. Positions are read untransformed (the
+    // piece's own y offset would otherwise shift its start).
+    const gate = (piece) => () => {
+      const vh = window.innerHeight;
+      const top = (el) =>
+        el.getBoundingClientRect().top +
+        window.scrollY -
+        (parseFloat(gsap.getProperty(el, "y")) || 0);
+      return Math.max(top(piece) - vh * 0.85, top(card) - vh * 0.15);
     };
 
-    gsap.fromTo(
-      ".example--up",
-      { y: 160 },
-      { y: 0, ease: "none", scrollTrigger: { ...shared } },
-    );
-    gsap.fromTo(
-      ".example--down",
-      { y: 380 },
-      { y: 0, ease: "none", scrollTrigger: { ...shared } },
-    );
+    document.querySelectorAll(".example").forEach((column, c) => {
+      [
+        [column.querySelector("figure:not(.example-detail)"), 0],
+        [column.querySelector(".example-detail"), 0.25],
+      ].forEach(([piece, lead]) => {
+        if (!piece) return;
+        // a standalone paused tween driven by trigger callbacks: an
+        // animation ATTACHED to a toggle trigger is reverted on every
+        // ScrollTrigger refresh, so the piece sat fully visible until
+        // its trigger fired, then blinked out and rose. Standalone, the
+        // hidden start state is applied once and survives refreshes.
+        const rise = gsap.fromTo(
+          piece,
+          { y: 70, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            // when pieces fire together (a tall screen, a menu jump),
+            // the words follow their site and the right column follows
+            // the left
+            delay: lead + c * 0.15,
+            paused: true,
+            immediateRender: true,
+          },
+        );
+        // onToggle covers every way in: the first scroll down, a
+        // reload that lands between start and end, and a scroll back
+        // UP into the section after a reload below it (plain onEnter
+        // would leave those pieces hidden). Leaving upward hides it
+        // again; leaving downward keeps it.
+        ScrollTrigger.create({
+          trigger: piece,
+          start: gate(piece),
+          invalidateOnRefresh: true,
+          onToggle: (self) => {
+            if (self.isActive) rise.play();
+            else if (self.direction < 0) rise.reverse();
+          },
+        });
+      });
+    });
   });
+}
+
+/* ===================== */
+/* EXAMPLES COVER        */
+/* ===================== */
+// The portfolio opens on one screen of the word EXAMPLES. The letters
+// wave in as the stage arrives. The stage is CSS-sticky inside its
+// wrapper (styles.css, .ex-cover), so once it fills the viewport it
+// holds while the portfolio section, next in flow, scrolls up over it
+// like a card, background, heading and ghost marks already on it. What
+// this script adds under the card is the drift and the veil, both
+// scrubbed to the card's climb. Desktop only (phones stack the cards
+// on their own panels), motion-safe, and guarded against a failed CDN
+// load.
+if (
+  typeof gsap !== "undefined" &&
+  typeof ScrollTrigger !== "undefined" &&
+  !prefersReducedMotion
+) {
+  const stage = document.querySelector("#examples-title");
+  const card = document.querySelector("#examples");
+
+  if (stage && card) {
+    // the word: a left-first wave, played ONCE when the stage first
+    // comes into view. A standalone paused tween driven by a trigger
+    // callback: an animation ATTACHED to a toggle trigger is reverted
+    // on every ScrollTrigger refresh, so the letters sat visible until
+    // the trigger fired, then blinked out and re-rose (the jump).
+    // Standalone, the hidden start state is applied once and survives.
+    // No rewind on the way back up either.
+    const wave = gsap.fromTo(
+      stage.querySelectorAll(".ex-letter"),
+      { yPercent: 70, opacity: 0 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.9,
+        ease: "power3.out",
+        stagger: 0.07,
+        paused: true,
+        immediateRender: true,
+      },
+    );
+    // onToggle rather than onEnter: a page reloaded BELOW the stage
+    // never "enters" it, it comes back up into it, and onEnter would
+    // leave the word hidden. play() on a finished tween is a no-op, so
+    // it can never replay. No rewind either.
+    // The trigger is the WRAPPER, not the stage: the stage is sticky, and
+    // a sticky element measured mid-page reports wherever it is stuck,
+    // not where it lives. Active from the stage top reaching 60% until
+    // the card has fully covered it, 1.6 viewports of scroll later.
+    ScrollTrigger.create({
+      trigger: stage.parentElement,
+      start: "top 60%",
+      end: () => "+=" + window.innerHeight * 1.6,
+      invalidateOnRefresh: true,
+      onToggle: (self) => self.isActive && wave.play(),
+    });
+
+    gsap.matchMedia().add("(min-width: 701px)", () => {
+      // the cover runs from the card's top entering at the bottom of
+      // the viewport until it reaches the top: one viewport of scroll
+      const cover = {
+        trigger: card,
+        start: "top bottom",
+        end: "top top",
+        scrub: true,
+        invalidateOnRefresh: true,
+      };
+
+      // the depth: the word drifts up a little under the card, the way
+      // the layer under a card stack falls away, while the veil dims it.
+      // A lift only: scaling live text re-rasterises it mid-scroll and
+      // the glyphs visibly pop
+      gsap.fromTo(
+        ".ex-stage-inner",
+        { y: 0 },
+        { y: -50, ease: "none", scrollTrigger: { ...cover } },
+      );
+
+      // the veil over the word
+      gsap.fromTo(
+        stage,
+        { "--dim": 0 },
+        {
+          "--dim": 0.62,
+          ease: "none",
+          immediateRender: false,
+          scrollTrigger: { ...cover },
+        },
+      );
+    });
+  }
 }

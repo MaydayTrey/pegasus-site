@@ -125,10 +125,6 @@ section {
   min-height: 100vh;
 }
 
-.skyband {
-  border: 2px solid white;
-}
-
 /* ================= */
 /* SECTIONS DESIGNED */
 /* ================= */
@@ -622,6 +618,111 @@ body.menu-locked {
   100% {
     scale: 1 0;
     transform-origin: bottom;
+  }
+}
+
+/* FOLLOW BAND — a strip under the hero, as on the Integrity site: two
+   phrases, each with its link set as a pill with the network's mark,
+   and a hairline between them on wide screens. White ground, so it
+   reads as a fixture rather than another sky section (the hamburger's
+   tone probe reads the white and flips its bars on its own). */
+.follow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 26px var(--space-lg);
+  background: #fff;
+  border-top: 1px solid rgba(11, 58, 94, 0.18);
+  border-bottom: 1px solid rgba(11, 58, 94, 0.18);
+  color: #1f1e1d;
+}
+
+.follow__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+.follow__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px 9px 14px;
+  font-weight: 700;
+  color: #1f1e1d;
+  background: #fff;
+  border: 2px solid rgba(11, 58, 94, 0.2);
+  border-radius: 999px; /* a pill: reads as a button, not a word */
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    translate 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* hover: the brand blue takes the ring, the ink deepens to the site's
+   navy (the light blue itself is too faint as text on white) */
+.follow__link:hover,
+.follow__link:focus-visible {
+  border-color: var(--primary-color);
+  color: #0b3a5e;
+  translate: 0 -2px;
+  box-shadow: 0 8px 18px rgba(0, 20, 45, 0.16);
+}
+
+.follow__icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+}
+
+@media (min-width: 768px) {
+  /* two equal halves, so the hairline between the phrases stands on
+     the page's centre line */
+  .follow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+  }
+
+  .follow__item {
+    font-size: 16px;
+    padding: 38px 24px;
+    justify-content: center; /* each phrase centred in its own half */
+  }
+
+  .follow__item + .follow__item {
+    border-left: 1px solid rgba(11, 58, 94, 0.18); /* full height, line to line */
+  }
+
+  .follow__icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* the smallest phones: keep each phrase on one line */
+@media (max-width: 359px) {
+  .follow__item {
+    font-size: 13px;
+    gap: 7px;
+    white-space: nowrap;
+  }
+
+  .follow__link {
+    gap: 6px;
+    padding: 7px 11px 7px 9px;
+  }
+
+  .follow__icon {
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -1431,11 +1532,6 @@ body.menu-locked {
   margin-bottom: var(--space-sm);
 }
 
-.section-kicker span {
-  color: hsl(42, 100%, 55%);
-  font-size: 0.8rem;
-}
-
 /* left-aligned variant for intros that aren't centred */
 .section-kicker--start,
 .care-copy .section-kicker {
@@ -2207,6 +2303,22 @@ body.menu-locked {
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* the add-on chip: available on this tier for a flat price. Sunlight
+   gold marks it as a line item, not a missing feature. */
+.mark-add {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(42, 100%, 62%);
+  padding: 0.35em 0.7em;
+  border: 1px solid hsla(42, 100%, 62%, 0.55);
+  border-radius: 20px;
+  background: hsla(42, 100%, 62%, 0.1);
+  white-space: nowrap;
+}
+
 /* the focused row's checks light up */
 .matrix-row.row-active .mark-box {
   border-color: #69db7c;
@@ -2227,6 +2339,139 @@ body.menu-locked {
   }
 }
 
+/* ============================ */
+/* ADD-ONS & RETAINERS          */
+/* ============================ */
+/* The line items: a price sheet, not a stage. Same editorial
+   furniture as the services spread (hairline rules, gold numerals,
+   column rules), laid out two-up so four items read as one page. */
+#add-ons {
+  min-height: 0; /* a sheet, not a full-screen stage */
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.addons-inner {
+  width: 100%;
+  max-width: 1050px;
+  text-align: center;
+  color: whitesmoke;
+}
+
+#add-ons-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+  margin-bottom: var(--space-md);
+}
+
+.addons-lede {
+  max-width: 58ch;
+  margin: 0 auto var(--space-lg);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.addons-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  text-align: left;
+}
+
+@media (min-width: 800px) {
+  .addons-list {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg) var(--space-xl);
+  }
+
+  /* the magazine column rule, on the right-hand items */
+  .addon:nth-child(even) {
+    border-left: 1px solid rgba(255, 255, 255, 0.45);
+    padding-left: var(--space-xl);
+  }
+}
+
+/* each item fades up on arrival (shared in-view observer) */
+.addon {
+  opacity: 0;
+  translate: 0 24px;
+  transition:
+    opacity 0.8s ease,
+    translate 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.addon.in-view {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* the right-hand column lands a beat behind the left */
+.addon:nth-child(even).in-view {
+  transition-delay: 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addon {
+    opacity: 1;
+    translate: 0 0;
+    transition: none;
+  }
+}
+
+.addon h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+/* the price, in the care plan's sunlight gold. min-height keeps the
+   body copy on one baseline whether the line is a numeral or words */
+.addon-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  min-height: 2.5rem;
+  color: hsl(42, 100%, 60%);
+  margin: var(--space-xs) 0 var(--space-sm);
+}
+
+.addon-price span {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  color: #dfe9f2;
+}
+
+/* "Quoted flat" is words, not a numeral, so it sits smaller */
+.addon-price--quote {
+  font-size: 1.4rem;
+  padding-top: 0.3em;
+}
+
+.addon-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.addons-note {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 1.2vw + 0.5rem, 1.4rem);
+}
+
 /*======================*/
 /* EXAMPLES OF OUR WORK */
 /*======================*/
@@ -2237,6 +2482,80 @@ body.menu-locked {
    own overlay recipe (ink #231F20 at 55% over the grey), precomputed
    to #504E50, where white body text clears AA at ~7:1. Red is an
    accent color only, never text on the dark surface. */
+/* ---- THE COVER ----
+   The title stage is STICKY at the top of this wrapper, so once it
+   fills the viewport it holds while the card (#examples), next in
+   flow, scrolls up over it: the Integrity FAQ cover, in CSS. Sticky
+   can't leave its containing block, so the stage is released with the
+   wrapper once the card has passed, and there is nothing for script.js
+   to pin, refresh or unpin. The wrapper isolates the two z-indexes. */
+.ex-cover {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ---- THE TITLE STAGE: one screen of the word, under the card ---- */
+#examples-title {
+  position: sticky;
+  top: 0;
+  z-index: 1; /* the card (#examples) paints over it */
+  height: 100vh; /* exactly one screen */
+  display: grid;
+  place-content: center;
+  gap: var(--space-md);
+  text-align: center;
+  padding: var(--space-xl) var(--space-lg);
+  overflow: hidden;
+}
+
+/* the veil: an ink overlay that comes over the whole stage as the card
+   covers it, the Integrity FAQ's grey veil in this site's navy
+   (script.js drives --dim from 0 to 0.62 through the cover) */
+#examples-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #06111f;
+  opacity: var(--dim, 0);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #examples-title {
+    position: relative; /* no cover: the stage just scrolls by */
+  }
+}
+
+.ex-word {
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 15vw, 16rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: whitesmoke;
+  text-shadow: 0 12px 40px rgba(0, 30, 60, 0.25);
+}
+
+/* each letter is its own box so script.js can wave them in; visible by
+   default, so a failed script still shows the word */
+.ex-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* the block that recedes under the card: script.js shrinks and lifts
+   it through the cover, the way the layer under a card stack falls away */
+.ex-stage-inner {
+  display: grid;
+  gap: var(--space-md);
+  will-change: transform;
+}
+
+/* ---- THE CARD: one section, split down the middle into the two
+   clients' brands, that slides up over the pinned title stage ---- */
 #examples {
   --hf-deep-teal: #143f3a;
   --int-surface: #504e50; /* ink 55% over logo grey #88888A */
@@ -2244,11 +2563,17 @@ body.menu-locked {
   padding: var(--space-xl) var(--space-lg);
   overflow: hidden;
   position: relative; /* anchors the ghosted brand marks */
+  z-index: 2; /* over the pinned title stage */
+  isolation: isolate;
   background: linear-gradient(
     to right,
     var(--hf-deep-teal) 0 50%,
     var(--int-surface) 50% 100%
   );
+  /* a card's top corners, as on the Integrity FAQ: the veiled stage
+     shows in the cutouts. No hairline and no cast shadow: the depth
+     comes from the veil darkening the stage underneath */
+  border-radius: 28px 28px 0 0;
   color: #fff;
 }
 
@@ -2278,10 +2603,8 @@ body.menu-locked {
   width: clamp(150px, 16vw, 260px);
 }
 
-/* content rides above the marks */
-#examples .section-kicker,
-#examples-heading,
-#examples .examples-grid {
+/* content rides above the ghost marks */
+.ex-content {
   position: relative;
   z-index: 1;
 }
@@ -2301,6 +2624,24 @@ body.menu-locked {
   text-align: center;
   color: whitesmoke;
   font-size: clamp(2rem, 3vw + 1rem, 3rem);
+}
+
+/* the second half of the headline carries the sunlight, like the hero */
+.examples-accent {
+  color: hsl(42, 100%, 55%);
+  font-style: italic;
+}
+
+/* the deck under it, in the services sub-line's italic */
+.examples-deck {
+  max-width: 52ch;
+  margin: var(--space-sm) auto 0;
+  text-align: center;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1rem, 1vw + 0.6rem, 1.3rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .examples-grid {
@@ -2334,7 +2675,6 @@ body.menu-locked {
 .example figure {
   overflow: hidden; /* so the zoom is clipped to the frame */
   perspective: 1500px; /* enables the 3D tilt */
-  cursor: pointer;
 }
 
 /* client testimonial under the card: rides in from the left the first
@@ -2342,16 +2682,24 @@ body.menu-locked {
 .example-detail {
   margin-top: var(--space-lg);
   max-width: 58ch;
-  opacity: 0;
-  translate: -56px 0;
-  transition:
-    opacity 0.7s ease,
-    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.example-detail.in-view {
-  opacity: 1;
-  translate: 0 0;
+/* phones: the testimonial rides in from the left via the shared
+   observer. Desktop gets NO CSS start state: script.js brings it up
+   with the rest of its column, and two systems on one element fight. */
+@media (max-width: 700px) {
+  .example-detail {
+    opacity: 0;
+    translate: -56px 0;
+    transition:
+      opacity 0.7s ease,
+      translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .example-detail.in-view {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2413,10 +2761,10 @@ body.menu-locked {
 
 .example--down figcaption h3 a:hover,
 .example--down figcaption h3 a:focus-visible {
-  /* red TEXT on the dark grey fails contrast (~2.6:1), so the hover
-     signal is the underline thickening, not a color swap */
-  color: #fff;
-  border-bottom-width: 4px;
+  /* the HF card's treatment in Integrity's red: the fill goes brand,
+     the underline stays put. (Red on the dark grey reads ~2.6:1; it's
+     a hover state, the resting white link is the one that must pass.) */
+  color: var(--int-red);
 }
 
 /* The media wrapper is now the tilt target, so poster and hover video
@@ -2426,6 +2774,7 @@ body.menu-locked {
   position: relative;
   transform-origin: right center;
   will-change: transform;
+  cursor: pointer; /* the card is the hover target; the caption under it is plain text */
 }
 
 .example-video {
@@ -2470,7 +2819,7 @@ body.menu-locked {
   }
 
   /* the moment the invitation is accepted, it bows out */
-  .example figure:hover .hover-hint {
+  .example-media:hover .hover-hint {
     opacity: 0;
     animation: none;
   }
@@ -2522,11 +2871,21 @@ body.menu-locked {
     background: var(--int-surface);
   }
 
+  /* stacked cards: a left/right split would cut through both cards,
+     so each card carries its own client's panel instead. No card edge
+     or shadow either: phones don't run the cover */
   #examples {
     padding: 0;
-    /* stacked cards: a left/right split would cut through both cards,
-       so each card carries its own client's panel instead */
     background: none;
+    border-radius: 0;
+  }
+
+  /* the word alone doesn't need a whole phone screen, and phones
+     don't run the cover: the stage just scrolls by */
+  #examples-title {
+    position: relative;
+    height: auto;
+    min-height: 60svh;
   }
   .example figure {
     position: relative; /* anchor for the caption */
@@ -4122,6 +4481,12 @@ body.menu-locked {
 
   .mark-num {
     font-size: 0.9rem;
+  }
+
+  .mark-add {
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+    padding: 0.3em 0.5em;
   }
 
   /* --- CARE PLAN: the cross scene shrinks to share the width --- */
