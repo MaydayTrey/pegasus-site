@@ -1345,13 +1345,13 @@ document.querySelectorAll("#contact-form select").forEach(enhanceSelect);
 /* ===================== */
 /* PORTFOLIO PARALLAX    */
 /* ===================== */
-// The two client columns drift into their staggered resting places as
-// the section scrolls in: they START pulled toward each other (up
-// column low, down column high, visually near-level) and the scroll
-// scrubs them apart into the baked-in grid stagger. scrub ties
-// progress to the scrollbar, so it reads as parallax, not a played
-// animation. Desktop only (phones stack the cards), motion-safe only,
-// and only if both GSAP pieces actually loaded from the CDN.
+// Both client columns RISE into their staggered resting places as the
+// section scrolls in: each starts pushed below its home, the right
+// column from deeper, so it trails the left on the way up - two
+// speeds, one direction, locking into the grid's baked-in stagger.
+// scrub ties progress to the scrollbar, so it reads as parallax, not
+// a played animation. Desktop only (phones stack the cards),
+// motion-safe only, and guarded against a failed CDN load.
 if (
   typeof gsap !== "undefined" &&
   typeof ScrollTrigger !== "undefined" &&
@@ -1370,12 +1370,12 @@ if (
 
     gsap.fromTo(
       ".example--up",
-      { y: 110 },
+      { y: 90 },
       { y: 0, ease: "none", scrollTrigger: { ...shared } },
     );
     gsap.fromTo(
       ".example--down",
-      { y: -130 },
+      { y: 260 },
       { y: 0, ease: "none", scrollTrigger: { ...shared } },
     );
   });

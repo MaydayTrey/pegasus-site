@@ -2481,7 +2481,10 @@ body.menu-locked {
   50% { opacity: 1; }
 }
 
-.example img {
+/* scoped to the POSTER inside the media wrapper - a blanket
+   .example img once swallowed the brand ghosts too and blew them up
+   into full-column 16:10 crops */
+.example .example-media img {
   width: 100%;
   /* frame matches the 1280x800 screenshots' shape, so nothing crops -
      a fixed 500px height forced cover to amputate the sides */
@@ -2532,7 +2535,7 @@ body.menu-locked {
     margin-right: auto; /* pushed left */
   }
 
-  .example img {
+  .example .example-media img {
     width: 100%;
     /* same 16:10 frame as desktop - a 60vh box was cropping the
        screenshots' sides on phones too */
