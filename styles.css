@@ -1312,6 +1312,12 @@ body.menu-locked {
   border-top: 4px solid var(--primary-color);
   border-bottom: 4px solid var(--primary-color);
   box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
+  /* the centering lives HERE, not under [open]: on close the [open]
+     rules drop at once while display stays flex for the 1.4s glide
+     out (allow-discrete), and with the centering gone the content
+     snapped to the top-left corner mid-exit - the jump */
+  align-items: center;
+  justify-content: center;
 
   transform: translateX(-100%); /* start fully off-screen to the left */
   /* long, gentle glide — 1.4s with a soft ease-out tail */
@@ -1321,11 +1327,11 @@ body.menu-locked {
     overlay 1.4s ease allow-discrete;
 }
 
-/* open state — slid into place */
+/* open state — slid into place. display stays here: an author
+   display on the base rule would override the UA's display:none for
+   the closed dialog and leave it in the layout */
 #about-dialog[open] {
   display: flex;
-  align-items: center;
-  justify-content: center;
   transform: translateX(0);
 }
 

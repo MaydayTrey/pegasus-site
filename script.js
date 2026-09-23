@@ -120,6 +120,7 @@ const dialog = document.getElementById("about-dialog");
 const dialogContent = document.getElementById("dialog-content");
 const closeBtn = dialog.querySelector(".dialog-close");
 const cards = document.querySelectorAll(".about-card");
+let dialogOpener = null; // the card that opened it: focus returns there
 
 cards.forEach((card) => {
   card.addEventListener("click", () => {
@@ -145,8 +146,19 @@ cards.forEach((card) => {
     });
 
     dialogContent.append(title, divider, body);
+    // the browser hands focus back to whatever was focused when the
+    // dialog opened, and scrolls to bring it fully into view: a small
+    // jump when the card sat at a viewport edge. Blur first so there
+    // is nothing recorded to restore, then put focus back ourselves
+    // on close, without the scroll
+    dialogOpener = card;
+    card.blur();
     dialog.showModal();
   });
+});
+
+dialog.addEventListener("close", () => {
+  if (dialogOpener) dialogOpener.focus({ preventScroll: true });
 });
 
 // the exit animation is pure CSS (transition + allow-discrete), so a
