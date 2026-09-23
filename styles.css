@@ -3742,11 +3742,97 @@ body.menu-locked {
 
 .contact-note {
   font-family: var(--font-body);
-  font-size: 1.3rem;
-  line-height: 1.75;
+  font-size: 1.1rem;
+  line-height: 1.7;
   color: #eaf4fb;
-  max-width: 32ch;
+  max-width: 36ch;
   margin-bottom: var(--space-lg);
+}
+
+/* --- WHAT HAPPENS NEXT: the Integrity contact card's next-steps list
+   in this site's dress - gold numerals on the blue, whitesmoke copy -
+   then the three ways to reach us, each with its mark in gold --- */
+.contact-sub {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: whitesmoke;
+  margin-bottom: var(--space-md);
+}
+
+.steps {
+  list-style: none;
+  display: grid;
+  gap: var(--space-md);
+  max-width: 40ch;
+  margin-bottom: var(--space-lg);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 2.4em 1fr;
+  gap: var(--space-sm);
+  align-items: start;
+}
+
+.step__num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: hsl(42, 100%, 60%);
+}
+
+.step p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #eaf4fb;
+}
+
+.step strong {
+  color: whitesmoke;
+}
+
+.contact-details {
+  list-style: none;
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 40ch;
+}
+
+.contact-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #eaf4fb;
+}
+
+.contact-detail__icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  color: hsl(42, 100%, 60%);
+}
+
+/* the phone and the address are links in the house style: white,
+   gold underline, gold on hover */
+.contact-detail__link {
+  color: whitesmoke;
+  text-decoration: none;
+  border-bottom: 2px solid hsl(42, 100%, 55%);
+  transition: color 0.25s ease;
+}
+
+.contact-detail__link:hover,
+.contact-detail__link:focus-visible {
+  color: hsl(42, 100%, 60%);
 }
 
 /* --- right column: the conversational form --- */
@@ -4849,6 +4935,16 @@ body.menu-locked {
   #contact-us h2 {
     font-size: 1.35rem;
     margin-bottom: var(--space-xs);
+  }
+
+  .steps {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .step p,
+  .contact-detail {
+    font-size: 0.92rem;
   }
 
   .contact-note {
