@@ -154,12 +154,16 @@ cards.forEach((card) => {
       return wrap;
     };
 
-    dialogContent.append(
-      title,
-      divider,
+    // side by side on desktop, so the two kickers sit on one line and
+    // the halves read against each other; stacked on phones (CSS)
+    const halves = document.createElement("div");
+    halves.className = "dialog-halves";
+    halves.append(
       half("What we do", detail.querySelector(".detail-tech")),
       half("What it means for you", detail.querySelector(".detail-plain")),
     );
+
+    dialogContent.append(title, divider, halves);
     // the browser hands focus back to whatever was focused when the
     // dialog opened, and scrolls to bring it fully into view: a small
     // jump when the card sat at a viewport edge. Blur first so there
