@@ -406,6 +406,9 @@ body.menu-locked {
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
   height: 100dvh;
+  /* the grid's first column was the viewport edge, so the masthead's
+     first glyph sat on it; a gutter either side keeps the same grid */
+  padding-inline: var(--space-xl);
 }
 
 /* the animated cloudscape canvas fills the hero, behind everything */
@@ -514,6 +517,14 @@ body.menu-locked {
 /* the deck: an editorial hairline rules it off from the masthead.
    Scoped by id — a bare `#hero p` would also capture the kicker
    paragraph and drag it into this grid row. */
+/* the masthead paints ABOVE the deck's hairline: the "g" descender
+   crosses that rule, and the letter should sit on the line, not under
+   it. Both are z-1 siblings by the rule above, so the later deck won;
+   two ids outrank it. */
+#hero #hero-heading {
+  z-index: 2;
+}
+
 #hero-description {
   font-family: var(--font-body);
   font-weight: 400;
@@ -542,9 +553,9 @@ body.menu-locked {
 
 /* the invitation under the tagline */
 .hero-cta {
-  grid-column: 3 / 7;
+  grid-column: 3 / 11; /* the deck's span, so centred means under it */
   grid-row: 9;
-  justify-self: start;
+  justify-self: center;
   align-self: start;
   padding: 0.8em 2em;
   border-radius: 30px;
@@ -2968,12 +2979,27 @@ body.menu-locked {
     border-radius: 0;
   }
 
-  /* the word alone doesn't need a whole phone screen, and phones
-     don't run the cover: the stage just scrolls by */
+  /* phones don't run the cover: the stage just scrolls by, and it is
+     no taller than the word, so the section's header sits right under
+     EXAMPLES and the two read as one introduction. The stage's own
+     kicker goes: the header's "Live Client Sites" takes that job */
   #examples-title {
     position: relative;
     height: auto;
-    min-height: 60svh;
+    min-height: 0;
+    padding: var(--space-xl) var(--space-md) 0;
+  }
+
+  .ex-stage-inner .section-kicker {
+    display: none;
+  }
+
+  .ex-stage-inner {
+    gap: 0;
+  }
+
+  .ex-content {
+    padding: var(--space-md) var(--space-md) 0;
   }
   .example figure {
     position: relative; /* anchor for the caption */
