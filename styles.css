@@ -3703,6 +3703,16 @@ body.menu-locked {
 }
 
 /* --- left column: avatar, heading, note, placeholder photo --- */
+/* the left column is a card in the avatar's own night blue, so the
+   white copy and the gold numerals sit on a deeper ground than the
+   panel and the contrast holds; the circle is centred on the column */
+.contact-intro {
+  background: hsl(210, 100%, 14%);
+  border-radius: 20px;
+  padding: clamp(var(--space-lg), 3vw, 2.5rem);
+  box-shadow: 0 16px 36px rgba(0, 20, 45, 0.35);
+}
+
 .contact-avatar {
   width: 176px;
   height: 176px;
@@ -3710,7 +3720,7 @@ body.menu-locked {
   overflow: hidden;
   border: 4px solid whitesmoke;
   box-shadow: 0 10px 24px rgba(0, 20, 45, 0.35);
-  margin-bottom: var(--space-lg);
+  margin: 0 auto var(--space-lg); /* centred on the column */
   /* deep-sky night circle behind the mark - a full-bleed cover crop
      would clip the wingtips against the round frame */
   background: hsl(210, 100%, 14%);
@@ -4925,11 +4935,16 @@ body.menu-locked {
     border-radius: 20px;
   }
 
+  .contact-intro {
+    padding: var(--space-md);
+    border-radius: 14px;
+  }
+
   .contact-avatar {
     width: 50px;
     height: 50px;
     border-width: 3px;
-    margin-bottom: var(--space-sm);
+    margin: 0 auto var(--space-sm);
   }
 
   #contact-us h2 {
