@@ -1705,5 +1705,22 @@
         </p>
       </div>
     </footer>
+
+    <!--COOKIE NOTICE: the pegasus in the lower left, once per visitor.
+        A notice, not a gate: the Meta Pixel in the head fires
+        regardless, so this is disclosure with one button. Hidden until
+        script.js (cookieNotice) decides to show it, so a returning
+        visitor never sees it flash. Not a modal: the page stays usable.-->
+    <aside
+      class="cookies"
+      id="cookie-notice"
+      role="region"
+      aria-label="Cookie notice"
+      hidden
+    >
+      <svg class="cookies__mark" aria-hidden="true"><use href="#pegasusMark" /></svg>
+      <p class="cookies__text">This site uses cookies to measure our ads.</p>
+      <button class="cookies__btn" type="button" data-cookie-dismiss>Got it</button>
+    </aside>
   </body>
 </html>

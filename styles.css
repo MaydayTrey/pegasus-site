@@ -4313,6 +4313,108 @@ body.menu-locked {
   }
 }
 
+/* ============ COOKIE NOTICE ============
+   The pegasus in the lower left, once per visitor: a white card with
+   the brand-blue mark, slid up from below the fold (script.js,
+   cookieNotice). A notice, not a gate: the pixel fires regardless, so
+   there is one button, in the house black-pill style of the CTAs.
+   z-index 80: over every section and pinned stage, under the
+   hamburger (90) and the open menu (100). */
+.cookies {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 12px 14px 12px 12px;
+  background: #fff;
+  color: #1f1e1d;
+  border: 2px solid var(--primary-color);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 20, 45, 0.28);
+  translate: 0 calc(100% + 24px); /* parked below the fold until shown */
+  transition: translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cookies[hidden] {
+  display: none;
+}
+
+.cookies.is-in {
+  translate: 0 0;
+}
+
+.cookies__mark {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  color: var(--primary-color);
+}
+
+.cookies__text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.cookies__btn {
+  flex: none;
+  padding: 0.55em 1.1em;
+  border: none;
+  border-radius: 30px;
+  background: #1f1e1d;
+  color: #f2f2f2;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cookies__btn:hover,
+.cookies__btn:focus-visible {
+  background: var(--primary-color);
+  box-shadow: 0 6px 14px rgba(20, 157, 255, 0.4);
+}
+
+.cookies__btn:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookies {
+    transition: none;
+  }
+}
+
+/* phones: a strip across the bottom, everything still on one line */
+@media (max-width: 480px) {
+  .cookies {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    gap: 10px;
+    padding: 10px 10px 10px 12px;
+  }
+
+  .cookies__mark {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cookies__text {
+    font-size: 0.78rem;
+  }
+}
+
 /* ============================================= */
 /* MOBILE LAYER — consolidated small-screen pass */
 /* (last in the sheet so it wins the cascade)    */

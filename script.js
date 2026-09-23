@@ -1524,3 +1524,49 @@ if (
     });
   }
 }
+
+/* ===================== */
+/* COOKIE NOTICE         */
+/* ===================== */
+// The pegasus in the lower left, once per visitor. A notice, not a
+// gate: the Meta Pixel in the head fires regardless, so this is
+// disclosure with one button. The dismissal is remembered in
+// localStorage (in private mode it lasts the page). It waits a beat
+// so the hero's intro has had its moment first.
+{
+  const KEY = "pegasus-cookie-notice";
+  const box = document.getElementById("cookie-notice");
+  const dismissed = () => {
+    try {
+      return localStorage.getItem(KEY) === "dismissed";
+    } catch {
+      return false;
+    }
+  };
+
+  if (box && !dismissed()) {
+    setTimeout(() => {
+      box.hidden = false;
+      // two frames: let display:none lift before the slide starts, or
+      // the transition never runs and the card just appears
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => box.classList.add("is-in")),
+      );
+    }, 1800);
+
+    box.querySelector("[data-cookie-dismiss]").addEventListener("click", () => {
+      try {
+        localStorage.setItem(KEY, "dismissed");
+      } catch {
+        /* private mode: the choice lasts for this page only */
+      }
+      box.classList.remove("is-in");
+      setTimeout(
+        () => {
+          box.hidden = true;
+        },
+        prefersReducedMotion ? 0 : 650,
+      );
+    });
+  }
+}
