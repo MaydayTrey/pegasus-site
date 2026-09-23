@@ -76,7 +76,7 @@
     <!--the ?v= on the two local assets is the cache-buster: bump it with
          every change, or a normal reload can pair fresh HTML with a stale
          cached script or sheet (browsers only revalidate the page itself)-->
-    <link rel="stylesheet" href="styles.css?v=20260923b" />
+    <link rel="stylesheet" href="styles.css?v=20260923c" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
       defer
@@ -95,7 +95,7 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.clouds.min.js"
       defer
     ></script>
-    <script src="script.js?v=20260923b" defer></script>
+    <script src="script.js?v=20260923c" defer></script>
 
     <!--EXTERNAL RESOURCES-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -207,7 +207,9 @@
           its reviews view already open (the #mpd fragment).-->
       <aside class="follow" aria-label="Find us online">
         <p class="follow__item">
-          Follow us on
+          <span class="follow__lead"
+            >Follow us on<span class="follow__phone">:</span></span
+          >
           <a
             class="follow__link"
             href="https://www.facebook.com/profile.php?id=61593208171210"
@@ -217,7 +219,9 @@
           >
         </p>
         <p class="follow__item">
-          Check out our reviews on
+          <span class="follow__lead"
+            >See our reviews on<span class="follow__phone"> Google:</span></span
+          >
           <a
             class="follow__link"
             href="https://www.google.com/search?sca_esv=3e5594fd685e5dfa&amp;sxsrf=APpeQntdCRquKPDY54dpZgAm6qB9QXuS5Q%3A1790016996364&amp;q=Pegasus%20Labs&amp;stick=H4sIAAAAAAAAAONgU1I1qLCwMDEwM0xKMTZPSjM1SDS0MqiwTDZJSkwyTU2xTDa1SDVKXcTKE5CanlhcWqzgk5hUDAAPZQBROAAAAA&amp;mat=CYyRmV4OAhqV&amp;ved=2ahUKEwiM29b5rICXAxVwNoYAHZ9RB5gQrMcEegQIHBAC#mpd=~10743902121785659788/customers/reviews"
