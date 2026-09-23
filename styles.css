@@ -3711,16 +3711,22 @@ body.menu-locked {
   border-radius: 20px;
   padding: clamp(var(--space-lg), 3vw, 2.5rem);
   box-shadow: 0 16px 36px rgba(0, 20, 45, 0.35);
+  /* the card fills the grid row, so its foot lines up with the form's
+     last element, the Send Inquiry button; the copy inside is sized to
+     stay shorter than the form so the card never sets the row height */
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
 }
 
 .contact-avatar {
-  width: 176px;
-  height: 176px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid whitesmoke;
   box-shadow: 0 10px 24px rgba(0, 20, 45, 0.35);
-  margin: 0 auto var(--space-lg); /* centred on the column */
+  margin: 0 auto var(--space-md); /* centred on the column */
   /* deep-sky night circle behind the mark - a full-bleed cover crop
      would clip the wingtips against the round frame */
   background: hsl(210, 100%, 14%);
@@ -3744,19 +3750,19 @@ body.menu-locked {
 #contact-us h2 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2rem, 3vw + 1rem, 3.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.6rem, 1.8vw + 0.8rem, 2.5rem);
+  line-height: 1.12;
   color: hsl(42, 100%, 60%); /* the sunlight accent carries the title */
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .contact-note {
   font-family: var(--font-body);
-  font-size: 1.1rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.6;
   color: #eaf4fb;
-  max-width: 36ch;
-  margin-bottom: var(--space-lg);
+  max-width: 38ch;
+  margin-bottom: var(--space-md);
 }
 
 /* --- WHAT HAPPENS NEXT: the Integrity contact card's next-steps list
@@ -3769,15 +3775,15 @@ body.menu-locked {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: whitesmoke;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .steps {
   list-style: none;
   display: grid;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   max-width: 40ch;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .step {
@@ -3797,8 +3803,8 @@ body.menu-locked {
 
 .step p {
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.5;
   color: #eaf4fb;
 }
 
@@ -4142,7 +4148,7 @@ body.menu-locked {
   cursor: pointer;
   color: #f2f2f2;
   transition: box-shadow 0.3s ease;
-  margin-bottom: var(--space-md);
+  margin-bottom: 0; /* the last thing in the form: the card beside it lines up with this edge */
 }
 
 #contact-form button[type="submit"]::before {
