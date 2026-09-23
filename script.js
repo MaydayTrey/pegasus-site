@@ -138,14 +138,28 @@ cards.forEach((card) => {
     divider.className = "dialog-divider";
     divider.setAttribute("aria-hidden", "true");
 
-    // clone the detail's real nodes in (no innerHTML, no XSS surface)
-    const body = document.createElement("div");
-    body.className = "dialog-body";
-    detail.childNodes.forEach((node) => {
-      body.appendChild(node.cloneNode(true));
-    });
+    // two halves, each under its own kicker: the technical account,
+    // then what it means for the owner and their visitors. The detail's
+    // real nodes are cloned in (no innerHTML, no XSS surface)
+    const half = (kicker, source) => {
+      const wrap = document.createElement("div");
+      wrap.className = "dialog-section";
+      const h = document.createElement("h4");
+      h.className = "dialog-kicker";
+      h.textContent = kicker;
+      const body = document.createElement("div");
+      body.className = "dialog-body";
+      body.appendChild(source.cloneNode(true));
+      wrap.append(h, body);
+      return wrap;
+    };
 
-    dialogContent.append(title, divider, body);
+    dialogContent.append(
+      title,
+      divider,
+      half("What we do", detail.querySelector(".detail-tech")),
+      half("What it means for you", detail.querySelector(".detail-plain")),
+    );
     // the browser hands focus back to whatever was focused when the
     // dialog opened, and scrolls to bring it fully into view: a small
     // jump when the card sat at a viewport edge. Blur first so there

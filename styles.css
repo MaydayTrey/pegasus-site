@@ -1336,6 +1336,7 @@ body.menu-locked {
   border-top: 4px solid var(--primary-color);
   border-bottom: 4px solid var(--primary-color);
   box-shadow: 0 18px 50px rgba(0, 30, 60, 0.35);
+  overflow-y: auto; /* two halves can outgrow 80vh on a short screen */
   /* the centering lives HERE, not under [open]: on close the [open]
      rules drop at once while display stays flex for the 1.4s glide
      out (allow-discrete), and with the centering gone the content
@@ -1430,9 +1431,13 @@ body.menu-locked {
   translate: 0 -4px;
 }
 
-/* CONTENT — rides in from the left after the panel, leaves with it */
+/* CONTENT — rides in from the left after the panel, leaves with it.
+   Full width, so the title can run as long as it needs; the reading
+   measure is set on the halves below instead. Auto margins centre it
+   while it fits and let it scroll from the top when it doesn't. */
 #dialog-content {
-  max-width: 62ch; /* readable line length */
+  width: 100%;
+  margin: auto;
   padding: var(--space-lg) var(--space-xl);
   text-align: center;
   opacity: 0;
@@ -1458,12 +1463,39 @@ body.menu-locked {
   }
 }
 
+/* one line, always: the size tracks the viewport so the longest
+   title (Measurable Performance — Analytics) fits a 320px phone, and
+   caps at the old desktop size */
 .dialog-title {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2vw + 1rem, 2.4rem);
+  font-size: clamp(1rem, 4.6vw, 2.4rem);
   font-weight: 600;
   color: #1f1e1d;
   line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* the two halves: a small blue kicker over each, the reading measure
+   on the half rather than the whole content box */
+.dialog-section {
+  max-width: 62ch;
+  margin: 0 auto;
+}
+
+.dialog-section + .dialog-section {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(11, 58, 94, 0.15);
+}
+
+.dialog-kicker {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0b3a5e;
+  margin-bottom: var(--space-sm);
 }
 
 /* accent line under the title — brand blue into the CTA gold */
